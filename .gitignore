@@ -17,7 +17,6 @@ tramp
 .mc-lists.el
 abbrev_defs
 /eshell/
-custom.el
 kill-ring-saved.el
 network-security.data
 semanticdb/
