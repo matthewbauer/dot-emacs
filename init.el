@@ -185,11 +185,5 @@ EVENT ?"
   (if (file-exists-p keymap-file)
       (load keymap-file)))
 
-(defun eshell/magit ()
-  "Function to open magit-status for the current directory."
-  (interactive)
-  (magit-status default-directory)
-  nil)
-
 (provide 'init)
 ;;; init.el ends here
