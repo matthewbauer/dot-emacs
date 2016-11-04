@@ -155,6 +155,23 @@ EVENT ?"
 (unless (server-running-p)
   (server-start))
 
+;;
+;; Load and init package, use-package
+;;
+
+(require 'package)
+
+(package-initialize)
+
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+
 ;; packages
 
 (let ((packages-file (expand-file-name "packages.el" user-emacs-directory)))
