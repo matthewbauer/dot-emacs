@@ -56,18 +56,6 @@
 (windmove-default-keybindings 'meta)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; theming
-(when window-system
-  (custom-set-faces
-   '(erc-input-face ((t (:foreground "antique white"))))
-   '(helm-selection ((t (:background "ForestGreen" :foreground "black"))))
-   '(org-agenda-clocking ((t (:inherit secondary-selection :foreground "black"))) t)
-   '(org-agenda-done ((t (:foreground "dim gray" :strike-through nil))))
-   '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
-   '(org-clock-overlay ((t (:background "SkyBlue4" :foreground "black"))))
-   '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t))))
-   '(outline-1 ((t (:inherit font-lock-function-name-face :foreground "cornflower blue"))))))
-
 ;; don't disable narrowing
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
@@ -176,6 +164,12 @@ EVENT ?"
 (let ((packages-file (expand-file-name "packages.el" user-emacs-directory)))
   (if (file-exists-p packages-file)
       (load packages-file)))
+
+;; theme
+
+(let ((theme-file (expand-file-name "theme.el" user-emacs-directory)))
+  (if (file-exists-p theme-file)
+      (load theme-file)))
 
 ;; key bindings
 

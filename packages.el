@@ -12,21 +12,6 @@
   :config
   (auto-compile-on-load-mode))
 
-;; Themes
-(use-package color-theme
-  :demand t)
-(use-package color-theme-solarized
-  :demand t
-  :config
-  (color-theme-solarized)
-  (set-face-foreground 'secondary-selection "darkblue")
-  (set-face-background 'secondary-selection "lightblue")
-  (set-face-background 'font-lock-doc-face "black")
-  (set-face-foreground 'font-lock-doc-face "wheat")
-  (set-face-background 'font-lock-string-face "black")
-  (set-face-foreground 'org-todo "green")
-  (set-face-background 'org-todo "black"))
-
 ;; Multiple Major Modes
 (use-package mmm-mode
   :commands mmm-mode)
