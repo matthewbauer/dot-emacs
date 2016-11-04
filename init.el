@@ -79,6 +79,17 @@
 (setenv "LC_ALL" "C")
 (setenv "LANG" "en")
 
+(when window-system
+  (custom-set-faces
+   '(erc-input-face ((t (:foreground "antique white"))))
+   '(helm-selection ((t (:background "ForestGreen" :foreground "black"))))
+   '(org-agenda-clocking ((t (:inherit secondary-selection :foreground "black"))) t)
+   '(org-agenda-done ((t (:foreground "dim gray" :strike-through nil))))
+   '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
+   '(org-clock-overlay ((t (:background "SkyBlue4" :foreground "black"))))
+   '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t))))
+   '(outline-1 ((t (:inherit font-lock-function-name-face :foreground "cornflower blue"))))))
+
 (defun eshell/emacs (&rest args)
   "Open a file in Emacs.  Some habits die hard.
 ARGS unused"
@@ -142,42 +153,11 @@ EVENT ?"
 (unless (server-running-p)
   (server-start))
 
-;;
-;; Load and init package, use-package
-;;
-
-(require 'package)
-
-(package-initialize)
-
-(unless (assoc-default "melpa" package-archives)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
-
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(eval-when-compile
-  (require 'use-package))
-
 ;; packages
 
 (let ((packages-file (expand-file-name "packages.el" user-emacs-directory)))
   (if (file-exists-p packages-file)
       (load packages-file)))
-
-;; theme
-
-(let ((theme-file (expand-file-name "theme.el" user-emacs-directory)))
-  (if (file-exists-p theme-file)
-      (load theme-file)))
-
-;; key bindings
-
-(use-package bind-key
-             :demand t)
-(let ((keymap-file (expand-file-name "keymap.el" user-emacs-directory)))
-  (if (file-exists-p keymap-file)
-      (load keymap-file)))
 
 (provide 'init)
 ;;; init.el ends here
