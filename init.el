@@ -27,6 +27,8 @@
 (ido-mode -1)
 (cua-selection-mode t)
 (semantic-mode 1)
+(desktop-save-mode t)
+(auto-revert-mode t)
 ;; (blink-cursor-mode -1)
 ;; (icomplete-mode 1)
 
