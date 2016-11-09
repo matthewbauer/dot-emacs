@@ -41,7 +41,6 @@
 
 ;; Helm mode
 (use-package helm
-  :diminish helm-mode
   :init
   (require 'helm-config)
   (helm-mode)
@@ -64,7 +63,6 @@
 
 ;; Company mode
 (use-package company
-  :diminish company-mode
   :bind ("<C-tab>" . company-complete)
   :init (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
@@ -102,11 +100,9 @@
 (use-package ispell)
 
 (use-package wrap-region
-  :commands wrap-region-mode
-  :diminish wrap-region-mode)
+  :commands wrap-region-mode)
 
 (use-package whitespace-cleanup-mode
-  :diminish whitespace-cleanup-mode
   :init (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
@@ -124,7 +120,6 @@
    ("<C-S-up>" . mc/mark-previous-like-this)))
 
 (use-package undo-tree
-  :diminish undo-tree-mode
   :config
   (global-undo-tree-mode t))
 
@@ -133,7 +128,6 @@
   (hes-mode))
 
 (use-package highlight-symbol
-  :diminish highlight-symbol-mode
   :config
   (dolist (hook '(prog-mode-hook html-mode-hook))
     (add-hook hook 'highlight-symbol-mode)
@@ -170,7 +164,6 @@
   (save-place-mode))
 
 (use-package page-break-lines
-  :diminish page-break-lines-mode
   :init
   (global-page-break-lines-mode))
 
