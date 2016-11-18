@@ -60,6 +60,107 @@
          ("C-x c s" . helm-swoop)
          ("C-x c SPC" . helm-all-mark-rings)))
 
+(use-package eshell
+  :commands (eshell eshell-command)
+  :preface
+  (defvar eshell-isearch-map
+    (let ((map (copy-keymap isearch-mode-map)))
+      (define-key map [(control ?m)] 'eshell-isearch-return)
+      (define-key map [return]       'eshell-isearch-return)
+      (define-key map [(control ?r)] 'eshell-isearch-repeat-backward)
+      (define-key map [(control ?s)] 'eshell-isearch-repeat-forward)
+      (define-key map [(control ?g)] 'eshell-isearch-abort)
+      (define-key map [backspace]    'eshell-isearch-delete-char)
+      (define-key map [delete]       'eshell-isearch-delete-char)
+      map)
+    "Keymap used in isearch in Eshell.")
+
+  (defun eshell-initialize ()
+    (defun eshell-spawn-external-command (beg end)
+      "Parse and expand any history references in current input."
+      (save-excursion
+        (goto-char end)
+        (when (looking-back "&!" beg)
+          (delete-region (match-beginning 0) (match-end 0))
+          (goto-char beg)
+          (insert "spawn "))))
+
+    (add-hook 'eshell-expand-input-functions 'eshell-spawn-external-command)
+
+    (defun ss (server)
+      (interactive "sServer: ")
+      (call-process "spawn" nil nil nil "ss" server))
+    )
+
+  :init
+  (add-hook 'eshell-first-time-mode-hook 'eshell-initialize)
+  )
+
+(use-package erc
+  :defines (erc-timestamp-only-if-changed-flag
+            erc-timestamp-format
+            erc-fill-prefix
+            erc-fill-column
+            erc-insert-timestamp-function
+            erc-modified-channels-alist)
+  :preface
+  (defun lookup-password (host user port)
+    (require 'auth-source)
+    (funcall (plist-get
+              (car (auth-source-search
+                    :host host
+                    :user user
+                    :type 'netrc
+                    :port port))
+              :secret)))
+
+  (defun slowping (host)
+    (= 0 (call-process "ping" nil nil nil "-c1" "-W5000" "-q" host)))
+
+  (defun setup-irc-environment ()
+    (setq erc-timestamp-only-if-changed-flag nil
+          erc-timestamp-format "%H:%M "
+          erc-fill-prefix "          "
+          erc-fill-column 88
+          erc-insert-timestamp-function 'erc-insert-timestamp-left)
+
+    (defun reset-erc-track-mode ()
+      (interactive)
+      (setq erc-modified-channels-alist nil)
+      (erc-modified-channels-update)
+      (erc-modified-channels-display)
+      (force-mode-line-update))
+
+    (bind-key "C-c r" #'reset-erc-track-mode))
+
+  (defcustom erc-foolish-content '()
+    "Regular expressions to identify foolish content.
+    Usually what happens is that you add the bots to
+    `erc-ignore-list' and the bot commands to this list."
+    :group 'erc
+    :type '(repeat regexp))
+
+  (defun erc-foolish-content (msg)
+    "Check whether MSG is foolish."
+    (erc-list-match erc-foolish-content msg))
+
+  :init
+  (add-hook 'erc-mode-hook 'setup-irc-environment)
+  (add-to-list
+   'erc-mode-hook
+   #'(lambda () (set (make-local-variable 'scroll-conservatively) 100)))
+
+  (erc :server "irc.freenode.net" :port 6667 :nick "matthewbauer")
+
+  :config
+  (erc-track-minor-mode 1)
+  (erc-track-mode 1)
+
+  (add-hook 'erc-insert-pre-hook
+            (lambda (s)
+              (when (erc-foolish-content s)
+                (setq erc-insert-this nil)))))
+
 ;; Hydra
 (use-package hydra)
 

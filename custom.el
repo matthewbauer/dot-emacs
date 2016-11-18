@@ -9,6 +9,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(mouse-wheel-progressive-speed nil)
  '(ag-highlight-search t)
  '(auto-revert-verbose nil)
  '(column-number-mode t)
@@ -152,7 +153,7 @@
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm java-imports jdee yaml-mode wrap-region whitespace-cleanup-mode wgrep-ag web-mode use-package undo-tree smooth-scrolling smex smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode js2-refactor jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
+    (em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm java-imports jdee yaml-mode wrap-region whitespace-cleanup-mode wgrep-ag web-mode use-package undo-tree smooth-scrolling smex smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode js2-refactor jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
