@@ -15,8 +15,8 @@
  '(comint-process-echoes t)
  '(css-indent-offset 2)
  '(delete-old-versions -1)
- '(desktop-save t)
- '(echo-keystrokes 0.1)
+ ;; '(desktop-save t)
+ ;; '(echo-keystrokes 0.1)
  '(emacs-lisp-mode-hook
    (quote
     (turn-on-auto-fill
@@ -175,10 +175,6 @@
  '(use-file-dialog nil)
  '(use-package-always-defer t)
  '(use-package-always-ensure t)
- '(use-package-verbose t)
- '(user-full-name "Matthew Bauer")
- '(user-initials "mjb")
- '(user-mail-address "mjbauer95@gmail.com")
  '(vc-command-messages t)
  '(vc-follow-symlinks t)
  '(vc-git-diff-switches (quote ("-w" "-U3")))

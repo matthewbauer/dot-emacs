@@ -16,7 +16,13 @@
 
 ;; custom-file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+
+(if (file-exists-p custom-file)
+    (load custom-file))
+
+(let ((private-file (expand-file-name "private.el" user-emacs-directory)))
+  (if (file-exists-p private-file)
+      (load private-file)))
 
 ;; default global modes
 (electric-pair-mode t)
@@ -27,7 +33,7 @@
 (ido-mode -1)
 (cua-selection-mode t)
 (semantic-mode 1)
-(desktop-save-mode t)
+;; (desktop-save-mode t)
 (auto-revert-mode t)
 ;; (blink-cursor-mode -1)
 ;; (icomplete-mode 1)

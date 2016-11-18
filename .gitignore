@@ -20,3 +20,4 @@ abbrev_defs
 kill-ring-saved.el
 network-security.data
 semanticdb/
+private.el
