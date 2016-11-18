@@ -14,9 +14,8 @@
  '(column-number-mode t)
  '(comint-process-echoes t)
  '(css-indent-offset 2)
+ '(custom-safe-themes t)
  '(delete-old-versions -1)
- ;; '(desktop-save t)
- ;; '(echo-keystrokes 0.1)
  '(emacs-lisp-mode-hook
    (quote
     (turn-on-auto-fill
@@ -32,6 +31,8 @@
        (local-set-key
         [(control 109)]
         (quote newline-and-indent))))))
+ '(erc-autojoin-channels-alist (quote (("freenode.net" "#emacs" "#nixos" "##nix-darwin"))))
+ '(erc-nick "matthewbauer")
  '(eshell-aliases-file "~/.emacs.d/eshell.aliases")
  '(eshell-cmpl-cycle-completions nil)
  '(eshell-history-size 1000)
@@ -151,7 +152,7 @@
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm java-imports jdee yaml-mode wrap-region whitespace-cleanup-mode wgrep-ag web-mode use-package undo-tree smooth-scrolling smex smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode js2-refactor jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
+    (apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm java-imports jdee yaml-mode wrap-region whitespace-cleanup-mode wgrep-ag web-mode use-package undo-tree smooth-scrolling smex smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode js2-refactor jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
@@ -175,6 +176,9 @@
  '(use-file-dialog nil)
  '(use-package-always-defer t)
  '(use-package-always-ensure t)
+ '(user-full-name "Matthew Bauer")
+ '(user-initials "mjb")
+ '(user-mail-address "mjbauer95@gmail.com")
  '(vc-command-messages t)
  '(vc-follow-symlinks t)
  '(vc-git-diff-switches (quote ("-w" "-U3")))
@@ -198,7 +202,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(erc-input-face ((t (:foreground "antique white"))))
+ '(helm-selection ((t (:background "ForestGreen" :foreground "black"))))
+ '(org-agenda-clocking ((t (:inherit secondary-selection :foreground "black"))) t)
+ '(org-agenda-done ((t (:foreground "dim gray" :strike-through nil))))
+ '(org-clock-overlay ((t (:background "SkyBlue4" :foreground "black"))))
+ '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
+ '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t))))
+ '(outline-1 ((t (:inherit font-lock-function-name-face :foreground "cornflower blue")))))
 
 (provide 'custom)
 ;;; custom.el ends here
