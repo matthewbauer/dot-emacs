@@ -7,19 +7,25 @@
 ;;; Code:
 
 ;; Themes
-(use-package color-theme
-  :demand t)
-(use-package color-theme-solarized
+
+;; (use-package color-theme
+;;   :demand t)
+;; (use-package color-theme-solarized
+;;   :demand t
+;;   :config
+;;   (color-theme-solarized)
+;;   (set-face-foreground 'secondary-selection "darkblue")
+;;   (set-face-background 'secondary-selection "lightblue")
+;;   (set-face-background 'font-lock-doc-face "black")
+;;   (set-face-foreground 'font-lock-doc-face "wheat")
+;;   (set-face-background 'font-lock-string-face "black")
+;;   (set-face-foreground 'org-todo "green")
+;;   (set-face-background 'org-todo "black"))
+
+(use-package apropospriate-theme
   :demand t
   :config
-  (color-theme-solarized)
-  (set-face-foreground 'secondary-selection "darkblue")
-  (set-face-background 'secondary-selection "lightblue")
-  (set-face-background 'font-lock-doc-face "black")
-  (set-face-foreground 'font-lock-doc-face "wheat")
-  (set-face-background 'font-lock-string-face "black")
-  (set-face-foreground 'org-todo "green")
-  (set-face-background 'org-todo "black"))
+  (load-theme 'apropospriate-dark))
 
 ;; key bindings
 
@@ -158,10 +164,6 @@
   ("M-?" . ag-project))
 
 (use-package savekill)
-
-(use-package saveplace
-  :config
-  (save-place-mode))
 
 (use-package page-break-lines
   :init
