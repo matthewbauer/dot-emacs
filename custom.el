@@ -32,8 +32,6 @@
        (local-set-key
         [(control 109)]
         (quote newline-and-indent))))))
- '(erc-autojoin-channels-alist (quote (("freenode.net" "#emacs" "#nixos" "##nix-darwin"))))
- '(erc-nick "matthewbauer")
  '(eshell-aliases-file "~/.emacs.d/eshell.aliases")
  '(eshell-cmpl-cycle-completions nil)
  '(eshell-history-size 1000)
@@ -177,9 +175,6 @@
  '(use-file-dialog nil)
  '(use-package-always-defer t)
  '(use-package-always-ensure t)
- '(user-full-name "Matthew Bauer")
- '(user-initials "mjb")
- '(user-mail-address "mjbauer95@gmail.com")
  '(vc-command-messages t)
  '(vc-follow-symlinks t)
  '(vc-git-diff-switches (quote ("-w" "-U3")))
