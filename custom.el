@@ -17,6 +17,10 @@
  '(css-indent-offset 2)
  '(custom-safe-themes t)
  '(delete-old-versions -1)
+ '(create-lockfiles nil)
+ '(gc-cons-threshold 20000000)
+ '(backup-directory-alist `((".*" . ,temporary-file-directory)))
+ '(auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
  '(emacs-lisp-mode-hook
    (quote
     (turn-on-auto-fill

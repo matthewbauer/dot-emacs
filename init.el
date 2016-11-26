@@ -14,6 +14,9 @@
 ;; sync exec-path with environment path
 (setq exec-path (split-string (getenv "PATH") ":"))
 
+;; temporary-file-directory
+(setq temporary-file-directory (expand-file-name "tmp" user-emacs-directory))
+
 ;; custom-file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -35,7 +38,7 @@
 (semantic-mode 1)
 ;; (desktop-save-mode t)
 (auto-revert-mode t)
-;; (blink-cursor-mode -1)
+(blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
 
@@ -83,9 +86,9 @@
 (setenv "TERM" "xterm-256color")
 
 ;; eshell mode
-;; (setenv "JAVA_HOME" "/usr/local/java")
+;; (se≈tenv "JAVA_HOME" "/usr/local/java")
 (setenv "EDITOR" "emacsclient")
-(setenv "LC_ALL" "C")
+≈irc≈≈(setenv "LC_ALL" "C")
 (setenv "LANG" "en")
 
 (defun eshell/emacs (&rest args)
@@ -145,39 +148,6 @@ EVENT ?"
                                   'keymap eshell-ls-keymap)
                             ad-return-value)
        ad-return-value)))
-
-(add-hook 'after-init-hook (lambda ()
-  (when (member "Fira Code" (font-family-list))
-    (set-frame-font "Fira Code Retina-15")
-    (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-                   (35 . ".\\(?:###\\|##\\|[#(?[_{]\\)")
-                   (36 . ".\\(?:>\\)")
-                   (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-                   (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-                   (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-                   (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-                   ;; (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-                   ;; (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-                   ;; (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-                   (48 . ".\\(?:x[a-zA-Z]\\)")
-                   ;; (58 . ".\\(?:::\\|[:=]\\)")
-                   (59 . ".\\(?:;;\\|;\\)")
-                   (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-                   (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-                   (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-                   ;; (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-                   (91 . ".\\(?:]\\)")
-                   (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-                   (94 . ".\\(?:=\\)")
-                   (119 . ".\\(?:ww\\)")
-                   (123 . ".\\(?:-\\)")
-                   ;; (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-                   (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
-                   )
-                 ))
-      (dolist (char-regexp alist)
-        (set-char-table-range composition-function-table (car char-regexp)
-                              `([,(cdr char-regexp) 0 font-shape-gstring])))))))
 
 ;; server
 (require 'server)

@@ -150,8 +150,6 @@
    'erc-mode-hook
    #'(lambda () (set (make-local-variable 'scroll-conservatively) 100)))
 
-  (erc :server "irc.freenode.net" :port 6667 :nick "matthewbauer")
-
   :config
   (erc-track-minor-mode 1)
   (erc-track-mode 1)
@@ -268,7 +266,7 @@
 
 (use-package page-break-lines
   :init
-  (global-page-break-lines-mode))
+  (add-hook 'doc-mode-hook 'page-break-lines-mode))
 
 ;;
 ;; editor modes
