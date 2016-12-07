@@ -88,7 +88,7 @@
 ;; eshell mode
 ;; (se≈tenv "JAVA_HOME" "/usr/local/java")
 (setenv "EDITOR" "emacsclient")
-≈irc≈≈(setenv "LC_ALL" "C")
+(setenv "LC_ALL" "C")
 (setenv "LANG" "en")
 
 (defun eshell/emacs (&rest args)
