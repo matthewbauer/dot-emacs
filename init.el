@@ -86,7 +86,7 @@
 (setenv "TERM" "xterm-256color")
 
 ;; eshell mode
-;; (se≈tenv "JAVA_HOME" "/usr/local/java")
+;; (setenv "JAVA_HOME" "/usr/local/java")
 (setenv "EDITOR" "emacsclient")
 (setenv "LC_ALL" "C")
 (setenv "LANG" "en")

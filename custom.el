@@ -9,18 +9,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(mouse-wheel-progressive-speed nil)
  '(ag-highlight-search t)
  '(auto-revert-verbose nil)
+ '(auto-save-file-name-transforms (\` ((".*" (\, temporary-file-directory) t))))
+ '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
  '(column-number-mode t)
  '(comint-process-echoes t)
+ '(create-lockfiles nil)
  '(css-indent-offset 2)
  '(custom-safe-themes t)
  '(delete-old-versions -1)
- '(create-lockfiles nil)
- '(gc-cons-threshold 20000000)
- '(backup-directory-alist `((".*" . ,temporary-file-directory)))
- '(auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
  '(emacs-lisp-mode-hook
    (quote
     (turn-on-auto-fill
@@ -70,6 +68,7 @@
  '(flyspell-abbrev-p nil)
  '(flyspell-incorrect-hook (quote (flyspell-maybe-correct-transposition)))
  '(flyspell-use-meta-tab nil)
+ '(gc-cons-threshold 20000000)
  '(git-commit-mode-hook
    (quote
     (turn-on-auto-fill flyspell-mode git-commit-save-message)) t)
@@ -135,6 +134,7 @@
  '(magit-unstage-all-confirm nil)
  '(magit-use-overlays nil)
  '(mmm-submode-decoration-level 0)
+ '(mouse-wheel-progressive-speed nil)
  '(org-agenda-include-diary t)
  '(org-agenda-inhibit-startup t)
  '(org-agenda-span 14)
@@ -162,10 +162,38 @@
  '(parens-require-spaces t)
  '(ring-bell-function (quote ignore))
  '(ruby-insert-encoding-magic-comment nil)
+ '(safe-local-variable-values
+   (quote
+    ((eval c-set-offset
+           (quote access-label)
+           (quote -))
+     (eval c-set-offset
+           (quote substatement-open)
+           0)
+     (eval c-set-offset
+           (quote arglist-cont-nonempty)
+           (quote +))
+     (eval c-set-offset
+           (quote arglist-cont)
+           0)
+     (eval c-set-offset
+           (quote arglist-intro)
+           (quote +))
+     (eval c-set-offset
+           (quote inline-open)
+           0)
+     (eval c-set-offset
+           (quote defun-open)
+           0)
+     (eval c-set-offset
+           (quote innamespace)
+           0)
+     (indicate-empty-lines . t))))
  '(same-window-buffer-names
    (quote
     ("*eshell*" "*shell*" "*mail*" "*inferior-lisp*" "*ielm*" "*scheme*")))
  '(save-abbrevs (quote silently))
+ '(send-mail-function (quote smtpmail-send-it))
  '(sentence-end-double-space nil)
  '(show-paren-delay 0)
  '(tab-width 2)
@@ -208,8 +236,7 @@
  '(org-agenda-done ((t (:foreground "dim gray" :strike-through nil))))
  '(org-clock-overlay ((t (:background "SkyBlue4" :foreground "black"))))
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
- '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t))))
- '(outline-1 ((t (:inherit font-lock-function-name-face :foreground "cornflower blue")))))
+ '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
 
 (provide 'custom)
 ;;; custom.el ends here

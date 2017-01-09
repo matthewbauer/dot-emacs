@@ -343,7 +343,7 @@
 
 (use-package haskell-mode)
 
-(use-package jdee)
+;; (use-package jdee)
 
 (provide 'packages)
 ;;; packages.el ends here
