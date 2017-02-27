@@ -418,5 +418,8 @@ END end of region"
 
 (bind-key "C-. C-i" #'indent-rigidly)
 
+;; Start a regular shell if you prefer that.
+(global-set-key (kbd "C-x M-m") 'shell)
+
 (provide 'keymap)
 ;;; keymap.el ends here
