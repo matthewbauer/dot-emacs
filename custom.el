@@ -10,6 +10,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ag-highlight-search t)
+ '(auth-sources (quote ("~/.authinfo")))
  '(auto-revert-verbose nil)
  '(auto-save-file-name-transforms (\` ((".*" (\, temporary-file-directory) t))))
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
