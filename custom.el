@@ -114,6 +114,8 @@
  '(initial-scratch-message "")
  '(js2-basic-offset 2)
  '(js2-bounce-indent-p nil)
+ '(js2-mode-show-parse-errors nil)
+ '(js2-mode-show-strict-warnings nil)
  '(js2-strict-missing-semi-warning nil)
  '(js-indent-level 2)
  '(kill-do-not-save-duplicates t)
