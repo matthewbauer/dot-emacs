@@ -93,6 +93,9 @@
 (setenv "LC_ALL" "C")
 (setenv "LANG" "en")
 
+;; temp fix for bbatsov/projectile#523
+(setq projectile-mode-line " Projectile")
+
 (defun eshell/emacs (&rest args)
   "Open a file in Emacs.  Some habits die hard.
 ARGS unused"
