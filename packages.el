@@ -41,9 +41,55 @@
   :config
   (auto-compile-on-load-mode))
 
+(use-package shell)
+(use-package tramp)
+(use-package tetris)
+(use-package gnus)
+
 ;; Multiple Major Modes
 (use-package mmm-mode
   :commands mmm-mode)
+
+(use-package smart-tabs-mode
+  :commands smart-tabs-mode)
+
+(use-package smartparens
+  :init
+  (progn
+    (smartparens-global-mode 1)
+    (show-smartparens-global-mode 1))
+  :config
+  (progn
+    (setq smartparens-strict-mode t)
+    (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
+  :bind
+  (("C-M-k" . sp-kill-sexp-with-a-twist-of-lime)
+   ("C-M-f" . sp-forward-sexp)
+   ("C-M-b" . sp-backward-sexp)
+   ("C-M-n" . sp-up-sexp)
+   ("C-M-d" . sp-down-sexp)
+   ("C-M-u" . sp-backward-up-sexp)
+   ("C-M-p" . sp-backward-down-sexp)
+   ("C-M-w" . sp-copy-sexp)
+   ("M-s" . sp-splice-sexp)
+   ("M-r" . sp-splice-sexp-killing-around)
+   ("C-)" . sp-forward-slurp-sexp)
+   ("C-}" . sp-forward-barf-sexp)
+   ("C-(" . sp-backward-slurp-sexp)
+   ("C-{" . sp-backward-barf-sexp)
+   ("M-S" . sp-split-sexp)
+   ("M-J" . sp-join-sexp)
+   ("C-M-t" . sp-transpose-sexp)))
+
+(use-package ispell)
+
+(use-package avy
+  :config
+  (global-set-key (kbd "C-:") 'avy-goto-char))
+
+(use-package expand-region
+  :config
+  (global-set-key (kbd "C-=") 'expand-region))
 
 ;; Helm mode
 (use-package helm
@@ -61,7 +107,36 @@
          ("C-x c s" . helm-swoop)
          ("C-x c SPC" . helm-all-mark-rings)))
 
+(use-package lsp-mode
+  :config (global-lsp-mode t))
+
+(use-package projectile
+  :commands projectile-mode
+  :defer 5
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (use-package helm-projectile
+    :config
+    (setq projectile-completion-system 'helm)
+    (helm-projectile-on))
+  (projectile-mode)
+  (bind-key "s s"
+            #'(lambda ()
+                (interactive)
+                (helm-do-grep-1 (list (projectile-project-root)) t))
+            'projectile-command-map))
+
+(use-package magithub
+  :after magit
+  :config (magithub-feature-autoinject t))
+
+;; (use-package ensime)
+
+;; (use-package framemove
+;;   :config (framemove-default-keybindings 'alt))
+
 (use-package eshell
+  :bind ("C-x e" . eshell)
   :commands (eshell eshell-command)
   :preface
   (defvar eshell-isearch-map
@@ -145,11 +220,15 @@
 
 ;; Flycheck mode
 (use-package flycheck
-  :init (global-flycheck-mode))
+  :config
+  (progn
+    (setq flycheck-display-errors-function nil)
+    (add-hook 'after-init-hook 'global-flycheck-mode)))
 
 ;; Company mode
 (use-package company
   :bind ("<C-tab>" . company-complete)
+  :commands company-mode
   :init (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
 
@@ -171,7 +250,7 @@
 
 (use-package magit
   :bind (("C-x g" . magit-status)
-         ("C-x G" . magit-status-with-prefix)))
+         ("C-x G" . magit-dispatch-popup)))
 
 ;;
 ;; minor modes
@@ -183,7 +262,7 @@
   :bind ("C-c h" . hs-toggle-hiding)
   :commands hs-toggle-hiding)
 
-(use-package ispell)
+;; (use-package ispell)
 
 (use-package wrap-region
   :commands wrap-region-mode)
@@ -236,7 +315,7 @@
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
 
 (use-package ace-window
-  :bind (("C-x o" . ace-window)))
+  :bind (("C-x a" . ace-window)))
 
 (use-package ag
   :if (executable-find "ag")
