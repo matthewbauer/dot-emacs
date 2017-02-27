@@ -114,6 +114,7 @@
  '(initial-scratch-message "")
  '(js2-basic-offset 2)
  '(js2-bounce-indent-p nil)
+ '(js2-strict-missing-semi-warning nil)
  '(kill-do-not-save-duplicates t)
  '(kill-whole-line t)
  '(line-number-mode t)
