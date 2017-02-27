@@ -21,3 +21,5 @@ kill-ring-saved.el
 network-security.data
 semanticdb/
 private.el
+history
+projectile-bookmarks.eld
