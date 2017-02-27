@@ -115,6 +115,7 @@
  '(js2-basic-offset 2)
  '(js2-bounce-indent-p nil)
  '(js2-strict-missing-semi-warning nil)
+ '(js-indent-level 2)
  '(kill-do-not-save-duplicates t)
  '(kill-whole-line t)
  '(line-number-mode t)
