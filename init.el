@@ -41,13 +41,15 @@
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
+(delete-selection-mode t)
+(savehist-mode t)
 
 (when (fboundp 'global-prettify-symbols-mode)
   (global-prettify-symbols-mode))
 
 ;; auto revert
 (require 'autorevert)
-(global-auto-revert-mode)
+(global-auto-revert-mode t)
 
 ;; Show trailing whitespace
 ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
