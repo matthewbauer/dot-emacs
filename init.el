@@ -126,30 +126,40 @@ POINT ?"
               (previous-single-property-change point 'help-echo)
               (next-single-property-change point 'help-echo))))
 
-(defun eshell-ls-find-file-at-mouse-click (event)
-  "Middle click on Eshell's `ls' output to open files.
-From Patrick Anderson via the wiki.
-EVENT ?"
-  (interactive "e")
-  (eshell-ls-find-file-at-point (posn-point (event-end event))))
+(defun window-toggle-split-direction ()
+  "Switch window split from horizontally to vertically, or vice versa.
 
-;; Stolen from http://www.emacswiki.org/cgi-bin/wiki.pl/EshellEnhancedLS
-(eval-after-load "em-ls"
-  '(progn
-     (let ((map (make-sparse-keymap)))
-       (define-key map (kbd "RET")      'eshell-ls-find-file-at-point)
-       (define-key map (kbd "<return>") 'eshell-ls-find-file-at-point)
-       (define-key map (kbd "<mouse-2>") 'eshell-ls-find-file-at-mouse-click)
-       (defvar eshell-ls-keymap map))
+i.e. change right window to bottom, or change bottom window to right."
+  (interactive)
+  (require 'windmove)
+  (let ((done))
+    (dolist (dirs '((right . down) (down . right)))
+      (unless done
+        (let* ((win (selected-window))
+               (nextdir (car dirs))
+               (neighbour-dir (cdr dirs))
+               (next-win (windmove-find-other-window nextdir win))
+               (neighbour1 (windmove-find-other-window neighbour-dir win))
+               (neighbour2 (if next-win (with-selected-window next-win
+                                          (windmove-find-other-window neighbour-dir next-win)))))
+          ;;(message "win: %s\nnext-win: %s\nneighbour1: %s\nneighbour2:%s" win next-win neighbour1 neighbour2)
+          (setq done (and (eq neighbour1 neighbour2)
+                          (not (eq (minibuffer-window) next-win))))
+          (if done
+              (let* ((other-buf (window-buffer next-win)))
+                (delete-window next-win)
+                (if (eq nextdir 'right)
+                    (split-window-vertically)
+                  (split-window-horizontally))
+                (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
 
-     (defadvice eshell-ls-decorated-name (after electrify-ls activate)
-       "Eshell's `ls' now lets you click or RET on file names to open them."
-       (add-text-properties 0 (length ad-return-value)
-                            (list 'help-echo "RET, mouse-2: visit this file"
-                                  'mouse-face 'highlight
-                                  'keymap eshell-ls-keymap)
-                            ad-return-value)
-       ad-return-value)))
+(defun newline-same-column ()
+  (interactive)
+  (let ((col (current-column)))
+    (newline)
+    (indent-to col)))
+
+(global-set-key (kbd "M-n") 'newline-same-column)
 
 ;; server
 (require 'server)

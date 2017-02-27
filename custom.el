@@ -35,31 +35,16 @@
        (local-set-key
         [(control 109)]
         (quote newline-and-indent))))))
- '(eshell-aliases-file "~/.emacs.d/eshell.aliases")
- '(eshell-cmpl-cycle-completions nil)
- '(eshell-history-size 1000)
- '(eshell-ls-dired-initial-args (quote ("-h")))
- '(eshell-ls-exclude-regexp "~\\'")
- '(eshell-ls-initial-args "-h")
- '(eshell-modules-list
-   (quote
-    (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-smart eshell-term eshell-unix eshell-xtra)))
- '(eshell-prompt-function
-   (lambda nil
-     (concat
-      (abbreviate-file-name
-       (eshell/pwd))
-      (if
-          (=
-           (user-uid)
-           0)
-          " # " " $ "))))
- '(eshell-save-history-on-exit t)
- '(eshell-stringify-t nil)
- '(eshell-term-name "ansi")
- '(eshell-visual-commands
-   (quote
-    ("vi" "top" "screen" "less" "lynx" "rlogin" "telnet")))
+ '(erc-auto-discard-away t)
+ '(erc-autoaway-idle-seconds 600)
+ '(erc-autoaway-use-emacs-idle t)
+ '(erc-autojoin-channels-alist (quote (("freenode.net" "#nixos" "##nix-darwin"))))
+ '(erc-interpret-mirc-color t)
+ '(erc-join-buffer (quote bury))
+ '(erc-nick "matthewbauer")
+ '(erc-prompt-for-password nil)
+ '(erc-spelling-mode 1)
+ '(erc-track-mode t)
  '(explicit-bash-args (quote ("-c" "export EMACS=; stty echo; bash")))
  '(explicit-shell-file-name "bash")
  '(flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
@@ -160,7 +145,7 @@
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm java-imports jdee yaml-mode wrap-region whitespace-cleanup-mode wgrep-ag web-mode use-package undo-tree smooth-scrolling smex smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode js2-refactor jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
+    (tern js2-refactor d-mode auctex smartparens-ruby helm-projectile ensime smartparens-config smart-tabs-mode chess company-anaconda company-cabal company-ghc company-ghci company-go company-nixos-options company-racer company-web company-ycm js3-mode tabbar projectile lsp-mode em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm yaml-mode wrap-region whitespace-cleanup-mode web-mode use-package undo-tree smooth-scrolling smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))

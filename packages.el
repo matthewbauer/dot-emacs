@@ -75,26 +75,6 @@
       (define-key map [delete]       'eshell-isearch-delete-char)
       map)
     "Keymap used in isearch in Eshell.")
-
-  (defun eshell-initialize ()
-    (defun eshell-spawn-external-command (beg end)
-      "Parse and expand any history references in current input."
-      (save-excursion
-        (goto-char end)
-        (when (looking-back "&!" beg)
-          (delete-region (match-beginning 0) (match-end 0))
-          (goto-char beg)
-          (insert "spawn "))))
-
-    (add-hook 'eshell-expand-input-functions 'eshell-spawn-external-command)
-
-    (defun ss (server)
-      (interactive "sServer: ")
-      (call-process "spawn" nil nil nil "ss" server))
-    )
-
-  :init
-  (add-hook 'eshell-first-time-mode-hook 'eshell-initialize)
   )
 
 (use-package erc
