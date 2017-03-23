@@ -41,10 +41,16 @@
   :config
   (auto-compile-on-load-mode))
 
+(use-package org)
+
 (use-package shell)
 (use-package tramp)
 (use-package tetris)
-(use-package gnus)
+(use-package gnus
+  :commands gnus
+  :init
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+  )
 
 ;; Multiple Major Modes
 (use-package mmm-mode
@@ -54,14 +60,13 @@
   :commands smart-tabs-mode)
 
 (use-package smartparens
-  :init
-  (progn
-    (smartparens-global-mode 1)
-    (show-smartparens-global-mode 1))
   :config
-  (progn
-    (setq smartparens-strict-mode t)
-    (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p)))
+  (setq smartparens-strict-mode t)
+  (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
+  (require 'smartparens-config)
+  (sp-use-paredit-bindings)
+  (smartparens-global-mode 1)
+  (show-smartparens-global-mode 1)
   :bind
   (("C-M-k" . sp-kill-sexp-with-a-twist-of-lime)
    ("C-M-f" . sp-forward-sexp)
@@ -96,6 +101,7 @@
   :init
   (require 'helm-config)
   (helm-mode)
+  (require 'helm-eshell)
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
@@ -105,20 +111,36 @@
          ("M-x" . helm-M-x)
          ("C-x c o" . helm-occur)
          ("C-x c s" . helm-swoop)
-         ("C-x c SPC" . helm-all-mark-rings)))
+         ("C-x c SPC" . helm-all-mark-rings))
+  :config
+  (use-package helm-descbinds
+    :config (helm-descbinds-mode))
+  (use-package helm-ag)
+  (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+  (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
+  ;; shell history.
+  (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
+  (substitute-key-definition 'find-tag 'helm-etags-select global-map)
+  (setq projectile-completion-system 'helm)
+  (helm-mode 1)
+  )
 
 (use-package lsp-mode
   :config (global-lsp-mode t))
 
 (use-package projectile
   :commands projectile-mode
+  :after helm
   :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (use-package helm-projectile
     :config
     (setq projectile-completion-system 'helm)
-    (helm-projectile-on))
+    (helm-projectile-toggle 1))
   (projectile-mode)
   (bind-key "s s"
             #'(lambda ()
@@ -135,6 +157,45 @@
 ;; (use-package framemove
 ;;   :config (framemove-default-keybindings 'alt))
 
+;;
+;; terminals
+;;
+
+(defun init-eshell ()
+  "Stuff to do when enabling eshell."
+  (setq pcomplete-cycle-completions nil)
+  (if (bound-and-true-p linum-mode) (linum-mode -1))
+  (semantic-mode -1))
+
+(defun multiterm (_)
+  "Wrapper to be able to call multi-term from shell-pop"
+  (interactive)
+  (multi-term))
+
+(defun term-send-tab ()
+  "Send tab in term mode."
+  (interactive)
+  (term-send-raw-string "\t"))
+
+(defun protect-eshell-prompt ()
+  "Protect Eshell's prompt like Comint's prompts.
+E.g. `evil-change-whole-line' won't wipe the prompt. This
+is achieved by adding the relevant text properties."
+  (let ((inhibit-field-text-motion t))
+    (add-text-properties
+     (point-at-bol)
+     (point)
+     '(rear-nonsticky t
+                      inhibit-line-move-field-capture t
+                      field output
+                      read-only t
+                      front-sticky (field inhibit-line-move-field-capture)))))
+
+(defun projectile-multi-term-in-root ()
+  "Invoke `multi-term' in the project's root."
+  (interactive)
+  (projectile-with-default-dir (projectile-project-root) (multi-term)))
+
 (use-package eshell
   :bind ("C-x e" . eshell)
   :commands (eshell eshell-command)
@@ -150,7 +211,133 @@
       (define-key map [delete]       'eshell-isearch-delete-char)
       map)
     "Keymap used in isearch in Eshell.")
+  :init
+  (add-hook 'eshell-after-prompt-hook 'protect-eshell-prompt)
+
+  (autoload 'eshell-delchar-or-maybe-eof "em-rebind")
+
+  (add-hook 'eshell-mode-hook 'init-eshell)
+  (add-hook 'eshell-mode-hook 'disable-hl-line-mode)
+    :config
+    (progn
+      (require 'esh-opt)
+
+      ;; quick commands
+      (defalias 'eshell/e 'find-file-other-window)
+      (defalias 'eshell/d 'dired)
+      (setenv "PAGER" "cat")
+
+      ;; support `em-smart'
+      (require 'em-smart)
+      (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
+
+      ;; Visual commands
+      (require 'em-term)
+      (mapc (lambda (x) (push x eshell-visual-commands))
+            '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
+
+      ;; automatically truncate buffer after output
+      (when (boundp 'eshell-output-filter-functions)
+        (push 'eshell-truncate-buffer eshell-output-filter-functions))
   )
+
+(defun init-eshell-xterm-color ()
+  "Initialize xterm coloring for eshell"
+  (setq-local xterm-color-preserve-properties t)
+  (make-local-variable 'eshell-preoutput-filter-functions)
+  (setq-local eshell-output-filter-functions
+              (remove 'eshell-handle-ansi-color
+                      eshell-output-filter-functions)))
+
+(defun disable-hl-line-mode ()
+  "Locally disable global-hl-line-mode"
+  (interactive)
+  (setq-local global-hl-line-mode nil))
+
+(add-hook 'term-mode-hook 'disable-hl-line-mode)
+
+(use-package xterm-color
+  :init
+  ;; Comint and Shell
+  (setq comint-output-filter-functions
+        (remove 'ansi-color-process-output comint-output-filter-functions))
+  (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
+
+(use-package esh-help
+  :init (add-hook 'eshell-mode-hook 'eldoc-mode)
+  :config (setup-esh-help-eldoc))
+
+(defmacro make-shell-pop-command (func &optional shell)
+  "Create a function to open a shell via the function FUNC.
+SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
+  (let* ((name (symbol-name func)))
+    `(defun ,(intern (concat "shell-pop-" name)) (index)
+       ,(format (concat "Toggle a popup window with `%S'.\n"
+                        "Multiple shells can be opened with a numerical prefix "
+                        "argument. Using the universal prefix argument will "
+                        "open the shell in the current buffer instead of a "
+                        "popup buffer.") func)
+       (interactive "P")
+       (require 'shell-pop)
+       (if (equal '(4) index)
+           ;; no popup
+           (,func ,shell)
+         (shell-pop--set-shell-type
+          'shell-pop-shell-type
+          (backquote (,name
+                      ,(concat "*" name "*")
+                      (lambda nil (,func ,shell)))))
+         (shell-pop index)))))
+
+(use-package shell-pop
+  :init
+  (make-shell-pop-command eshell)
+  (make-shell-pop-command shell)
+  (make-shell-pop-command term shell-pop-term-shell)
+  (make-shell-pop-command multiterm)
+  (make-shell-pop-command ansi-term shell-pop-term-shell))
+
+(add-hook 'term-mode-hook 'ansi-term-handle-close)
+(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
+(defun shell-comint-input-sender-hook ()
+    "Check certain shell commands.
+ Executes the appropriate behavior for certain commands."
+    (setq comint-input-sender
+          (lambda (proc command)
+            (cond
+             ;; Check for clear command and execute it.
+             ((string-match "^[ \t]*clear[ \t]*$" command)
+              (comint-send-string proc "\n")
+              (erase-buffer))
+             ;; Check for man command and execute it.
+             ((string-match "^[ \t]*man[ \t]*" command)
+              (comint-send-string proc "\n")
+              (setq command (replace-regexp-in-string
+                             "^[ \t]*man[ \t]*" "" command))
+              (setq command (replace-regexp-in-string
+                             "[ \t]+$" "" command))
+              (funcall 'man command))
+             ;; Send other commands to the default handler.
+             (t (comint-simple-send proc command))))))
+(add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
+(add-hook 'shell-mode-hook 'disable-hl-line-mode)
+
+(use-package multi-term)
+
+(use-package eshell-z
+  :init
+  (with-eval-after-load 'eshell
+    (require 'eshell-z)))
+
+(use-package eshell-prompt-extras
+  :commands epe-theme-lambda
+  :init
+  (setq eshell-highlight-prompt nil
+        eshell-prompt-function 'epe-theme-lambda))
+
+;;
+;; IRC
+;;
 
 (use-package erc
   :defines (erc-timestamp-only-if-changed-flag
@@ -213,7 +400,32 @@
   (add-hook 'erc-insert-pre-hook
             (lambda (s)
               (when (erc-foolish-content s)
-                (setq erc-insert-this nil)))))
+                (setq erc-insert-this nil)))
+            )
+      (erc-services-mode 1)
+      (defun erc-list-command ()
+        "execute the list command"
+        (interactive)
+        (insert "/list")
+        (erc-send-current-line))
+      (setq erc-kill-buffer-on-part t
+            erc-kill-queries-on-quit t
+            erc-kill-server-buffer-on-quit t)
+      (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules)))
+      (erc-track-mode t)
+      (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
+            erc-server-coding-system '(utf-8 . utf-8))
+      (setq erc-prompt (lambda () (concat "[" (buffer-name) "]")))
+
+      (require 'notifications)
+      (defun erc-global-notify (match-type nick message)
+        "Notify when a message is recieved."
+        (notifications-notify
+         :title nick
+         :body message
+         :urgency 'low)))
+
+(use-package erc-terminal-notifier)
 
 ;; Hydra
 (use-package hydra)
@@ -221,14 +433,29 @@
 ;; Flycheck mode
 (use-package flycheck
   :config
-  (progn
-    (setq flycheck-display-errors-function nil)
-    (add-hook 'after-init-hook 'global-flycheck-mode)))
+  (setq flycheck-display-errors-function nil)
+  (add-hook 'after-init-hook 'global-flycheck-mode))
+
+(use-package auto-dictionary
+  :init
+  (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
+
+  (use-package flyspell
+    :commands (spell-checking/change-dictionary)
+    :init
+    (progn
+      (add-hook 'text-mode-hook' 'flyspell-mode)
+      (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
+
+(use-package flyspell-correct
+  :commands (flyspell-correct-word-generic
+             flyspell-correct-previous-word-generic))
 
 ;; Company mode
 (use-package company
   :bind ("<C-tab>" . company-complete)
   :commands company-mode
+  :after helm
   :init (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
 
@@ -248,9 +475,40 @@
 
 (use-package gist)
 
+(use-package git-commit)
+
 (use-package magit
   :bind (("C-x g" . magit-status)
-         ("C-x G" . magit-dispatch-popup)))
+         ("C-x G" . magit-dispatch-popup))
+  :config
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:
+  "))
+  (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
+  )
+
+(use-package ycmd)
+(use-package flycheck-ycmd
+  :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+(use-package company-ycmd
+  :commands company-ycmd)
+
+(defun my:setup-imenu-for-use-package ()
+  "Recognize `use-package` in imenu"
+  (when (string= buffer-file-name (expand-file-name "packages.el" "~/.emacs.d"))
+    (add-to-list
+     'imenu-generic-expression
+     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))))
+
+(add-hook 'emacs-lisp-mode-hook 'my:setup-imenu-for-use-package)
+
+(use-package imenu-list
+    :init
+    (setq imenu-list-focus-after-activation t
+          imenu-list-auto-resize t)
+    )
+(use-package golden-ratio)
+
+(use-package deft)
 
 ;;
 ;; minor modes
@@ -328,9 +586,48 @@
   :init
   (add-hook 'doc-mode-hook 'page-break-lines-mode))
 
+(use-package dumb-jump
+  :config
+  (dumb-jump-mode))
+
+(use-package editorconfig
+  :if (executable-find "editorconfig")
+  :mode ("\\.editorconfig\\'" . conf-unix-mode)
+  :config
+  (editorconfig-mode 1))
+
+(use-package ranger
+  :commands (ranger deer ranger-override-dired-fn)
+  :config
+  (define-key ranger-mode-map (kbd "-") 'ranger-up-directory))
+
+(defun fasd-find-file-only ()
+  (interactive)
+  (fasd-find-file -1))
+
+(defun fasd-find-directory-only ()
+  (interactive)
+  (fasd-find-file 1))
+
+(use-package fasd
+  :init
+  (global-fasd-mode 1)
+  ;; we will fall back to using the default completing-read function, which is helm once helm is loaded.
+  (setq fasd-completing-read-function 'nil)
+  )
+
+(use-package aggressive-indent
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+  )
+
+
+
 ;;
 ;; editor modes
 ;;
+
+;; big editor modes
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -339,6 +636,15 @@
   (use-package js2-refactor)
   (use-package skewer-mode
     :commands skewer-mode))
+
+(use-package intero
+  :config (add-hook 'haskell-mode-hook 'intero-mode))
+
+(use-package tern
+  :config
+  (add-hook 'js2-mode-hook 'tern-mode))
+
+;; small editor modes
 
 (use-package json-mode
   :mode "\\.json\\'")
@@ -368,17 +674,6 @@
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
-(use-package editorconfig
-  :if (executable-find "editorconfig")
-  :mode ("\\.editorconfig\\'" . conf-unix-mode))
-
-(use-package intero
-  :config (add-hook 'haskell-mode-hook 'intero-mode))
-
-(use-package tern
-  :config
-  (add-hook 'js2-mode-hook 'tern-mode))
-
 (use-package nix-mode)
 
 (use-package web-mode)
@@ -403,7 +698,36 @@
 
 (use-package haskell-mode)
 
+(use-package pandoc-mode)
+(use-package ox-pandoc
+  :init (with-eval-after-load 'org (require 'ox-pandoc)))
+
 ;; (use-package jdee)
+
+(use-package which-key)
+
+(use-package typo)
+
+(use-package semantic)
+;; (use-package semantic-refractor)
+
+(use-package hungry-delete
+  :config
+  (setq-default hungry-delete-chars-to-skip " \t\f\v") ; only horizontal whitespace
+  (define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-backward)
+  (define-key hungry-delete-mode-map (kbd "S-DEL") 'delete-backward-char)
+  (global-hungry-delete-mode)
+  )
+
+;;
+;; fun
+;;
+
+;; (use-package twittering-mode)
+;; (use-package xkcd)
+;; (use-package tetris)
+;; (use-package pacmacs)
+;; (use-package spray)
 
 (provide 'packages)
 ;;; packages.el ends here
