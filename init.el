@@ -545,8 +545,6 @@ i.e. change right window to bottom, or change bottom window to right."
      (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
      (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
 
-(provide 'prelude-common-lisp)
-
 (defun prelude-recompile-elc-on-save ()
   "Recompile your elc when saving an elisp file."
   (add-hook 'after-save-hook
@@ -766,8 +764,6 @@ that can occur between two notifications.  The default is
 ;; (smex-initialize)
 ;; (global-set-key (kbd "M-x") 'smex)
 ;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
-(provide 'prelude-ido)
 
 (add-to-list 'auto-mode-alist '("\\.js\\'"    . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.pac\\'"   . js2-mode))

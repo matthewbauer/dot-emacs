@@ -45,7 +45,6 @@
 
 (use-package shell)
 (use-package tramp)
-(use-package tetris)
 (use-package gnus
   :commands gnus
   :init
@@ -161,11 +160,6 @@
 ;; terminals
 ;;
 
-(defun init-eshell ()
-  "Stuff to do when enabling eshell."
-  (setq pcomplete-cycle-completions nil)
-  (if (bound-and-true-p linum-mode) (linum-mode -1))
-  (semantic-mode -1))
 
 (defun multiterm (_)
   "Wrapper to be able to call multi-term from shell-pop"
@@ -177,69 +171,10 @@
   (interactive)
   (term-send-raw-string "\t"))
 
-(defun protect-eshell-prompt ()
-  "Protect Eshell's prompt like Comint's prompts.
-E.g. `evil-change-whole-line' won't wipe the prompt. This
-is achieved by adding the relevant text properties."
-  (let ((inhibit-field-text-motion t))
-    (add-text-properties
-     (point-at-bol)
-     (point)
-     '(rear-nonsticky t
-                      inhibit-line-move-field-capture t
-                      field output
-                      read-only t
-                      front-sticky (field inhibit-line-move-field-capture)))))
-
 (defun projectile-multi-term-in-root ()
   "Invoke `multi-term' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-project-root) (multi-term)))
-
-(use-package eshell
-  :bind ("C-x e" . eshell)
-  :commands (eshell eshell-command)
-  :preface
-  (defvar eshell-isearch-map
-    (let ((map (copy-keymap isearch-mode-map)))
-      (define-key map [(control ?m)] 'eshell-isearch-return)
-      (define-key map [return]       'eshell-isearch-return)
-      (define-key map [(control ?r)] 'eshell-isearch-repeat-backward)
-      (define-key map [(control ?s)] 'eshell-isearch-repeat-forward)
-      (define-key map [(control ?g)] 'eshell-isearch-abort)
-      (define-key map [backspace]    'eshell-isearch-delete-char)
-      (define-key map [delete]       'eshell-isearch-delete-char)
-      map)
-    "Keymap used in isearch in Eshell.")
-  :init
-  (add-hook 'eshell-after-prompt-hook 'protect-eshell-prompt)
-
-  (autoload 'eshell-delchar-or-maybe-eof "em-rebind")
-
-  (add-hook 'eshell-mode-hook 'init-eshell)
-  (add-hook 'eshell-mode-hook 'disable-hl-line-mode)
-    :config
-    (progn
-      (require 'esh-opt)
-
-      ;; quick commands
-      (defalias 'eshell/e 'find-file-other-window)
-      (defalias 'eshell/d 'dired)
-      (setenv "PAGER" "cat")
-
-      ;; support `em-smart'
-      (require 'em-smart)
-      (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
-
-      ;; Visual commands
-      (require 'em-term)
-      (mapc (lambda (x) (push x eshell-visual-commands))
-            '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
-
-      ;; automatically truncate buffer after output
-      (when (boundp 'eshell-output-filter-functions)
-        (push 'eshell-truncate-buffer eshell-output-filter-functions))
-  )
 
 (defun init-eshell-xterm-color ()
   "Initialize xterm coloring for eshell"
@@ -253,19 +188,6 @@ is achieved by adding the relevant text properties."
   "Locally disable global-hl-line-mode"
   (interactive)
   (setq-local global-hl-line-mode nil))
-
-(add-hook 'term-mode-hook 'disable-hl-line-mode)
-
-(use-package xterm-color
-  :init
-  ;; Comint and Shell
-  (setq comint-output-filter-functions
-        (remove 'ansi-color-process-output comint-output-filter-functions))
-  (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
-
-(use-package esh-help
-  :init (add-hook 'eshell-mode-hook 'eldoc-mode)
-  :config (setup-esh-help-eldoc))
 
 (defmacro make-shell-pop-command (func &optional shell)
   "Create a function to open a shell via the function FUNC.
@@ -288,6 +210,86 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
                       ,(concat "*" name "*")
                       (lambda nil (,func ,shell)))))
          (shell-pop index)))))
+
+(use-package eshell
+  :bind ("C-x e" . eshell)
+  :commands (eshell eshell-command)
+  :preface
+  (defvar eshell-isearch-map
+    (let ((map (copy-keymap isearch-mode-map)))
+      (define-key map [(control ?m)] 'eshell-isearch-return)
+      (define-key map [return]       'eshell-isearch-return)
+      (define-key map [(control ?r)] 'eshell-isearch-repeat-backward)
+      (define-key map [(control ?s)] 'eshell-isearch-repeat-forward)
+      (define-key map [(control ?g)] 'eshell-isearch-abort)
+      (define-key map [backspace]    'eshell-isearch-delete-char)
+      (define-key map [delete]       'eshell-isearch-delete-char)
+      map)
+    "Keymap used in isearch in Eshell.")
+
+  :init
+
+  (defun protect-eshell-prompt ()
+    "Protect Eshell's prompt like Comint's prompts.
+E.g. `evil-change-whole-line' won't wipe the prompt. This
+is achieved by adding the relevant text properties."
+    (let ((inhibit-field-text-motion t))
+      (add-text-properties
+       (point-at-bol)
+       (point)
+       '(rear-nonsticky t
+                        inhibit-line-move-field-capture t
+                        field output
+                        read-only t
+                        front-sticky (field inhibit-line-move-field-capture)))))
+
+  (add-hook 'eshell-after-prompt-hook 'protect-eshell-prompt)
+
+  (autoload 'eshell-delchar-or-maybe-eof "em-rebind")
+
+  (defun init-eshell ()
+    "Stuff to do when enabling eshell."
+    (setq pcomplete-cycle-completions nil)
+    (if (bound-and-true-p linum-mode) (linum-mode -1))
+    (semantic-mode -1))
+
+  (add-hook 'eshell-mode-hook 'init-eshell)
+  (add-hook 'eshell-mode-hook 'disable-hl-line-mode)
+
+  :config
+
+  (require 'esh-opt)
+
+  ;; quick commands
+  (defalias 'eshell/e 'find-file-other-window)
+  (defalias 'eshell/d 'dired)
+  (setenv "PAGER" "cat")
+
+  ;; support `em-smart'
+  (require 'em-smart)
+  (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
+
+  ;; Visual commands
+  (require 'em-term)
+  (mapc (lambda (x) (push x eshell-visual-commands))
+        '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
+
+  ;; automatically truncate buffer after output
+  (when (boundp 'eshell-output-filter-functions)
+    (push 'eshell-truncate-buffer eshell-output-filter-functions))
+
+(add-hook 'term-mode-hook 'disable-hl-line-mode)
+
+(use-package xterm-color
+  :init
+  ;; Comint and Shell
+  (setq comint-output-filter-functions
+        (remove 'ansi-color-process-output comint-output-filter-functions))
+  (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
+
+(use-package esh-help
+  :init (add-hook 'eshell-mode-hook 'eldoc-mode)
+  :config (setup-esh-help-eldoc))
 
 (use-package shell-pop
   :init
@@ -425,11 +427,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          :body message
          :urgency 'low)))
 
-(use-package erc-terminal-notifier)
-
-;; Hydra
-(use-package hydra)
-
 ;; Flycheck mode
 (use-package flycheck
   :config
@@ -487,6 +484,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package ycmd)
+
 (use-package flycheck-ycmd
   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
 (use-package company-ycmd
@@ -506,7 +504,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
     (setq imenu-list-focus-after-activation t
           imenu-list-auto-resize t)
     )
-(use-package golden-ratio)
 
 (use-package deft)
 
@@ -514,7 +511,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; minor modes
 ;;
 
-(use-package hl-line)
+(use-package golden-ratio-mode
+  :config
+  (global-golden-ratio-mode))
 
 (use-package hideshow
   :bind ("C-c h" . hs-toggle-hiding)
@@ -523,7 +522,14 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; (use-package ispell)
 
 (use-package wrap-region
-  :commands wrap-region-mode)
+  :commands wrap-region-mode
+  :diminish wrap-region-mode
+  :config
+  (wrap-region-add-wrappers
+   '(("$" "$")
+     ("/" "/" nil ruby-mode)
+     ("/* " " */" "#" (java-mode javascript-mode css-mode c-mode c++-mode))
+     ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
 (use-package whitespace-cleanup-mode
   :init (global-whitespace-cleanup-mode t))
@@ -546,16 +552,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (global-undo-tree-mode t))
 
-(use-package highlight-escape-sequences
-  :init
-  (hes-mode))
-
-(use-package highlight-symbol
-  :config
-  (dolist (hook '(prog-mode-hook html-mode-hook))
-    (add-hook hook 'highlight-symbol-mode)
-    (add-hook hook 'highlight-symbol-nav-mode)))
-
 (use-package multi-term
   :commands multi-term
   :init
@@ -570,7 +566,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package rainbow-delimiters
   :init
-  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  )
 
 (use-package ace-window
   :bind (("C-x a" . ace-window)))
@@ -579,8 +577,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :if (executable-find "ag")
   :bind
   ("M-?" . ag-project))
-
-(use-package savekill)
 
 (use-package page-break-lines
   :init
@@ -601,14 +597,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (define-key ranger-mode-map (kbd "-") 'ranger-up-directory))
 
-(defun fasd-find-file-only ()
-  (interactive)
-  (fasd-find-file -1))
-
-(defun fasd-find-directory-only ()
-  (interactive)
-  (fasd-find-file 1))
-
 (use-package fasd
   :init
   (global-fasd-mode 1)
@@ -618,10 +606,24 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package aggressive-indent
   :init
+  (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   )
 
+(use-package which-key)
 
+(use-package typo)
+
+(use-package semantic)
+;; (use-package semantic-refractor)
+
+(use-package hungry-delete
+  :config
+  (setq-default hungry-delete-chars-to-skip " \t\f\v") ; only horizontal whitespace
+  (define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-backward)
+  (define-key hungry-delete-mode-map (kbd "S-DEL") 'delete-backward-char)
+  (global-hungry-delete-mode)
+  )
 
 ;;
 ;; editor modes
@@ -644,27 +646,25 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (add-hook 'js2-mode-hook 'tern-mode))
 
+;; (use-package jdee)
+
 ;; small editor modes
 
 (use-package json-mode
   :mode "\\.json\\'")
-
 (use-package less-css-mode
   :commands less-css-mode
   :config
   (use-package js2-mode)
   (use-package skewer-less))
-
 (use-package markdown-mode
   :mode "\\.\\(md\\|markdown\\)\\'"
   :commands markdown-mode
   :config
   (use-package pandoc-mode :init
     (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
-
 (use-package crontab-mode
   :mode "\\.?cron\\(tab\\)?\\'")
-
 (use-package css-mode
   :commands css-mode
   :config
@@ -673,51 +673,21 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
     (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
-
 (use-package nix-mode)
-
 (use-package web-mode)
-
 (use-package php-mode)
-
 (use-package cmake-mode)
-
 (use-package rust-mode)
-
 (use-package gitattributes-mode)
-
 (use-package gitconfig-mode)
-
 (use-package go-mode)
-
 (use-package coffee-mode)
-
 (use-package gitignore-mode)
-
 (use-package yaml-mode)
-
 (use-package haskell-mode)
-
 (use-package pandoc-mode)
 (use-package ox-pandoc
   :init (with-eval-after-load 'org (require 'ox-pandoc)))
-
-;; (use-package jdee)
-
-(use-package which-key)
-
-(use-package typo)
-
-(use-package semantic)
-;; (use-package semantic-refractor)
-
-(use-package hungry-delete
-  :config
-  (setq-default hungry-delete-chars-to-skip " \t\f\v") ; only horizontal whitespace
-  (define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-backward)
-  (define-key hungry-delete-mode-map (kbd "S-DEL") 'delete-backward-char)
-  (global-hungry-delete-mode)
-  )
 
 ;;
 ;; fun

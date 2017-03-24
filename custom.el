@@ -14,12 +14,12 @@
  '(TeX-close-quote "" t)
  '(TeX-open-quote "" t)
  '(TeX-parse-self t t)
+ '(ad-redefinition-action (quote accept))
  '(ag-highlight-search t)
  '(auru-warn-only t)
  '(auth-sources (quote ("~/.authinfo")))
  '(auto-revert-verbose nil)
  '(auto-save-file-name-transforms (\` ((".*" (\, temporary-file-directory) t))))
- '(ad-redefinition-action 'accept)
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
  '(column-number-mode t)
  '(comint-process-echoes t)
@@ -81,7 +81,7 @@
  '(eshell-buffer-maximum-lines 20000)
  '(eshell-buffer-shorthand t)
  '(eshell-cmpl-cycle-completions nil)
- '(eshell-highlight-prompt nil t)
+ '(eshell-highlight-prompt nil)
  '(eshell-hist-ignoredups t)
  '(eshell-history-size 350)
  '(eshell-plain-echo-behavior t)
@@ -211,7 +211,7 @@
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (aggressive-indent semantic-refractor typo-mode typo helm-ag which-key spray pacmacs xkcd rebox-mode ox-pandoc systemd-mode fasd ranger deft golden-ratio imenu-list company-ycmd flycheck-ycmd ycmd flyspell-correct erc-terminal-notifier erc-autoaway eshell-prompt-extras eshell-z shell-pop esh-help xterm-color twittering-mode dumb-jump pdf-tools tern js2-refactor d-mode auctex smartparens-ruby helm-projectile ensime smartparens-config smart-tabs-mode chess company-anaconda company-cabal company-ghc company-ghci company-go company-nixos-options company-racer company-web company-ycm js3-mode tabbar projectile lsp-mode em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm yaml-mode wrap-region whitespace-cleanup-mode web-mode use-package undo-tree smooth-scrolling smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
+    (volatile-highlights highlight-parentheses aggressive-indent semantic-refractor typo-mode typo helm-ag which-key spray pacmacs xkcd rebox-mode ox-pandoc systemd-mode fasd ranger deft golden-ratio imenu-list company-ycmd flycheck-ycmd ycmd flyspell-correct erc-terminal-notifier erc-autoaway eshell-prompt-extras eshell-z shell-pop esh-help xterm-color twittering-mode dumb-jump pdf-tools tern js2-refactor d-mode auctex smartparens-ruby helm-projectile ensime smartparens-config smart-tabs-mode chess company-anaconda company-cabal company-ghc company-ghci company-go company-nixos-options company-racer company-web company-ycm js3-mode tabbar projectile lsp-mode em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm yaml-mode wrap-region whitespace-cleanup-mode web-mode use-package undo-tree smooth-scrolling smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
