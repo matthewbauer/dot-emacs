@@ -29,17 +29,9 @@
 
 ;; key bindings
 
-(use-package bind-key
-             :demand t)
 (let ((keymap-file (expand-file-name "keymap.el" user-emacs-directory)))
   (if (file-exists-p keymap-file)
       (load keymap-file)))
-
-;; auto compile
-(use-package auto-compile
-  :demand t
-  :config
-  (auto-compile-on-load-mode))
 
 (use-package org)
 
@@ -97,10 +89,6 @@
 
 ;; Helm mode
 (use-package helm
-  :init
-  (require 'helm-config)
-  (helm-mode)
-  (require 'helm-eshell)
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
@@ -112,6 +100,9 @@
          ("C-x c s" . helm-swoop)
          ("C-x c SPC" . helm-all-mark-rings))
   :config
+  (require 'helm-config)
+  (helm-mode)
+  ;; (require 'helm-eshell)
   (use-package helm-descbinds
     :config (helm-descbinds-mode))
   (use-package helm-ag)
@@ -119,9 +110,6 @@
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
   ;; shell history.
   (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (setq projectile-completion-system 'helm)
   (helm-mode 1)
@@ -299,7 +287,7 @@ is achieved by adding the relevant text properties."
   (make-shell-pop-command multiterm)
   (make-shell-pop-command ansi-term shell-pop-term-shell))
 
-(add-hook 'term-mode-hook 'ansi-term-handle-close)
+;; (add-hook 'term-mode-hook 'ansi-term-handle-close)
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 (defun shell-comint-input-sender-hook ()
     "Check certain shell commands.
@@ -327,7 +315,7 @@ is achieved by adding the relevant text properties."
 (use-package multi-term)
 
 (use-package eshell-z
-  :init
+  :config
   (with-eval-after-load 'eshell
     (require 'eshell-z)))
 
@@ -431,18 +419,19 @@ is achieved by adding the relevant text properties."
 (use-package flycheck
   :config
   (setq flycheck-display-errors-function nil)
-  (add-hook 'after-init-hook 'global-flycheck-mode))
+  )
 
 (use-package auto-dictionary
   :init
   (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
 
-  (use-package flyspell
-    :commands (spell-checking/change-dictionary)
-    :init
-    (progn
-      (add-hook 'text-mode-hook' 'flyspell-mode)
-      (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
+(use-package flyspell
+  :commands (spell-checking/change-dictionary)
+  :init
+  (progn
+    (add-hook 'text-mode-hook' 'flyspell-mode)
+    ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    ))
 
 (use-package flyspell-correct
   :commands (flyspell-correct-word-generic
@@ -453,10 +442,8 @@ is achieved by adding the relevant text properties."
   :bind ("<C-tab>" . company-complete)
   :commands company-mode
   :after helm
-  :init (global-company-mode 1)
+  :config (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
-
-  :config
   (use-package company-tern
     :init (add-to-list 'company-backends 'company-tern))
 
@@ -472,8 +459,6 @@ is achieved by adding the relevant text properties."
 
 (use-package gist)
 
-(use-package git-commit)
-
 (use-package magit
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
@@ -483,12 +468,16 @@ is achieved by adding the relevant text properties."
   (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
   )
 
-(use-package ycmd)
+(use-package magit-gh-pulls
+  :config
+  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
-(use-package flycheck-ycmd
-  :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
-(use-package company-ycmd
-  :commands company-ycmd)
+;; (use-package ycmd)
+;; (use-package flycheck-ycmd
+;;   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+;; (use-package company-ycmd
+;;   :after ycmd
+;;   :commands company-ycmd)
 
 (defun my:setup-imenu-for-use-package ()
   "Recognize `use-package` in imenu"
@@ -511,9 +500,9 @@ is achieved by adding the relevant text properties."
 ;; minor modes
 ;;
 
-(use-package golden-ratio-mode
-  :config
-  (global-golden-ratio-mode))
+;; (use-package golden-ratio
+;;   :config
+;;   (global-golden-ratio-mode))
 
 (use-package hideshow
   :bind ("C-c h" . hs-toggle-hiding)
@@ -532,7 +521,7 @@ is achieved by adding the relevant text properties."
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
 (use-package whitespace-cleanup-mode
-  :init (global-whitespace-cleanup-mode t))
+  :config (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
@@ -583,7 +572,12 @@ is achieved by adding the relevant text properties."
   (add-hook 'doc-mode-hook 'page-break-lines-mode))
 
 (use-package dumb-jump
-  :config
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'helm)
+
   (dumb-jump-mode))
 
 (use-package editorconfig
@@ -598,7 +592,7 @@ is achieved by adding the relevant text properties."
   (define-key ranger-mode-map (kbd "-") 'ranger-up-directory))
 
 (use-package fasd
-  :init
+  :config
   (global-fasd-mode 1)
   ;; we will fall back to using the default completing-read function, which is helm once helm is loaded.
   (setq fasd-completing-read-function 'nil)

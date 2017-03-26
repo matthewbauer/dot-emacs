@@ -1,8 +1,4 @@
-;;; Custom.el -- Emacs settings
-
-;;; Commentary:
-
-;;; Code:
+;; Custom.el -- Emacs settings;;; Custom.el -- Emacs settingCode:
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -81,13 +77,14 @@
  '(eshell-buffer-maximum-lines 20000)
  '(eshell-buffer-shorthand t)
  '(eshell-cmpl-cycle-completions nil)
- '(eshell-highlight-prompt nil)
+ '(eshell-highlight-prompt nil t)
  '(eshell-hist-ignoredups t)
  '(eshell-history-size 350)
  '(eshell-plain-echo-behavior t)
  '(eshell-review-quick-commands nil)
  '(eshell-smart-space-goes-to-end t)
  '(eshell-where-to-jump (quote begin))
+ '(esup-child-profile-require-level 3 t)
  '(explicit-bash-args (quote ("-c" "export EMACS=; stty echo; bash")))
  '(explicit-shell-file-name "bash")
  '(flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
@@ -106,7 +103,7 @@
           (abbreviate-file-name
            (buffer-file-name))
         "%b")))) t)
- '(gc-cons-threshold 20000000)
+ '(gc-cons-threshold 100000000)
  '(geiser-mode-start-repl-p t)
  '(git-commit-mode-hook
    (quote
@@ -208,10 +205,9 @@
  '(org-refile-use-outline-path (quote file))
  '(org-src-fontify-natively t)
  '(org-tags-column 80)
- '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (volatile-highlights highlight-parentheses aggressive-indent semantic-refractor typo-mode typo helm-ag which-key spray pacmacs xkcd rebox-mode ox-pandoc systemd-mode fasd ranger deft golden-ratio imenu-list company-ycmd flycheck-ycmd ycmd flyspell-correct erc-terminal-notifier erc-autoaway eshell-prompt-extras eshell-z shell-pop esh-help xterm-color twittering-mode dumb-jump pdf-tools tern js2-refactor d-mode auctex smartparens-ruby helm-projectile ensime smartparens-config smart-tabs-mode chess company-anaconda company-cabal company-ghc company-ghci company-go company-nixos-options company-racer company-web company-ycm js3-mode tabbar projectile lsp-mode em-unix erc-patch erc-highlight-nicknames erc-alert agda-input esh-toggle apropospriate-theme coffee-mode color-theme js2-mode multiple-cursors magit company flycheck hydra helm yaml-mode wrap-region whitespace-cleanup-mode web-mode use-package undo-tree smooth-scrolling smartscan smartparens smart-mode-line skewer-mode savekill rust-mode readline-complete rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub magit-gh-pulls less-css-mode jsx-mode json-mode jasminejs-mode intero imenu-anywhere hungry-delete htmlize highlight-symbol highlight-escape-sequences helm-swoop helm-descbinds guide-key go-mode gitignore-mode gitconfig-mode gitattributes-mode gist flycheck-pos-tip f expand-region editorconfig css-eldoc crontab-mode company-tern color-theme-solarized coffee-fof cmake-mode buffer-move auto-dictionary auto-compile ag ace-window ace-jump-mode)))
+    (magit-gh-pulls go-mode deft multiple-cursors jdee ox-pandoc coffee-mode typo xterm-color yaml-mode wrap-region whitespace-cleanup-mode which-key web-mode use-package undo-tree smooth-scrolling smartparens smart-tabs-mode smart-mode-line skewer-less shell-pop savekill rust-mode readline-complete ranger rainbow-mode rainbow-delimiters php-mode peep-dired pandoc-mode page-break-lines pacmacs ox-gfm origami nix-mode mwim multi-term mmm-mode miniedit markdown-mode magithub lsp-mode less-css-mode jsx-mode json-mode js3-mode jasminejs-mode intero imenu-list imenu-anywhere hungry-delete helm-projectile helm-descbinds helm-ag gitignore-mode gitconfig-mode gitattributes-mode gist flyspell-correct flycheck-pos-tip fasd expand-region esup eshell-z eshell-prompt-extras esh-help ensime editorconfig dumb-jump d-mode css-eldoc crontab-mode company-web company-tern company-ghci company-ghc company-cabal company-anaconda cmake-mode buffer-move auto-dictionary auto-compile auctex apropospriate-theme aggressive-indent ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
@@ -281,6 +277,7 @@
  '(use-file-dialog nil)
  '(use-package-always-defer t)
  '(use-package-always-ensure t)
+ '(use-package-verbose nil)
  '(user-full-name "Matthew Bauer")
  '(user-initials "mjb")
  '(user-mail-address "mjbauer95@gmail.com")
@@ -290,7 +287,6 @@
  '(vc-handled-backends (quote (GIT SVN CVS Bzr Hg)))
  '(vc-make-backup-files t)
  '(version-control t)
- '(warning-minimum-log-level :error)
  '(whitespace-auto-cleanup t t)
  '(whitespace-line-column 110)
  '(whitespace-rescan-timer-time nil t)
