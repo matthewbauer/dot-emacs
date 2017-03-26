@@ -1,6 +1,8 @@
-alias l  $*
+alias npm ~/.nix-profile/bin/npm $*
+alias l $*
 alias ll ls -lh $*
 alias la ls -lha $*
 alias clear recenter 0
 alias ff find-file $1
 alias d dired $1
+alias heroku /home/mbauer/.local/bin/heroku $*
