@@ -74,10 +74,11 @@
    (quote
     ("JOIN" "NICK" "PART" "QUIT" "MODE" "324" "329" "332" "333" "353" "477")))
  '(erc-track-mode t)
+ '(eshell-banner-message "")
  '(eshell-buffer-maximum-lines 20000)
  '(eshell-buffer-shorthand t)
  '(eshell-cmpl-cycle-completions nil)
- '(eshell-highlight-prompt nil t)
+ '(eshell-highlight-prompt nil)
  '(eshell-hist-ignoredups t)
  '(eshell-history-size 350)
  '(eshell-plain-echo-behavior t)
