@@ -465,10 +465,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (add-hook 'emacs-lisp-mode-hook 'my:setup-imenu-for-use-package)
 
 (use-package imenu-list
-    :init
-    (setq imenu-list-focus-after-activation t
-          imenu-list-auto-resize t)
-    )
+  :init
+  (setq imenu-list-focus-after-activation t
+        imenu-list-auto-resize t))
 
 (use-package deft)
 
@@ -647,7 +646,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
-(use-package nix-mode)
+(use-package nix-mode
+  :load-path "/Users/mbauer/Projects/nix-mode/")
 
 (use-package web-mode)
 
