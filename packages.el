@@ -417,9 +417,10 @@ is achieved by adding the relevant text properties."
 
 ;; Flycheck mode
 (use-package flycheck
+  :init
+  (global-flycheck-mode 1)
   :config
   (setq flycheck-display-errors-function nil)
-  (global-flycheck-mode)
   )
 
 (use-package auto-dictionary
