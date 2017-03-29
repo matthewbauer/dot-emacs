@@ -1,21 +1,20 @@
 ;; default global modes
 (electric-pair-mode t)
 (electric-indent-mode t)
-(show-paren-mode t)
+(show-paren-mode 1)
 ;; (winner-mode t)
 ;; (which-function-mode t)
 ;; (ido-mode -1)
 (cua-selection-mode t)
 (semantic-mode 1)
 ;; (desktop-save-mode t)
-;; (auto-revert-mode t)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
 (delete-selection-mode t)
 (savehist-mode t)
 (delete-selection-mode t)
-;; (global-auto-revert-mode t)
+(global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
 ;; (menu-bar-mode +1)
@@ -36,14 +35,6 @@
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
-
-;; saveplace remembers your location in a file when saving files
-(setq save-place-file (expand-file-name "saveplace" "~/.emacs.d"))
-;; activate it for all buffers
-(if (< emacs-major-version 25)
-    (progn (require 'saveplace)
-           (setq-default save-place t))
-  (save-place-mode 1))
 
 ;; savehist keeps track of some history
 (require 'savehist)

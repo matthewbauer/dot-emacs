@@ -446,12 +446,14 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
-;; (use-package ycmd)
-;; (use-package flycheck-ycmd
-;;   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
-;; (use-package company-ycmd
-;;   :after ycmd
-;;   :commands company-ycmd)
+(use-package ycmd)
+(use-package flycheck-ycmd
+  :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+(use-package company-ycmd
+  :after ycmd
+  :commands company-ycmd
+  :init
+  (company-ycmd-setup))
 
 (defun my:setup-imenu-for-use-package ()
   "Recognize `use-package` in imenu"
@@ -530,8 +532,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (use-package rainbow-delimiters
   :init
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  )
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 (use-package ace-window
   :bind (("C-x a" . ace-window)))
