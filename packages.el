@@ -189,7 +189,6 @@ is achieved by adding the relevant text properties."
     (semantic-mode -1))
 
   (add-hook 'eshell-mode-hook 'init-eshell)
-  (add-hook 'eshell-mode-hook 'disable-hl-line-mode)
 
   :config
 
