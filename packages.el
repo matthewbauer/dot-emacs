@@ -683,10 +683,16 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;
 
 ;; (use-package twittering-mode)
+
 ;; (use-package xkcd)
+
 ;; (use-package tetris)
+
 ;; (use-package pacmacs)
+
 ;; (use-package spray)
+
+(use-package esup)
 
 (provide 'packages)
 ;;; packages.el ends here
