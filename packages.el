@@ -40,8 +40,7 @@
 (use-package gnus
   :commands gnus
   :init
-  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-  )
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
 
 ;; Multiple Major Modes
 (use-package mmm-mode
@@ -112,8 +111,7 @@
   (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (setq projectile-completion-system 'helm)
-  (helm-mode 1)
-  )
+  (helm-mode 1))
 
 (use-package lsp-mode
   :config (global-lsp-mode t))
@@ -147,57 +145,6 @@
 ;;
 ;; terminals
 ;;
-
-
-(defun multiterm (_)
-  "Wrapper to be able to call multi-term from shell-pop"
-  (interactive)
-  (multi-term))
-
-(defun term-send-tab ()
-  "Send tab in term mode."
-  (interactive)
-  (term-send-raw-string "\t"))
-
-(defun projectile-multi-term-in-root ()
-  "Invoke `multi-term' in the project's root."
-  (interactive)
-  (projectile-with-default-dir (projectile-project-root) (multi-term)))
-
-(defun init-eshell-xterm-color ()
-  "Initialize xterm coloring for eshell"
-  (setq-local xterm-color-preserve-properties t)
-  (make-local-variable 'eshell-preoutput-filter-functions)
-  (setq-local eshell-output-filter-functions
-              (remove 'eshell-handle-ansi-color
-                      eshell-output-filter-functions)))
-
-(defun disable-hl-line-mode ()
-  "Locally disable global-hl-line-mode"
-  (interactive)
-  (setq-local global-hl-line-mode nil))
-
-(defmacro make-shell-pop-command (func &optional shell)
-  "Create a function to open a shell via the function FUNC.
-SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
-  (let* ((name (symbol-name func)))
-    `(defun ,(intern (concat "shell-pop-" name)) (index)
-       ,(format (concat "Toggle a popup window with `%S'.\n"
-                        "Multiple shells can be opened with a numerical prefix "
-                        "argument. Using the universal prefix argument will "
-                        "open the shell in the current buffer instead of a "
-                        "popup buffer.") func)
-       (interactive "P")
-       (require 'shell-pop)
-       (if (equal '(4) index)
-           ;; no popup
-           (,func ,shell)
-         (shell-pop--set-shell-type
-          'shell-pop-shell-type
-          (backquote (,name
-                      ,(concat "*" name "*")
-                      (lambda nil (,func ,shell)))))
-         (shell-pop index)))))
 
 (use-package eshell
   :bind ("C-x e" . eshell)
@@ -273,6 +220,13 @@ is achieved by adding the relevant text properties."
   ;; Comint and Shell
   (setq comint-output-filter-functions
         (remove 'ansi-color-process-output comint-output-filter-functions))
+  (defun init-eshell-xterm-color ()
+    "Initialize xterm coloring for eshell"
+    (setq-local xterm-color-preserve-properties t)
+    (make-local-variable 'eshell-preoutput-filter-functions)
+    (setq-local eshell-output-filter-functions
+                (remove 'eshell-handle-ansi-color
+                        eshell-output-filter-functions)))
   (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
 
 (use-package esh-help
@@ -281,6 +235,27 @@ is achieved by adding the relevant text properties."
 
 (use-package shell-pop
   :init
+  (defmacro make-shell-pop-command (func &optional shell)
+    "Create a function to open a shell via the function FUNC.
+SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
+    (let* ((name (symbol-name func)))
+      `(defun ,(intern (concat "shell-pop-" name)) (index)
+         ,(format (concat "Toggle a popup window with `%S'.\n"
+                          "Multiple shells can be opened with a numerical prefix "
+                          "argument. Using the universal prefix argument will "
+                          "open the shell in the current buffer instead of a "
+                          "popup buffer.") func)
+         (interactive "P")
+         (require 'shell-pop)
+         (if (equal '(4) index)
+             ;; no popup
+             (,func ,shell)
+           (shell-pop--set-shell-type
+            'shell-pop-shell-type
+            (backquote (,name
+                        ,(concat "*" name "*")
+                        (lambda nil (,func ,shell)))))
+           (shell-pop index)))))
   (make-shell-pop-command eshell)
   (make-shell-pop-command shell)
   (make-shell-pop-command term shell-pop-term-shell)
@@ -310,7 +285,6 @@ is achieved by adding the relevant text properties."
              ;; Send other commands to the default handler.
              (t (comint-simple-send proc command))))))
 (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
-(add-hook 'shell-mode-hook 'disable-hl-line-mode)
 
 (use-package multi-term)
 
@@ -417,10 +391,10 @@ is achieved by adding the relevant text properties."
 
 ;; Flycheck mode
 (use-package flycheck
+  :init
+  (global-flycheck-mode t)
   :config
-  (setq flycheck-display-errors-function nil)
-  (global-flycheck-mode)
-  )
+  (setq flycheck-display-errors-function nil))
 
 (use-package auto-dictionary
   :init
@@ -522,7 +496,7 @@ is achieved by adding the relevant text properties."
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
 (use-package whitespace-cleanup-mode
-  :config (global-whitespace-cleanup-mode t))
+  :init (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
@@ -647,19 +621,23 @@ is achieved by adding the relevant text properties."
 
 (use-package json-mode
   :mode "\\.json\\'")
+
 (use-package less-css-mode
   :commands less-css-mode
   :config
   (use-package js2-mode)
   (use-package skewer-less))
+
 (use-package markdown-mode
   :mode "\\.\\(md\\|markdown\\)\\'"
   :commands markdown-mode
   :config
   (use-package pandoc-mode :init
     (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
+
 (use-package crontab-mode
   :mode "\\.?cron\\(tab\\)?\\'")
+
 (use-package css-mode
   :commands css-mode
   :config
@@ -668,21 +646,37 @@ is achieved by adding the relevant text properties."
     (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
+
 (use-package nix-mode)
+
 (use-package web-mode)
+
 (use-package php-mode)
+
 (use-package cmake-mode)
+
 (use-package rust-mode)
+
 (use-package gitattributes-mode)
+
 (use-package gitconfig-mode)
+
 (use-package go-mode)
+
 (use-package coffee-mode)
+
 (use-package gitignore-mode)
+
 (use-package yaml-mode)
+
 (use-package haskell-mode)
+
 (use-package pandoc-mode)
+
 (use-package ox-pandoc
-  :init (with-eval-after-load 'org (require 'ox-pandoc)))
+  :init (with-eval-after-load 'org (require 'ox-pandoc))
+  :if (executable-find "pandoc")
+  )
 
 ;;
 ;; fun
