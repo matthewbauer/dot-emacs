@@ -673,10 +673,10 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package pandoc-mode)
 
-(use-package ox-pandoc
-  :init (with-eval-after-load 'org (require 'ox-pandoc))
-  :if (executable-find "pandoc")
-  )
+;; (use-package ox-pandoc
+;;   :init (with-eval-after-load 'org (require 'ox-pandoc))
+;;   :if (executable-find "pandoc")
+;;   )
 
 ;;
 ;; fun
