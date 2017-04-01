@@ -564,10 +564,10 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (editorconfig-mode 1))
 
-(use-package ranger
-  :commands (ranger deer ranger-override-dired-fn)
-  :config
-  (define-key ranger-mode-map (kbd "-") 'ranger-up-directory))
+;; (use-package ranger
+;;   :commands (ranger deer ranger-override-dired-fn)
+;;   :config
+;;   (define-key ranger-mode-map (kbd "-") 'ranger-up-directory))
 
 (use-package fasd
   :config
