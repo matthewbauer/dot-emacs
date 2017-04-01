@@ -650,8 +650,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
-(use-package nix-mode
-  :load-path "/Users/mbauer/Projects/nix-mode/")
+(use-package nix-mode)
 
 (use-package web-mode)
 
