@@ -134,6 +134,7 @@
             'projectile-command-map))
 
 (use-package magithub
+  :if (executable-find "git")
   :after magit
   :config (magithub-feature-autoinject t))
 
@@ -435,6 +436,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (use-package gist)
 
 (use-package magit
+  :if (executable-find "git")
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
   :config
@@ -444,6 +446,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package magit-gh-pulls
+  :if (executable-find "git")
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
