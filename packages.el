@@ -607,9 +607,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :mode "\\.js\\'"
   :config
   (js2-imenu-extras-mode)
-  (use-package js2-refactor)
-  (use-package skewer-mode
-    :commands skewer-mode))
+  ;; (use-package skewer-mode
+  ;;   :commands skewer-mode)
+  )
 
 (use-package intero
   :config (add-hook 'haskell-mode-hook 'intero-mode))
