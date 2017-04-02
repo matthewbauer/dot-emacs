@@ -78,13 +78,13 @@
 
 (use-package ispell)
 
-(use-package avy
-  :config
-  (global-set-key (kbd "C-:") 'avy-goto-char))
+;; (use-package avy
+;;   :config
+;;   (global-set-key (kbd "C-:") 'avy-goto-char))
 
-(use-package expand-region
-  :config
-  (global-set-key (kbd "C-=") 'expand-region))
+;; (use-package expand-region
+;;   :config
+;;   (global-set-key (kbd "C-=") 'expand-region))
 
 ;; Helm mode
 (use-package helm
@@ -287,8 +287,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
              (t (comint-simple-send proc command))))))
 (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
 
-(use-package multi-term)
-
 (use-package eshell-z
   :config
   (with-eval-after-load 'eshell
@@ -433,7 +431,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; custom major modes
 ;;
 
-(use-package gist)
+;; (use-package gist)
 
 (use-package magit
   :if (executable-find "git")
@@ -473,7 +471,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (setq imenu-list-focus-after-activation t
         imenu-list-auto-resize t))
 
-(use-package deft)
+;; (use-package deft)
 
 ;;
 ;; minor modes
@@ -483,9 +481,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;   :config
 ;;   (global-golden-ratio-mode))
 
-(use-package hideshow
-  :bind ("C-c h" . hs-toggle-hiding)
-  :commands hs-toggle-hiding)
+;; (use-package hideshow
+;;   :bind ("C-c h" . hs-toggle-hiding)
+;;   :commands hs-toggle-hiding)
 
 ;; (use-package ispell)
 
@@ -516,17 +514,17 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (("<C-S-down>" . mc/mark-next-like-this)
    ("<C-S-up>" . mc/mark-previous-like-this)))
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode t))
+;; (use-package undo-tree
+;;   :config
+;;   (global-undo-tree-mode t))
 
-(use-package multi-term
-  :commands multi-term
-  :init
-  (add-hook 'term-mode-hook
-            (lambda () (yas-minor-mode -1))))
+;; (use-package multi-term
+;;   :commands multi-term
+;;   :init
+;;   (add-hook 'term-mode-hook
+;;             (lambda () (yas-minor-mode -1))))
 
-(use-package ace-jump-mode)
+;; (use-package ace-jump-mode)
 
 (use-package mwim
   :bind (("C-a" . mwim-beginning-of-code-or-line)
@@ -537,8 +535,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
-(use-package ace-window
-  :bind (("C-x a" . ace-window)))
+;; (use-package ace-window
+;;   :bind (("C-x a" . ace-window)))
 
 (use-package ag
   :if (executable-find "ag")
@@ -582,11 +580,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   )
 
-(use-package which-key)
+;; (use-package which-key)
 
-(use-package typo)
+;; (use-package typo)
 
-(use-package semantic)
+;; (use-package semantic)
 ;; (use-package semantic-refractor)
 
 (use-package hungry-delete
