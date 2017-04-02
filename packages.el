@@ -415,13 +415,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;   (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
 
 (use-package flyspell
-  :demand t
   :commands (spell-checking/change-dictionary)
   :init
-  (progn
-    (add-hook 'text-mode-hook' 'flyspell-mode)
-    ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-    ))
+  (add-hook 'text-mode-hook' 'flyspell-mode)
+  ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  )
 
 ;; (use-package flyspell-correct
 ;;   :commands (flyspell-correct-word-generic
@@ -483,8 +481,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (add-hook 'emacs-lisp-mode-hook 'my:setup-imenu-for-use-package)
 
 (use-package imenu-list
-  :demand t
-  :init
+  :commands imenu-list
+  :config
   (setq imenu-list-focus-after-activation t
         imenu-list-auto-resize t))
 
@@ -551,7 +549,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("C-e" . mwim-end-of-code-or-line)))
 
 (use-package rainbow-delimiters
-  :demand t
+  :comands rainbow-delimiters-mode
   :init
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
@@ -597,8 +595,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package aggressive-indent
-  :demand t
-  :config
+  :comands aggressive-indent-mode
+  :init
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   )
