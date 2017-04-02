@@ -239,9 +239,9 @@ is achieved by adding the relevant text properties."
   (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
 
 (use-package esh-help
-  :demand t
-  :config
+  :init
   (add-hook 'eshell-mode-hook 'eldoc-mode)
+  :config
   (setup-esh-help-eldoc))
 
 (use-package shell-pop
