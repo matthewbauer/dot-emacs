@@ -504,9 +504,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
      ("/* " " */" "#" (java-mode javascript-mode css-mode c-mode c++-mode))
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
-(use-package whitespace-cleanup-mode
-  :demand t
-  :config (global-whitespace-cleanup-mode t))
+;; (use-package whitespace-cleanup-mode
+;;   :demand t
+;;   :config (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
