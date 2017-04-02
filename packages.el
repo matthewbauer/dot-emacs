@@ -49,40 +49,43 @@
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
 
 ;; Multiple Major Modes
-(use-package mmm-mode
-  :commands mmm-mode)
+;; (use-package mmm-mode
+;;   :commands mmm-mode)
 
 (use-package smart-tabs-mode
-  :demand t
+  :init
+  (add-hook 'prog-mode-hook 'smart-tabs-mode)
   :commands smart-tabs-mode)
 
-(use-package smartparens
-  :demand t
-  :config
-  (setq smartparens-strict-mode t)
-  (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
-  (require 'smartparens-config)
-  (sp-use-paredit-bindings)
-  (smartparens-global-mode 1)
-  (show-smartparens-global-mode 1)
-  :bind
-  (("C-M-k" . sp-kill-sexp-with-a-twist-of-lime)
-   ("C-M-f" . sp-forward-sexp)
-   ("C-M-b" . sp-backward-sexp)
-   ("C-M-n" . sp-up-sexp)
-   ("C-M-d" . sp-down-sexp)
-   ("C-M-u" . sp-backward-up-sexp)
-   ("C-M-p" . sp-backward-down-sexp)
-   ("C-M-w" . sp-copy-sexp)
-   ("M-s" . sp-splice-sexp)
-   ("M-r" . sp-splice-sexp-killing-around)
-   ("C-)" . sp-forward-slurp-sexp)
-   ("C-}" . sp-forward-barf-sexp)
-   ("C-(" . sp-backward-slurp-sexp)
-   ("C-{" . sp-backward-barf-sexp)
-   ("M-S" . sp-split-sexp)
-   ("M-J" . sp-join-sexp)
-   ("C-M-t" . sp-transpose-sexp)))
+;; (use-package smartparens
+;;   :init
+;;   (add-hook 'prog-mode-hook 'smartparens-mode)
+;;   :commands smartparens-mode
+;;   :config
+;;   (setq smartparens-strict-mode t)
+;;   (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
+;;   (require 'smartparens-config)
+;;   (sp-use-paredit-bindings)
+;;   (smartparens-global-mode 1)
+;;   (show-smartparens-global-mode 1)
+;;   :bind
+;;   (("C-M-k" . sp-kill-sexp-with-a-twist-of-lime)
+;;    ("C-M-f" . sp-forward-sexp)
+;;    ("C-M-b" . sp-backward-sexp)
+;;    ("C-M-n" . sp-up-sexp)
+;;    ("C-M-d" . sp-down-sexp)
+;;    ("C-M-u" . sp-backward-up-sexp)
+;;    ("C-M-p" . sp-backward-down-sexp)
+;;    ("C-M-w" . sp-copy-sexp)
+;;    ("M-s" . sp-splice-sexp)
+;;    ("M-r" . sp-splice-sexp-killing-around)
+;;    ("C-)" . sp-forward-slurp-sexp)
+;;    ("C-}" . sp-forward-barf-sexp)
+;;    ("C-(" . sp-backward-slurp-sexp)
+;;    ("C-{" . sp-backward-barf-sexp)
+;;    ("M-S" . sp-split-sexp)
+;;    ("M-J" . sp-join-sexp)
+;;    ("C-M-t" . sp-transpose-sexp)))
 
 (use-package ispell)
 
@@ -213,16 +216,14 @@ is achieved by adding the relevant text properties."
   (require 'em-smart)
   (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
 
-  ;; Visual commands
-  (require 'em-term)
-  (mapc (lambda (x) (push x eshell-visual-commands))
-        '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
+;; Visual commands
+(require 'em-term)
+(mapc (lambda (x) (push x eshell-visual-commands))
+      '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
 
-  ;; automatically truncate buffer after output
-  (when (boundp 'eshell-output-filter-functions)
-    (push 'eshell-truncate-buffer eshell-output-filter-functions))
-
-(add-hook 'term-mode-hook 'disable-hl-line-mode)
+;; automatically truncate buffer after output
+(when (boundp 'eshell-output-filter-functions)
+  (push 'eshell-truncate-buffer eshell-output-filter-functions))
 
 (use-package xterm-color
   :init
@@ -239,10 +240,14 @@ is achieved by adding the relevant text properties."
   (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
 
 (use-package esh-help
+  :commands eldoc-documentation-function
   :init
   (add-hook 'eshell-mode-hook 'eldoc-mode)
-  :config
-  (setup-esh-help-eldoc))
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (make-local-variable 'eldoc-documentation-function)
+              (setq eldoc-documentation-function
+                    'esh-help-eldoc-command))))
 
 (use-package shell-pop
   :init
@@ -400,10 +405,10 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 ;; Flycheck mode
 (use-package flycheck
-  :demand t
-  :config
-  (global-flycheck-mode t)
-  (setq flycheck-display-errors-function nil))
+  :commands flycheck-mode
+  :init
+  (setq flycheck-display-errors-function nil)
+  (add-hook 'prog-mode-hook #'flycheck-mode))
 
 ;; (use-package auto-dictionary
 ;;   :init
@@ -511,8 +516,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
 (use-package whitespace-cleanup-mode
-  :demand t
-  :config (global-whitespace-cleanup-mode t))
+  :commands whitespace-cleanup-mode
+  :init
+  (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
