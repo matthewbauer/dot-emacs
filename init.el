@@ -57,12 +57,6 @@
 ;;  (package-initialize t)
 ;;  (require 'use-package))
 
-;; auto compile
-(use-package auto-compile
-  :demand t
-  :config
-  (auto-compile-on-load-mode))
-
 ;; (require 'custom)
 
 (let ((private-file (expand-file-name "private.el" user-emacs-directory)))

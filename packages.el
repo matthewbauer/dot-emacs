@@ -22,6 +22,12 @@
 ;;   (set-face-foreground 'org-todo "green")
 ;;   (set-face-background 'org-todo "black"))
 
+;; auto compile
+(use-package auto-compile
+  :demand t
+  :config
+  (auto-compile-on-load-mode))
+
 (use-package apropospriate-theme
   :demand t
   :config
@@ -115,9 +121,9 @@
   (setq projectile-completion-system 'helm)
   (helm-mode 1))
 
-(use-package lsp-mode
-  :demand t
-  :config (global-lsp-mode t))
+;; (use-package lsp-mode
+;;   :demand t
+;;   :config (global-lsp-mode t))
 
 (use-package projectile
   :commands projectile-mode
