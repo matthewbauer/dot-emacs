@@ -549,7 +549,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("C-e" . mwim-end-of-code-or-line)))
 
 (use-package rainbow-delimiters
-  :comands rainbow-delimiters-mode
+  :commands rainbow-delimiters-mode
   :init
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
@@ -595,7 +595,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package aggressive-indent
-  :comands aggressive-indent-mode
+  :commands aggressive-indent-mode
   :init
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
