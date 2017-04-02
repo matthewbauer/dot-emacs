@@ -31,14 +31,22 @@
 
 (require 'package)
 
-(setq package-enable-at-startup nil)
-(package-initialize)
-
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
+(setq package-enable-at-startup nil)
+(package-initialize 'noactivate)
+
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
+
+;; (package-initialize)
+(let ((default-directory (concat user-emacs-directory "elpa/")))
+  (normal-top-level-add-subdirs-to-load-path))
+
+(eval-when-compile
+  (require 'use-package))
 
 ;;(eval-and-compile
 ;;  (mapc #'(lambda (path)
