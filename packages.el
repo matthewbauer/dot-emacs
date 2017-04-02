@@ -47,9 +47,11 @@
   :commands mmm-mode)
 
 (use-package smart-tabs-mode
+  :demand t
   :commands smart-tabs-mode)
 
 (use-package smartparens
+  :demand t
   :config
   (setq smartparens-strict-mode t)
   (sp-local-pair 'emacs-lisp-mode "`" nil :when '(sp-in-string-p))
@@ -114,6 +116,7 @@
   (helm-mode 1))
 
 (use-package lsp-mode
+  :demand t
   :config (global-lsp-mode t))
 
 (use-package projectile
@@ -230,7 +233,8 @@ is achieved by adding the relevant text properties."
   (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
 
 (use-package esh-help
-  :init
+  :demand t
+  :config
   (add-hook 'eshell-mode-hook 'eldoc-mode)
   (setup-esh-help-eldoc))
 
@@ -390,16 +394,17 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 ;; Flycheck mode
 (use-package flycheck
-  :init
-  (global-flycheck-mode t)
+  :demand t
   :config
+  (global-flycheck-mode t)
   (setq flycheck-display-errors-function nil))
 
-(use-package auto-dictionary
-  :init
-  (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
+;; (use-package auto-dictionary
+;;   :init
+;;   (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
 
 (use-package flyspell
+  :demand t
   :commands (spell-checking/change-dictionary)
   :init
   (progn
@@ -407,9 +412,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
     ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     ))
 
-(use-package flyspell-correct
-  :commands (flyspell-correct-word-generic
-             flyspell-correct-previous-word-generic))
+;; (use-package flyspell-correct
+;;   :commands (flyspell-correct-word-generic
+;;              flyspell-correct-previous-word-generic))
 
 ;; Company mode
 (use-package company
@@ -448,14 +453,14 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
-(use-package ycmd)
-(use-package flycheck-ycmd
-  :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
-(use-package company-ycmd
-  :after ycmd
-  :commands company-ycmd
-  :init
-  (company-ycmd-setup))
+;; (use-package ycmd)
+;; (use-package flycheck-ycmd
+;;   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+;; (use-package company-ycmd
+;;   :after ycmd
+;;   :commands company-ycmd
+;;   :init
+;;   (company-ycmd-setup))
 
 (defun my:setup-imenu-for-use-package ()
   "Recognize `use-package` in imenu"
@@ -467,6 +472,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (add-hook 'emacs-lisp-mode-hook 'my:setup-imenu-for-use-package)
 
 (use-package imenu-list
+  :demand t
   :init
   (setq imenu-list-focus-after-activation t
         imenu-list-auto-resize t))
@@ -488,6 +494,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; (use-package ispell)
 
 (use-package wrap-region
+  :demand t
   :commands wrap-region-mode
   :diminish wrap-region-mode
   :config
@@ -498,7 +505,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
 (use-package whitespace-cleanup-mode
-  :init (global-whitespace-cleanup-mode t))
+  :demand t
+  :config (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
@@ -531,6 +539,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("C-e" . mwim-end-of-code-or-line)))
 
 (use-package rainbow-delimiters
+  :demand t
   :init
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
@@ -539,9 +548,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;   :bind (("C-x a" . ace-window)))
 
 (use-package ag
+  :demand t
   :if (executable-find "ag")
-  :bind
-  ("M-?" . ag-project))
+  :bind ("M-?" . ag-project))
 
 (use-package page-break-lines
   :init
@@ -557,6 +566,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (dumb-jump-mode))
 
 (use-package editorconfig
+  :demand t
   :if (executable-find "editorconfig")
   :mode ("\\.editorconfig\\'" . conf-unix-mode)
   :config
@@ -575,7 +585,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package aggressive-indent
-  :init
+  :demand t
+  :config
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   )
@@ -610,10 +621,10 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package intero
-  :config (add-hook 'haskell-mode-hook 'intero-mode))
+  :init (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package tern
-  :config
+  :init
   (add-hook 'js2-mode-hook 'tern-mode))
 
 ;; (use-package jdee)
@@ -624,10 +635,12 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :mode "\\.json\\'")
 
 (use-package less-css-mode
+  :mode "\\.json\\'"
   :commands less-css-mode
-  :config
-  (use-package js2-mode)
-  (use-package skewer-less))
+  ;; :config
+  ;; (use-package js2-mode)
+  ;; (use-package skewer-less)
+  )
 
 (use-package markdown-mode
   :mode "\\.\\(md\\|markdown\\)\\'"
@@ -648,31 +661,40 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
-(use-package nix-mode)
+(use-package nix-mode
+  :mode "\\.nix\\'")
 
-(use-package web-mode)
+(use-package web-mode
+  :mode "\\.html\\'")
 
-(use-package php-mode)
+(use-package php-mode
+  :mode "\\.php\\'")
 
 (use-package cmake-mode)
 
-(use-package rust-mode)
+(use-package rust-mode
+  :mode "\\.rs\\'")
 
-(use-package gitattributes-mode)
+(use-package gitattributes-mode
+  :mode "\\.gitattributes\\'")
 
-(use-package gitconfig-mode)
+(use-package gitconfig-mode
+  :mode "\\.gitconfig\\'")
 
-(use-package go-mode)
+(use-package go-mode
+  :mode "\\.go\\'")
 
 (use-package coffee-mode)
 
 (use-package gitignore-mode)
 
-(use-package yaml-mode)
+(use-package yaml-mode
+  :mode "\\.yaml\\'")
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :mode "\\.hs\\'")
 
-(use-package pandoc-mode)
+;; (use-package pandoc-mode)
 
 ;; (use-package ox-pandoc
 ;;   :init (with-eval-after-load 'org (require 'ox-pandoc))
@@ -693,7 +715,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 ;; (use-package spray)
 
-(use-package esup)
+(use-package esup
+  :demand t)
 
 (provide 'packages)
 ;;; packages.el ends here
