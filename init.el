@@ -65,6 +65,13 @@
 
 (require 'misc)
 
+;; key bindings
+
+(let ((keymap-file (expand-file-name "keymap.el" user-emacs-directory)))
+  (if (file-exists-p keymap-file)
+      (load keymap-file)
+    ))
+
 ;; server
 ;; (require 'server)
 ;; (unless (server-running-p)
@@ -75,8 +82,6 @@
 (let ((packages-file (expand-file-name "packages.el" user-emacs-directory)))
   (if (file-exists-p packages-file)
       (load packages-file)))
-
-(fset 'yes-or-no-p 'y-or-n-p)
 
 (provide 'init)
 

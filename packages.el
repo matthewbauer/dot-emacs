@@ -33,12 +33,6 @@
   :config
   (load-theme 'apropospriate-dark))
 
-;; key bindings
-
-(let ((keymap-file (expand-file-name "keymap.el" user-emacs-directory)))
-  (if (file-exists-p keymap-file)
-      (load keymap-file)))
-
 (use-package org)
 
 (use-package shell)
@@ -216,15 +210,6 @@ is achieved by adding the relevant text properties."
   (require 'em-smart)
   (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
 
-;; Visual commands
-(require 'em-term)
-(mapc (lambda (x) (push x eshell-visual-commands))
-      '("el" "elinks" "htop" "less" "ssh" "tmux" "top"))
-
-;; automatically truncate buffer after output
-(when (boundp 'eshell-output-filter-functions)
-  (push 'eshell-truncate-buffer eshell-output-filter-functions))
-
 (use-package xterm-color
   :init
   ;; Comint and Shell
@@ -240,7 +225,7 @@ is achieved by adding the relevant text properties."
   (add-hook 'eshell-mode-hook 'init-eshell-xterm-color))
 
 (use-package esh-help
-  :commands eldoc-documentation-function
+  :commands esh-help-eldoc-command
   :init
   (add-hook 'eshell-mode-hook 'eldoc-mode)
   (add-hook 'eshell-mode-hook
