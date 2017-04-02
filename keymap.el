@@ -421,5 +421,7 @@ END end of region"
 ;; Start a regular shell if you prefer that.
 (global-set-key (kbd "C-x M-m") 'shell)
 
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (provide 'keymap)
 ;;; keymap.el ends here

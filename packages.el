@@ -543,7 +543,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;   :bind (("C-x a" . ace-window)))
 
 (use-package ag
-  :demand t
+  :commands ag
   :if (executable-find "ag")
   :bind ("M-?" . ag-project))
 
