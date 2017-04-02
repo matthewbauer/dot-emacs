@@ -505,9 +505,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; (use-package ispell)
 
 (use-package wrap-region
-  :demand t
   :commands wrap-region-mode
-  :diminish wrap-region-mode
+  :init
+  (add-hook 'prog-mode-hook 'wrap-region-mode)
   :config
   (wrap-region-add-wrappers
    '(("$" "$")
@@ -728,7 +728,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; (use-package spray)
 
 (use-package esup
-  :demand t)
+  :commands esup)
 
 (provide 'packages)
 ;;; packages.el ends here
