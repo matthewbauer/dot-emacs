@@ -504,9 +504,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
      ("/* " " */" "#" (java-mode javascript-mode css-mode c-mode c++-mode))
      ("`" "`" nil (markdown-mode ruby-mode shell-script-mode)))))
 
-;; (use-package whitespace-cleanup-mode
-;;   :demand t
-;;   :config (global-whitespace-cleanup-mode t))
+(use-package whitespace-cleanup-mode
+  :demand t
+  :config (global-whitespace-cleanup-mode t))
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
@@ -598,13 +598,13 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; (use-package semantic)
 ;; (use-package semantic-refractor)
 
-(use-package hungry-delete
-  :config
-  (setq-default hungry-delete-chars-to-skip " \t\f\v") ; only horizontal whitespace
-  (define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-backward)
-  (define-key hungry-delete-mode-map (kbd "S-DEL") 'delete-backward-char)
-  (global-hungry-delete-mode)
-  )
+;; (use-package hungry-delete
+;;   :config
+;;   (setq-default hungry-delete-chars-to-skip " \t\f\v") ; only horizontal whitespace
+;;   (define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-backward)
+;;   (define-key hungry-delete-mode-map (kbd "S-DEL") 'delete-backward-char)
+;;   (global-hungry-delete-mode)
+;;   )
 
 ;;
 ;; editor modes
