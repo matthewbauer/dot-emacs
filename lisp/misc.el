@@ -6,7 +6,7 @@
 ;; (which-function-mode t)
 ;; (ido-mode -1)
 (cua-selection-mode t)
-(semantic-mode 1)
+;; (semantic-mode 1)
 ;; (desktop-save-mode t)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
@@ -14,7 +14,7 @@
 (delete-selection-mode t)
 (savehist-mode t)
 (delete-selection-mode t)
-(global-auto-revert-mode t)
+;; (global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
 ;; (menu-bar-mode +1)
@@ -501,7 +501,7 @@ Start `ielm' if it's not already running."
   "Sensible defaults for `emacs-lisp-mode'."
   (run-hooks 'prelude-lisp-coding-hook)
   (eldoc-mode +1)
-  (rainbow-mode +1)
+  ;; (rainbow-mode +1)
   (show-paren-mode 1)
   (setq mode-name "LE")
   (prelude-conditional-emacs-lisp-checker))
@@ -681,7 +681,7 @@ This functions should be added to the hooks of major modes for programming."
 (defun prelude-prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
   ;; (guru-mode +1)
-  (smartparens-mode +1)
+  ;; (smartparens-mode +1)
   (prelude-enable-whitespace)
   (prelude-local-comment-auto-fill)
   (prelude-font-lock-comment-annotations))
@@ -700,7 +700,7 @@ This functions should be added to the hooks of major modes for programming."
   "Default Prelude hook for `LaTeX-mode'."
   (turn-on-auto-fill)
   (abbrev-mode +1)
-  (smartparens-mode +1)
+  ;; (smartparens-mode +1)
   (case prelude-latex-fast-math-entry
     (LaTeX-math-mode (LaTeX-math-mode 1))
     (cdlatex (turn-on-cdlatex))))
