@@ -423,5 +423,8 @@ END end of region"
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(bind-key "C-x p" 'pop-to-mark-command)
+(setq set-mark-command-repeat-pop t)
+
 (provide 'keymap)
 ;;; keymap.el ends here
