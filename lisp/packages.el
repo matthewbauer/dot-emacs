@@ -547,6 +547,17 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :if (executable-find "ag")
   :bind ("M-?" . ag-project))
 
+(use-package rg
+  :commands rg
+  :if (executable-find "ripgrep"))
+
+(use-package undo-tree
+  :config (global-undo-tree-mode 1)
+  :bind (("C-c j" . undo-tree-undo)
+         ("C-c k" . undo-tree-redo)
+         ("C-c l" . undo-tree-switch-branch)
+         ("C-c ;" . undo-tree-visualize)))
+
 (use-package page-break-lines
   :init
   (add-hook 'doc-mode-hook 'page-break-lines-mode))
