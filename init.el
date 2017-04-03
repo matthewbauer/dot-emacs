@@ -23,7 +23,7 @@
 (load custom-file)
 
 ;; saveplace remembers your location in a file when saving files
-(setq save-place-file (expand-file-name "saveplace" "~/.emacs.d"))
+(setq save-place-file (expand-file-name "saveplace" user-emacs-directory))
 
 ;;
 ;; Load and init package, use-package
@@ -48,6 +48,10 @@
 (eval-when-compile
   (require 'use-package))
 
+;; packages
+
+(require 'packages)
+
 ;;(eval-and-compile
 ;;  (mapc #'(lambda (path)
 ;;            (add-to-list 'load-path
@@ -57,31 +61,18 @@
 ;;  (package-initialize t)
 ;;  (require 'use-package))
 
-;; (require 'custom)
-
-(let ((private-file (expand-file-name "private.el" user-emacs-directory)))
-  (if (file-exists-p private-file)
-      (load private-file)))
+(require 'private nil t)
 
 (require 'misc)
 
 ;; key bindings
 
-(let ((keymap-file (expand-file-name "keymap.el" user-emacs-directory)))
-  (if (file-exists-p keymap-file)
-      (load keymap-file)
-    ))
+(require 'keymap)
 
 ;; server
 ;; (require 'server)
 ;; (unless (server-running-p)
 ;;   (server-start))
-
-;; packages
-
-(let ((packages-file (expand-file-name "packages.el" user-emacs-directory)))
-  (if (file-exists-p packages-file)
-      (load packages-file)))
 
 (provide 'init)
 

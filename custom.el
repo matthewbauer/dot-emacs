@@ -17,7 +17,6 @@
  '(auto-revert-verbose nil)
  '(auto-save-file-name-transforms (\` ((".*" (\, temporary-file-directory) t))))
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
- '(column-number-mode t)
  '(comint-process-echoes t)
  '(comint-prompt-read-only t)
  '(company-idle-delay 0.5)
@@ -38,7 +37,6 @@
  '(css-indent-offset 2)
  '(custom-safe-themes t)
  '(delete-old-versions -1)
- '(dumb-jump-mode t)
  '(emacs-lisp-mode-hook
    (quote
     (turn-on-auto-fill
@@ -102,10 +100,8 @@
     (turn-on-auto-fill flyspell-mode git-commit-save-message)) t)
  '(glasses-separator "-")
  '(glasses-uncapitalize-p t)
- '(global-auto-complete-mode t)
  '(global-auto-revert-non-file-buffers t)
  '(global-font-lock-mode t nil (font-lock))
- '(global-undo-tree-mode t)
  '(helm-buffers-fuzzy-matching t)
  '(helm-completing-read-handlers-alist
    (quote
@@ -156,12 +152,10 @@
  '(js2-strict-missing-semi-warning nil)
  '(kill-do-not-save-duplicates t)
  '(kill-whole-line t)
- '(line-number-mode t)
  '(load-prefer-newer t)
  '(mac-pass-command-to-system nil)
  '(mac-pass-control-to-system nil)
  '(mac-wheel-button-is-mouse-2 nil)
- '(magit-auto-revert-mode nil)
  '(magit-completing-read-function (quote helm--completing-read-default))
  '(magit-diff-options nil)
  '(magit-ediff-dwim-show-on-hunks t)
@@ -242,7 +236,6 @@
  '(scroll-conservatively 100000)
  '(scroll-margin 0)
  '(scroll-preserve-screen-position 1)
- '(semantic-mode t)
  '(send-mail-function (quote smtpmail-send-it))
  '(sentence-end-double-space nil)
  '(shell-pop-full-span t)
@@ -254,7 +247,6 @@
  '(sp-base-key-bindings (quote paredit))
  '(sp-hybrid-kill-entire-symbol nil)
  '(tab-width 2)
- '(typo-global-mode t)
  '(undo-limit 800000)
  '(undo-tree-auto-save-history t)
  '(undo-tree-history-directory-alist (quote ((".*" . "~/.backups"))))
