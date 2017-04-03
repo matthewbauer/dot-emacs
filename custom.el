@@ -17,6 +17,7 @@
  '(auto-revert-verbose nil)
  '(auto-save-file-name-transforms (\` ((".*" (\, temporary-file-directory) t))))
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
+ '(column-number-mode t)
  '(comint-process-echoes t)
  '(comint-prompt-read-only t)
  '(company-idle-delay 0.5)
@@ -67,16 +68,14 @@
  '(erc-query-display (quote buffer))
  '(erc-save-buffer-on-part t t)
  '(erc-server-coding-system (quote (utf-8 . utf-8)))
- '(erc-spelling-mode 1)
  '(erc-track-exclude-types
    (quote
     ("JOIN" "NICK" "PART" "QUIT" "MODE" "324" "329" "332" "333" "353" "477")))
- '(erc-track-mode t)
  '(eshell-banner-message "")
  '(eshell-buffer-maximum-lines 20000)
  '(eshell-buffer-shorthand t)
  '(eshell-cmpl-cycle-completions nil)
- '(eshell-highlight-prompt nil)
+ '(eshell-highlight-prompt nil t)
  '(eshell-hist-ignoredups t)
  '(eshell-history-size 350)
  '(eshell-plain-echo-behavior t)
@@ -101,7 +100,6 @@
  '(glasses-separator "-")
  '(glasses-uncapitalize-p t)
  '(global-auto-revert-non-file-buffers t)
- '(global-font-lock-mode t nil (font-lock))
  '(helm-buffers-fuzzy-matching t)
  '(helm-completing-read-handlers-alist
    (quote
