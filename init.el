@@ -17,6 +17,9 @@
 ;; temporary-file-directory
 (setq temporary-file-directory (expand-file-name "tmp" user-emacs-directory))
 
+(when tool-bar-mode
+  (tool-bar-mode -1))
+
 ;; custom-file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 

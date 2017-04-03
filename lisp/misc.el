@@ -17,10 +17,11 @@
 ;; (global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
-;; (menu-bar-mode +1)
+(menu-bar-mode -1)
 ;; (line-number-mode t)
 ;; (column-number-mode t)
 ;; (size-indication-mode t)
+(toggle-scroll-bar -1)
 
 ;; show the cursor when moving after big movements in the window
 ;; (require 'beacon)
