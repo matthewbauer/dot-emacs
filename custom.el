@@ -92,6 +92,9 @@
  '(flyspell-abbrev-p nil)
  '(flyspell-incorrect-hook (quote (flyspell-maybe-correct-transposition)))
  '(flyspell-use-meta-tab nil)
+ '(frame-title-format '((:eval (if (buffer-file-name)
+                                   (abbreviate-file-name (buffer-file-name))
+                                 "%b"))))
  '(gc-cons-threshold 100000000)
  '(geiser-mode-start-repl-p t)
  '(git-commit-mode-hook
