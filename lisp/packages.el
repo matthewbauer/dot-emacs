@@ -33,6 +33,16 @@
   :config
   (load-theme 'apropospriate-dark))
 
+(use-package smart-mode-line
+  :demand t
+  :config
+  (sml/setup))
+
+(use-package mode-icons
+  :demand t
+  :config
+  (mode-icons-mode))
+
 (use-package org
   :config
   (add-hook 'org-mode-hook 'auto-fill-mode))
@@ -45,8 +55,8 @@
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
 
 ;; Multiple Major Modes
-;; (use-package mmm-mode
-;;   :commands mmm-mode)
+(use-package mmm-mode
+  :commands mmm-mode)
 
 (use-package smart-tabs-mode
   :init
@@ -700,6 +710,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package esup
   :commands esup)
+
+(use-package try
+  :commands try)
 
 (provide 'packages)
 ;;; packages.el ends here
