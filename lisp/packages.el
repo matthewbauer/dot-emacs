@@ -106,6 +106,8 @@
 
 ;; Helm mode
 (use-package helm
+  :commands helm-mode
+  :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
@@ -137,6 +139,7 @@
 
 (use-package projectile
   :commands projectile-mode
+  :diminish projectile-mode
   :after helm
   :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
@@ -409,6 +412,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;; Company mode
 (use-package company
   :bind ("<C-tab>" . company-complete)
+  :diminish company-mode
   :commands company-mode
   :after helm
   :config (global-company-mode 1)
