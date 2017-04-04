@@ -204,8 +204,8 @@ is achieved by adding the relevant text properties."
   (require 'esh-opt)
 
   ;; quick commands
-  (defalias 'eshell/e 'find-file-other-window)
-  (defalias 'eshell/d 'dired)
+  ;; (defalias 'eshell/e 'find-file-other-window)
+  ;; (defalias 'eshell/d 'dired)
   (setenv "PAGER" "cat")
 
   ;; support `em-smart'
