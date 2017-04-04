@@ -37,17 +37,6 @@
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
 
-;; savehist keeps track of some history
-(require 'savehist)
-(setq savehist-additional-variables
-      ;; search entries
-      '(search-ring regexp-search-ring)
-      ;; save every minute
-      savehist-autosave-interval 60
-      ;; keep the home clean
-      savehist-file (expand-file-name "savehist" "~/.emacs.d"))
-(savehist-mode +1)
-
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
 (if (fboundp 'set-fontset-font)
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
@@ -80,17 +69,8 @@
 ;; (require 'rect)
 ;; (crux-with-region-or-line kill-region)
 
-;; tramp, for sudo access
-;; (require 'tramp)
-;; keep in mind known issues with zsh - see emacs wiki
-(setq tramp-default-method "ssh")
-
-(set-default 'imenu-auto-rescan t)
-
 ;; flyspell-mode does spell-checking on the fly as you type
 ;; (require 'flyspell)
-(setq ispell-program-name "aspell" ; use aspell instead of ispell
-      ispell-extra-args '("--sug-mode=ultra"))
 
 (defun prelude-cleanup-maybe ()
   "Invoke `whitespace-cleanup' if `prelude-clean-whitespace-on-save' is not nil."
@@ -118,11 +98,6 @@
 
 ;; (require 'expand-region)
 
-;; bookmarks
-;; (require 'bookmark)
-(setq bookmark-default-file (expand-file-name "bookmarks" "~/.emacs.d")
-      bookmark-save-flag 1)
-
 ;; avy allows us to effectively navigate to visible things
 ;; (require 'avy)
 ;; (setq avy-background t)
@@ -133,21 +108,6 @@
 
 ;; dired - reuse current buffer by pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
-
-;; always delete and copy recursively
-(setq dired-recursive-deletes 'always)
-(setq dired-recursive-copies 'always)
-
-;; if there is a dired buffer displayed in the next window, use its
-;; current subdir, instead of the current subdir of this dired buffer
-(setq dired-dwim-target t)
-
-;; enable some really cool extensions like C-x C-j(dired-jump)
-;; (require 'dired-x)
-
-;; ediff - don't start another frame
-;; (require 'ediff)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; clean up obsolete buffers automatically
 ;; (require 'midnight)
@@ -175,7 +135,7 @@
 (with-region-or-buffer untabify)
 
 ;; abbrev config
-(add-hook 'text-mode-hook 'abbrev-mode)
+;; (add-hook 'text-mode-hook 'abbrev-mode)
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
@@ -183,20 +143,6 @@
 
 ;; .zsh file is shell script too
 (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
-
-;; whitespace-mode config
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face tabs empty trailing lines-tail))
-
-;; saner regex syntax
-;; (require 're-builder)
-(setq reb-re-syntax 'string)
-
-;; (require 'eshell)
-(setq eshell-directory-name (expand-file-name "eshell" "~/.emacs.d"))
-
-(setq semanticdb-default-save-directory
-      (expand-file-name "semanticdb" "~/.emacs.d"))
 
 ;; Compilation from Emacs
 (defun prelude-colorize-compilation-buffer ()
@@ -208,12 +154,6 @@
       (ansi-color-apply-on-region (point-min) (point-max)))))
 
 ;; (require 'compile)
-(setq compilation-ask-about-save nil  ; Just save before compiling
-      compilation-always-kill t       ; Just kill old compile processes before
-                                        ; starting the new one
-      compilation-scroll-output 'first-error ; Automatically scroll to first
-                                        ; error
-      )
 
 ;; Colorize output of Compilation Mode, see
 ;; http://stackoverflow.com/a/3072831/355252
@@ -226,8 +166,8 @@
 ;; (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
 ;; easy-kill
-(global-set-key [remap kill-ring-save] 'easy-kill)
-(global-set-key [remap mark-sexp] 'easy-mark)
+;; (global-set-key [remap kill-ring-save] 'easy-kill)
+;; (global-set-key [remap mark-sexp] 'easy-mark)
 
 ;; operate-on-number
 ;; (require 'operate-on-number)
@@ -423,8 +363,6 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (eval-after-load 'cider
   '(progn
-     (setq nrepl-log-messages t)
-
      (add-hook 'cider-mode-hook 'eldoc-mode)
 
      (defun prelude-cider-repl-mode-defaults ()
@@ -442,17 +380,6 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; Open files with .cl extension in lisp-mode
 (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
 
-;; a list of alternative Common Lisp implementations that can be
-;; used with SLIME. Note that their presence render
-;; inferior-lisp-program useless. This variable holds a list of
-;; programs and if you invoke SLIME with a negative prefix
-;; argument, M-- M-x slime, you can select a program from that list.
-(setq slime-lisp-implementations
-      '((ccl ("ccl"))
-        (clisp ("clisp" "-q"))
-        (cmucl ("cmucl" "-quiet"))
-        (sbcl ("sbcl" "--noinform") :coding-system utf-8-unix)))
-
 ;; select the default value from slime-lisp-implementations
 (if (and (eq system-type 'darwin)
          (executable-find "ccl"))
@@ -460,9 +387,6 @@ i.e. change right window to bottom, or change bottom window to right."
     (setq slime-default-lisp 'ccl)
   ;; default to SBCL on Linux and Windows
   (setq slime-default-lisp 'sbcl))
-
-;; Add fancy slime contribs
-(setq slime-contribs '(slime-fancy))
 
 (add-hook 'lisp-mode-hook (lambda () (run-hooks 'prelude-lisp-coding-hook)))
 ;; rainbow-delimeters messes up colors in slime-repl, and doesn't seem to work
@@ -635,8 +559,6 @@ Start `ielm' if it's not already running."
   :type '(choice (const :tag "None" nil)
                  (const :tag "AUCTeX Math Mode" LaTeX-math-mode)
                  (const :tag "CDLaTeX" cdlatex)))
-
-(setq-default TeX-master nil)
 
 ;; sensible defaults for OS X, other OSes should be covered out-of-the-box
 (when (eq system-type 'darwin)

@@ -295,8 +295,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (use-package eshell-prompt-extras
   :commands epe-theme-lambda
   :init
-  (setq eshell-highlight-prompt nil
-        eshell-prompt-function 'epe-theme-lambda))
+  (setq eshell-prompt-function 'epe-theme-lambda))
 
 ;;
 ;; IRC
@@ -324,15 +323,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
     (= 0 (call-process "ping" nil nil nil "-c1" "-W5000" "-q" host)))
 
   (defun setup-irc-environment ()
-    (setq erc-timestamp-only-if-changed-flag nil
-          erc-timestamp-format "%H:%M "
-          erc-fill-prefix "          "
-          erc-fill-column 88
-          erc-insert-timestamp-function 'erc-insert-timestamp-left)
-
     (defun reset-erc-track-mode ()
       (interactive)
-      (setq erc-modified-channels-alist nil)
       (erc-modified-channels-update)
       (erc-modified-channels-display)
       (force-mode-line-update))
@@ -371,14 +363,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
         (interactive)
         (insert "/list")
         (erc-send-current-line))
-      (setq erc-kill-buffer-on-part t
-            erc-kill-queries-on-quit t
-            erc-kill-server-buffer-on-quit t)
       (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules)))
-      (erc-track-mode t)
-      (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
-            erc-server-coding-system '(utf-8 . utf-8))
-      (setq erc-prompt (lambda () (concat "[" (buffer-name) "]")))
+      (erc-track-mode t))
 
       (require 'notifications)
       (defun erc-global-notify (match-type nick message)
@@ -386,14 +372,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
         (notifications-notify
          :title nick
          :body message
-         :urgency 'low)))
+         :urgency 'low))
 
 ;; Flycheck mode
 (use-package flycheck
-  :commands flycheck-mode
-  :init
-  (setq flycheck-display-errors-function nil)
-  (add-hook 'prog-mode-hook #'flycheck-mode))
+  :commands flycheck-mode)
 
 ;; (use-package auto-dictionary
 ;;   :init
@@ -436,10 +419,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :if (executable-find "git")
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
-  :config
-  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:
-  "))
-  (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
   )
 
 (use-package magit-gh-pulls
@@ -466,10 +445,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (add-hook 'emacs-lisp-mode-hook 'my:setup-imenu-for-use-package)
 
 (use-package imenu-list
-  :commands imenu-list
-  :config
-  (setq imenu-list-focus-after-activation t
-        imenu-list-auto-resize t))
+  :commands imenu-list)
 
 ;; (use-package deft)
 
@@ -567,7 +543,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("M-g j" . dumb-jump-go)
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'helm)
+  :config
 
   (dumb-jump-mode))
 
@@ -587,7 +563,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (global-fasd-mode 1)
   ;; we will fall back to using the default completing-read function, which is helm once helm is loaded.
-  (setq fasd-completing-read-function 'nil)
   )
 
 (use-package aggressive-indent
