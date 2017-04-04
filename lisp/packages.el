@@ -33,7 +33,9 @@
   :config
   (load-theme 'apropospriate-dark))
 
-(use-package org)
+(use-package org
+  :config
+  (add-hook 'org-mode-hook 'auto-fill-mode))
 
 (use-package shell)
 (use-package tramp)
@@ -383,7 +385,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 ;;   (add-hook 'flyspell-mode-hook 'auto-dictionary-mode))
 
 (use-package flyspell
-  :commands (spell-checking/change-dictionary)
+  :commands flyspell-mode ;;(spell-checking/change-dictionary)
   :init
   (add-hook 'text-mode-hook' 'flyspell-mode)
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
