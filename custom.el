@@ -274,7 +274,7 @@
  '(save-abbrevs (quote silently))
  '(save-interprogram-paste-before-kill t)
  '(save-place t)
- '(save-place-file (quote (concat user-emacs-directory "places")))
+ '(save-place-file (concat user-emacs-directory "places"))
  '(save-place-mode t)
  '(savehist-additional-variables (quote (search-ring regexp-search-ring)))
  '(savehist-autosave-interval 60)
