@@ -36,12 +36,13 @@
 (use-package smart-mode-line
   :demand t
   :config
+  (setq sml/theme 'respectful)
   (sml/setup))
 
-(use-package mode-icons
-  :demand t
-  :config
-  (mode-icons-mode))
+;; (use-package mode-icons
+;;   :demand t
+;;   :config
+;;   (mode-icons-mode))
 
 (use-package org
   :config
