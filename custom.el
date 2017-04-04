@@ -183,6 +183,7 @@
  '(mac-pass-command-to-system nil)
  '(mac-pass-control-to-system nil)
  '(mac-wheel-button-is-mouse-2 nil)
+ '(magit-auto-revert-mode nil)
  '(magit-revision-show-gravatars '("^Author:     " . "^Commit:
   "))
  '(magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
