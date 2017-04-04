@@ -61,17 +61,6 @@
       (setq mode (car mode)))
     (with-current-buffer buffer (if mode (funcall mode)))))
 
-;; (require 'volatile-highlights)
-;; (volatile-highlights-mode t)
-
-;; note - this should be after volatile-highlights is required
-;; add the ability to cut the current line, without marking it
-;; (require 'rect)
-;; (crux-with-region-or-line kill-region)
-
-;; flyspell-mode does spell-checking on the fly as you type
-;; (require 'flyspell)
-
 (defun prelude-cleanup-maybe ()
   "Invoke `whitespace-cleanup' if `prelude-clean-whitespace-on-save' is not nil."
   (whitespace-cleanup))
@@ -96,33 +85,14 @@
 ;; enable erase-buffer command
 (put 'erase-buffer 'disabled nil)
 
-;; (require 'expand-region)
-
-;; avy allows us to effectively navigate to visible things
-;; (require 'avy)
-;; (setq avy-background t)
-;; (setq avy-style 'at-full)
-
-;; (global-set-key (kbd "M-%") 'anzu-query-replace)
-;; (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
-
 ;; dired - reuse current buffer by pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
-
-;; clean up obsolete buffers automatically
-;; (require 'midnight)
-
-;; smarter kill-ring navigation
-;; (require 'browse-kill-ring)
-;; (browse-kill-ring-default-keybindings)
-;; (global-set-key (kbd "s-y") 'browse-kill-ring)
 
 (defadvice exchange-point-and-mark (before deactivate-mark activate compile)
   "When called with no active region, do not activate mark."
   (interactive
    (list (not (region-active-p)))))
 
-;; (require 'tabify)
 (defmacro with-region-or-buffer (func)
   "When called with no active region, call FUNC on current buffer."
   `(defadvice ,func (before with-region-or-buffer activate compile)
@@ -153,38 +123,9 @@
     (let ((inhibit-read-only t))
       (ansi-color-apply-on-region (point-min) (point-max)))))
 
-;; (require 'compile)
-
 ;; Colorize output of Compilation Mode, see
 ;; http://stackoverflow.com/a/3072831/355252
-;; (require 'ansi-color)
 (add-hook 'compilation-filter-hook #'prelude-colorize-compilation-buffer)
-
-;; diff-hl
-;; (global-diff-hl-mode +1)
-;; (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-;; (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-
-;; easy-kill
-;; (global-set-key [remap kill-ring-save] 'easy-kill)
-;; (global-set-key [remap mark-sexp] 'easy-mark)
-
-;; operate-on-number
-;; (require 'operate-on-number)
-;; (require 'smartrep)
-
-;; (smartrep-define-key global-map "C-c ."
-;;   '(("+" . apply-operation-to-number-at-point)
-;;     ("-" . apply-operation-to-number-at-point)
-;;     ("*" . apply-operation-to-number-at-point)
-;;     ("/" . apply-operation-to-number-at-point)
-;;     ("\\" . apply-operation-to-number-at-point)
-;;     ("^" . apply-operation-to-number-at-point)
-;;     ("<" . apply-operation-to-number-at-point)
-;;     (">" . apply-operation-to-number-at-point)
-;;     ("#" . apply-operation-to-number-at-point)
-;;     ("%" . apply-operation-to-number-at-point)
-;;     ("'" . operate-on-number-at-point)))
 
 (defadvice server-visit-files (before parse-numbers-in-lines (files proc &optional nowait) activate)
   "Open file with emacsclient with cursors positioned on requested line.
@@ -296,7 +237,6 @@ POINT ?"
 
 i.e. change right window to bottom, or change bottom window to right."
   (interactive)
-  (require 'windmove)
   (let ((done))
     (dolist (dirs '((right . down) (down . right)))
       (unless done
@@ -346,9 +286,6 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (add-hook 'makefile-mode-hook (lambda ()
                                 (run-hooks 'makefile-mode-defaults)))
-
-;; (require 'closure-mode)
-;; (require 'cider)
 
 (eval-after-load 'clojure-mode
   '(progn
@@ -454,12 +391,6 @@ Start `ielm' if it's not already running."
      (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
      (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\""))))
 
-;; enable elisp-slime-nav-mode
-;; (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-;;   (add-hook hook 'elisp-slime-nav-mode))
-
-;; (require 'go-projectile)
-
 ;; Ignore go test -c output files
 (add-to-list 'completion-ignored-extensions ".test")
 
@@ -514,23 +445,6 @@ Start `ielm' if it's not already running."
      (add-hook 'haskell-mode-hook (lambda ()
                                     (run-hooks 'prelude-haskell-mode-hook)))))
 
-;; (require 'ido)
-;; (require 'ido-ubiquitous)
-;; (require 'flx-ido)
-
-;; (ido-mode +1)
-;; (ido-ubiquitous-mode +1)
-
-;;; smarter fuzzy matching for ido
-;; (flx-ido-mode +1)
-;; disable ido faces to see flx highlights
-
-;;; smex, remember recently and most frequently used commands
-;; (require 'smex)
-;; (smex-initialize)
-;; (global-set-key (kbd "M-x") 'smex)
-;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
 (add-to-list 'auto-mode-alist '("\\.js\\'"    . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.pac\\'"   . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
@@ -546,10 +460,6 @@ Start `ielm' if it's not already running."
      (setq prelude-js-mode-hook 'prelude-js-mode-defaults)
 
      (add-hook 'js2-mode-hook (lambda () (run-hooks 'prelude-js-mode-hook)))))
-
-;; (require 'smartparens-latex)
-;; for case
-;; (require 'cl)
 
 (defcustom prelude-latex-fast-math-entry 'LaTeX-math-mode
   "Method used for fast math symbol entry in LaTeX."
@@ -581,25 +491,6 @@ This functions should be added to the hooks of major modes for programming."
   (font-lock-add-keywords
    nil '(("\\<\\(\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):\\)"
           1 font-lock-warning-face t))))
-
-;; show the name of the current function definition in the modeline
-;; (require 'which-func)
-;; (which-function-mode 1)
-
-;; in Emacs 24 programming major modes generally derive from a common
-;; mode named prog-mode; for others, we'll arrange for our mode
-;; defaults function to run prelude-prog-mode-hook directly.  To
-;; augment and/or counteract these defaults your own function
-;; to prelude-prog-mode-hook, using:
-;;
-;;     (add-hook 'prelude-prog-mode-hook 'my-prog-mode-defaults t)
-;;
-;; (the final optional t sets the *append* argument)
-
-;; smart curly braces
-;; (sp-pair "{" nil :post-handlers
-;;          '(((lambda (&rest _ignored)
-;;               (crux-smart-open-line-above)) "RTE")))
 
 (defun prelude-prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
