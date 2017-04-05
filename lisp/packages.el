@@ -967,6 +967,7 @@ is achieved by adding the relevant text properties."
   (apply #'hook-into-modes 'my-lisp-mode-hook lisp-mode-hooks))
 
 (use-package lsp-mode
+  :disabled t
   :demand t
   :config (global-lsp-mode t))
 
