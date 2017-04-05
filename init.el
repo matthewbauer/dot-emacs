@@ -14,23 +14,10 @@
 ;; sync exec-path with environment path
 (setq exec-path (split-string (getenv "PATH") ":"))
 
-;; temporary-file-directory
-(setq temporary-file-directory (expand-file-name "tmp" user-emacs-directory))
-
-(when tool-bar-mode
-  (tool-bar-mode -1))
-
 ;; custom-file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (load custom-file)
-
-;; saveplace remembers your location in a file when saving files
-(setq save-place-file (expand-file-name "saveplace" user-emacs-directory))
-
-;;
-;; Load and init package, use-package
-;;
 
 (require 'package)
 
@@ -44,7 +31,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; (package-initialize)
 (let ((default-directory (concat user-emacs-directory "elpa/")))
   (normal-top-level-add-subdirs-to-load-path))
 
@@ -57,20 +43,9 @@
 
 (require 'packages)
 
-;;(eval-and-compile
-;;  (mapc #'(lambda (path)
-;;            (add-to-list 'load-path
-;;                         (expand-file-name path
-;;                                           user-emacs-directory)))
-;;        '("site-lisp" "override" "lisp" "lisp/use-package" ""))
-;;  (package-initialize t)
-;;  (require 'use-package))
-
 (require 'private nil t)
 
 (require 'misc)
-
-;; key bindings
 
 (require 'keymap)
 

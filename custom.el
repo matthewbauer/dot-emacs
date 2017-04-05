@@ -50,21 +50,6 @@
  '(dired-recursive-deletes (quote always))
  '(dumb-jump-selector (quote helm))
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
- '(emacs-lisp-mode-hook
-   (quote
-    (turn-on-auto-fill
-     (lambda nil
-       (ignore-errors
-         (diminish
-          (quote auto-fill-function))))
-     eldoc-mode
-     (lambda nil
-       (local-set-key
-        [(meta 46)]
-        (quote find-function))
-       (local-set-key
-        [(control 109)]
-        (quote newline-and-indent))))))
  '(erc-auto-discard-away t t)
  '(erc-autoaway-idle-seconds 600 t)
  '(erc-autoaway-use-emacs-idle t t)
@@ -78,7 +63,7 @@
  '(erc-kill-queries-on-quit t)
  '(erc-kill-server-buffer-on-quit t)
  '(erc-log-channels-directory "~/.erc/logs/" t)
- '(erc-modified-channels-alist nil)
+ '(erc-modified-channels-alist nil t)
  '(erc-nick "matthewbauer")
  '(erc-prompt (lambda nil (concat "[" (buffer-name) "]")))
  '(erc-prompt-for-password nil)
@@ -231,7 +216,7 @@
  '(org-tags-column 80)
  '(package-selected-packages
    (quote
-    (mmm-mode mode-icons smart-line-mode try helm-spotify-plus helm-spotify spotify esup yaml-mode gitignore-mode coffee-mode go-mode gitconfig-mode gitattributes-mode rust-mode cmake-mode php-mode web-mode nix-mode css-eldoc rainbow-mode crontab-mode markdown-mode less-css-mode json-mode intero js2-mode aggressive-indent fasd editorconfig dumb-jump page-break-lines ag rainbow-delimiters mwim multiple-cursors buffer-move whitespace-cleanup-mode wrap-region imenu-list magit-gh-pulls company-tern company flycheck eshell-prompt-extras eshell-z shell-pop esh-help xterm-color magithub helm-projectile projectile helm-ag helm-descbinds helm smart-tabs-mode apropospriate-theme auto-compile use-package jdee smooth-scrolling smart-mode-line skewer-less savekill readline-complete peep-dired pacmacs ox-gfm origami miniedit jsx-mode js3-mode jasminejs-mode imenu-anywhere flycheck-pos-tip ensime d-mode company-web company-ghci company-ghc company-cabal company-anaconda auctex)))
+    (info-lookmore highlight-cl cldoc elisp-slime-nav redshank emacs-lisp-mode lsp-mode flycheck-ycmd company-ycmd paredit-ext workgroups slime python-mode mic-paren paredit nxml-mode multi-term lisp-mode hydra haskell-mode-autoloads fancy-narrow edit-var diffview diff-mode- dired debbugs-gnu cursor-chg bytecomp-simplify bookmark+ bug-reference-github backup-each-save helm-swoop helm-make helm-grep helm-config tramp-sh realgud mmm-mode mode-icons smart-line-mode try helm-spotify-plus helm-spotify spotify esup yaml-mode gitignore-mode coffee-mode go-mode gitconfig-mode gitattributes-mode rust-mode cmake-mode php-mode web-mode nix-mode css-eldoc rainbow-mode crontab-mode markdown-mode less-css-mode json-mode intero js2-mode aggressive-indent fasd editorconfig dumb-jump page-break-lines ag rainbow-delimiters mwim multiple-cursors buffer-move whitespace-cleanup-mode wrap-region imenu-list magit-gh-pulls company-tern company flycheck eshell-prompt-extras eshell-z shell-pop esh-help xterm-color magithub helm-projectile projectile helm-ag helm-descbinds helm smart-tabs-mode apropospriate-theme auto-compile use-package jdee smooth-scrolling smart-mode-line skewer-less savekill readline-complete peep-dired pacmacs ox-gfm origami miniedit jsx-mode js3-mode jasminejs-mode imenu-anywhere flycheck-pos-tip ensime d-mode company-web company-ghci company-ghc company-cabal company-anaconda auctex)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
@@ -273,7 +258,6 @@
     ("*eshell*" "*shell*" "*mail*" "*inferior-lisp*" "*ielm*" "*scheme*")))
  '(save-abbrevs (quote silently))
  '(save-interprogram-paste-before-kill t)
- '(save-place t)
  '(save-place-file (concat user-emacs-directory "places"))
  '(save-place-mode t)
  '(savehist-additional-variables (quote (search-ring regexp-search-ring)))
@@ -292,7 +276,7 @@
  '(shell-pop-window-position (quote bottom))
  '(shell-pop-window-size 30)
  '(show-paren-delay 0)
- '(slime-contribs (quote (slime-fancy)))
+ '(slime-contribs (quote (slime-fancy)) t)
  '(slime-lisp-implementations
    (quote
     ((ccl
@@ -303,11 +287,12 @@
       ("cmucl" "-quiet"))
      (sbcl
       ("sbcl" "--noinform")
-      :coding-system utf-8-unix))))
+      :coding-system utf-8-unix))) t)
  '(sp-autoskip-closing-pair (quote always))
  '(sp-base-key-bindings (quote paredit))
  '(sp-hybrid-kill-entire-symbol nil)
  '(tab-width 2)
+ '(temporary-file-directory (expand-file-name "tmp" user-emacs-directory))
  '(tramp-default-method "ssh")
  '(undo-limit 800000)
  '(undo-tree-auto-save-history t)

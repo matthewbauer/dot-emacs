@@ -61,18 +61,6 @@
       (setq mode (car mode)))
     (with-current-buffer buffer (if mode (funcall mode)))))
 
-(defun prelude-cleanup-maybe ()
-  "Invoke `whitespace-cleanup' if `prelude-clean-whitespace-on-save' is not nil."
-  (whitespace-cleanup))
-
-(defun prelude-enable-whitespace ()
-  "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
-  ;; keep the whitespace decent all the time (in this buffer)
-  (add-hook 'before-save-hook 'prelude-cleanup-maybe nil t)
-  (whitespace-mode +1))
-
-(add-hook 'text-mode-hook 'prelude-enable-whitespace)
-
 ;; enable narrowing commands
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
@@ -104,9 +92,6 @@
 (with-region-or-buffer indent-region)
 (with-region-or-buffer untabify)
 
-;; abbrev config
-;; (add-hook 'text-mode-hook 'abbrev-mode)
-
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
@@ -115,7 +100,7 @@
 (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
 
 ;; Compilation from Emacs
-(defun prelude-colorize-compilation-buffer ()
+(defun colorize-compilation-buffer ()
   "Colorize a compilation mode buffer."
   (interactive)
   ;; we don't want to mess with child modes such as grep-mode, ack, ag, etc
@@ -125,7 +110,7 @@
 
 ;; Colorize output of Compilation Mode, see
 ;; http://stackoverflow.com/a/3072831/355252
-(add-hook 'compilation-filter-hook #'prelude-colorize-compilation-buffer)
+(add-hook 'compilation-filter-hook #'colorize-compilation-buffer)
 
 (defadvice server-visit-files (before parse-numbers-in-lines (files proc &optional nowait) activate)
   "Open file with emacsclient with cursors positioned on requested line.
@@ -173,21 +158,6 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
 (setenv "EDITOR" "emacsclient")
 (setenv "LC_ALL" "C")
 (setenv "LANG" "en")
-
-(defun prelude-swap-meta-and-super ()
-  "Swap the mapping of Meta and Super.
-Very useful for people using their Mac with a
-Windows external keyboard from time to time."
-  (interactive)
-  (if (eq mac-command-modifier 'super)
-      (progn
-        (setq mac-command-modifier 'meta)
-        (setq mac-option-modifier 'super)
-        (message "Command is now bound to META and Option is bound to SUPER."))
-    (progn
-      (setq mac-command-modifier 'super)
-      (setq mac-option-modifier 'meta)
-      (message "Command is now bound to SUPER and Option is bound to META."))))
 
 ;; It's all in the Meta
 ;; (setq ns-function-modifier 'hyper)
@@ -266,270 +236,47 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (global-set-key (kbd "M-n") 'newline-same-column)
 
-;;
-;; prelude stuff
-;;
+(defun setup-imenu-for-use-package ()
+  "Recognize `use-package` in imenu"
+  (when (string= buffer-file-name (expand-file-name "packages.el" "~/.emacs.d"))
+    (add-to-list
+     'imenu-generic-expression
+     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))))
 
-(defun c-mode-common-defaults ()
-  (setq c-default-style "k&r"
-        c-basic-offset 4)
-  (c-set-offset 'substatement-open 0))
+(add-hook 'emacs-lisp-mode-hook 'setup-imenu-for-use-package)
 
-;; this will affect all modes derived from cc-mode, like
-;; java-mode, php-mode, etc
-(add-hook 'c-mode-common-hook (lambda ()
-                                (run-hooks 'c-mode-common-defaults)))
+(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
-(defun makefile-mode-defaults ()
-  (whitespace-toggle-options '(tabs))
-  (setq indent-tabs-mode t ))
+(defun shell-comint-input-sender-hook ()
+  "Check certain shell commands.
+ Executes the appropriate behavior for certain commands."
+  (setq comint-input-sender
+        (lambda (proc command)
+          (cond
+           ;; Check for clear command and execute it.
+           ((string-match "^[ \t]*clear[ \t]*$" command)
+            (comint-send-string proc "\n")
+            (erase-buffer))
+           ;; Check for man command and execute it.
+           ((string-match "^[ \t]*man[ \t]*" command)
+            (comint-send-string proc "\n")
+            (setq command (replace-regexp-in-string
+                           "^[ \t]*man[ \t]*" "" command))
+            (setq command (replace-regexp-in-string
+                           "[ \t]+$" "" command))
+            (funcall 'man command))
+           ;; Send other commands to the default handler.
+           (t (comint-simple-send proc command))))))
 
-(add-hook 'makefile-mode-hook (lambda ()
-                                (run-hooks 'makefile-mode-defaults)))
+(add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
 
-(eval-after-load 'clojure-mode
-  '(progn
-     (defun prelude-clojure-mode-defaults ()
-       (subword-mode +1)
-       (run-hooks 'prelude-lisp-coding-hook))
+(require 'notifications)
 
-     (setq prelude-clojure-mode-hook 'prelude-clojure-mode-defaults)
-
-     (add-hook 'clojure-mode-hook (lambda ()
-                                    (run-hooks 'prelude-clojure-mode-hook)))))
-
-(eval-after-load 'cider
-  '(progn
-     (add-hook 'cider-mode-hook 'eldoc-mode)
-
-     (defun prelude-cider-repl-mode-defaults ()
-       (subword-mode +1)
-       (run-hooks 'prelude-interactive-lisp-coding-hook))
-
-     (setq prelude-cider-repl-mode-hook 'prelude-cider-repl-mode-defaults)
-
-     (add-hook 'cider-repl-mode-hook (lambda ()
-                                       (run-hooks 'prelude-cider-repl-mode-hook)))))
-
-;; the SBCL configuration file is in Common Lisp
-(add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
-
-;; Open files with .cl extension in lisp-mode
-(add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
-
-;; select the default value from slime-lisp-implementations
-(if (and (eq system-type 'darwin)
-         (executable-find "ccl"))
-    ;; default to Clozure CL on OS X
-    (setq slime-default-lisp 'ccl)
-  ;; default to SBCL on Linux and Windows
-  (setq slime-default-lisp 'sbcl))
-
-(add-hook 'lisp-mode-hook (lambda () (run-hooks 'prelude-lisp-coding-hook)))
-;; rainbow-delimeters messes up colors in slime-repl, and doesn't seem to work
-;; anyway, so we won't use prelude-lisp-coding-defaults.
-(add-hook 'slime-repl-mode-hook (lambda ()
-                                  (smartparens-strict-mode +1)
-                                  (whitespace-mode -1)))
-
-(eval-after-load "slime"
-  '(progn
-     (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-           slime-fuzzy-completion-in-place t
-           slime-enable-evaluate-in-emacs t
-           slime-autodoc-use-multiline-p t
-           slime-auto-start 'always)
-
-     (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
-     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
-
-(defun prelude-visit-ielm ()
-  "Switch to default `ielm' buffer.
-Start `ielm' if it's not already running."
-  (interactive)
-  (crux-start-or-switch-to 'ielm "*ielm*"))
-
-(define-key emacs-lisp-mode-map (kbd "C-c C-z") 'prelude-visit-ielm)
-(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
-(define-key emacs-lisp-mode-map (kbd "C-c C-b") 'eval-buffer)
-
-(defun prelude-conditional-emacs-lisp-checker ()
-  "Don't check doc style in Emacs Lisp test files."
-  (let ((file-name (buffer-file-name)))
-    (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
-      (setq-local flycheck-checkers '(emacs-lisp)))))
-
-(defun prelude-emacs-lisp-mode-defaults ()
-  "Sensible defaults for `emacs-lisp-mode'."
-  (run-hooks 'prelude-lisp-coding-hook)
-  (eldoc-mode +1)
-  ;; (rainbow-mode +1)
-  (show-paren-mode 1)
-  (setq mode-name "LE")
-  (prelude-conditional-emacs-lisp-checker))
-
-(setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
-
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (run-hooks 'prelude-emacs-lisp-mode-hook)))
-
-(add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
-
-;; ielm is an interactive Emacs Lisp shell
-(defun prelude-ielm-mode-defaults ()
-  "Sensible defaults for `ielm'."
-  (run-hooks 'prelude-interactive-lisp-coding-hook)
-  (eldoc-mode +1))
-
-(setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
-
-(add-hook 'ielm-mode-hook (lambda ()
-                            (run-hooks 'prelude-ielm-mode-hook)))
-
-(eval-after-load "ielm"
-  '(progn
-     (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
-     (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\""))))
-
-;; Ignore go test -c output files
-(add-to-list 'completion-ignored-extensions ".test")
-
-(define-key 'help-command (kbd "G") 'godoc)
-
-(eval-after-load 'go-mode
-  '(progn
-     (defun prelude-go-mode-defaults ()
-       ;; Add to default go-mode key bindings
-       (let ((map go-mode-map))
-         (define-key map (kbd "C-c a") 'go-test-current-project) ;; current package, really
-         (define-key map (kbd "C-c m") 'go-test-current-file)
-         (define-key map (kbd "C-c .") 'go-test-current-test)
-         (define-key map (kbd "C-c b") 'go-run)
-         (define-key map (kbd "C-h f") 'godoc-at-point))
-
-       ;; Prefer goimports to gofmt if installed
-       (let ((goimports (executable-find "goimports")))
-         (when goimports
-           (setq gofmt-command goimports)))
-
-       ;; gofmt on save
-       (add-hook 'before-save-hook 'gofmt-before-save nil t)
-
-       ;; stop whitespace being highlighted
-       (whitespace-toggle-options '(tabs))
-
-       ;; Company mode settings
-       (set (make-local-variable 'company-backends) '(company-go))
-
-       ;; El-doc for Go
-       (go-eldoc-setup)
-
-       ;; CamelCase aware editing operations
-       (subword-mode +1))
-
-     (setq prelude-go-mode-hook 'prelude-go-mode-defaults)
-
-     (add-hook 'go-mode-hook (lambda ()
-                               (run-hooks 'prelude-go-mode-hook)))))
-
-(eval-after-load 'haskell-mode
-  '(progn
-     (defun prelude-haskell-mode-defaults ()
-       (subword-mode +1)
-       (eldoc-mode +1)
-       (haskell-indentation-mode +1)
-       (interactive-haskell-mode +1))
-
-     (setq prelude-haskell-mode-hook 'prelude-haskell-mode-defaults)
-
-     (add-hook 'haskell-mode-hook (lambda ()
-                                    (run-hooks 'prelude-haskell-mode-hook)))))
-
-(add-to-list 'auto-mode-alist '("\\.js\\'"    . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.pac\\'"   . js2-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-
-(eval-after-load 'js2-mode
-  '(progn
-     (defun prelude-js-mode-defaults ()
-       ;; electric-layout-mode doesn't play nice with smartparens
-       (setq-local electric-layout-rules '((?\; . after)))
-       (setq mode-name "JS2")
-       (js2-imenu-extras-mode +1))
-
-     (setq prelude-js-mode-hook 'prelude-js-mode-defaults)
-
-     (add-hook 'js2-mode-hook (lambda () (run-hooks 'prelude-js-mode-hook)))))
-
-(defcustom prelude-latex-fast-math-entry 'LaTeX-math-mode
-  "Method used for fast math symbol entry in LaTeX."
-  :link '(function-link :tag "AUCTeX Math Mode" LaTeX-math-mode)
-  :link '(emacs-commentary-link :tag "CDLaTeX" "cdlatex.el")
-  :group 'prelude
-  :type '(choice (const :tag "None" nil)
-                 (const :tag "AUCTeX Math Mode" LaTeX-math-mode)
-                 (const :tag "CDLaTeX" cdlatex)))
-
-;; sensible defaults for OS X, other OSes should be covered out-of-the-box
-(when (eq system-type 'darwin)
-  (setq TeX-view-program-selection
-        '((output-dvi "DVI Viewer")
-          (output-pdf "PDF Viewer")
-          (output-html "HTML Viewer")))
-
-  (setq TeX-view-program-list
-        '(("DVI Viewer" "open %o")
-          ("PDF Viewer" "open %o")
-          ("HTML Viewer" "open %o"))))
-
-(defun prelude-local-comment-auto-fill ()
-  (set (make-local-variable 'comment-auto-fill-only-comments) t))
-
-(defun prelude-font-lock-comment-annotations ()
-  "Highlight a bunch of well known comment annotations.
-This functions should be added to the hooks of major modes for programming."
-  (font-lock-add-keywords
-   nil '(("\\<\\(\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):\\)"
-          1 font-lock-warning-face t))))
-
-(defun prelude-prog-mode-defaults ()
-  "Default coding hook, useful with any programming language."
-  ;; (guru-mode +1)
-  ;; (smartparens-mode +1)
-  (prelude-enable-whitespace)
-  (prelude-local-comment-auto-fill)
-  (prelude-font-lock-comment-annotations))
-
-(setq prelude-prog-mode-hook 'prelude-prog-mode-defaults)
-
-(add-hook 'prog-mode-hook (lambda ()
-                            (run-hooks 'prelude-prog-mode-hook)))
-
-;; enable on-the-fly syntax checking
-;; (if (fboundp 'global-flycheck-mode)
-;;     (global-flycheck-mode +1)
-;;   (add-hook 'prog-mode-hook 'flycheck-mode))
-
-(defun prelude-latex-mode-defaults ()
-  "Default Prelude hook for `LaTeX-mode'."
-  (turn-on-auto-fill)
-  (abbrev-mode +1)
-  ;; (smartparens-mode +1)
-  (case prelude-latex-fast-math-entry
-    (LaTeX-math-mode (LaTeX-math-mode 1))
-    (cdlatex (turn-on-cdlatex))))
-
-;; recognize prezto files as zsh scripts
-(defvar prelude-prezto-files '("zlogin" "zlogin" "zlogout" "zpreztorc" "zprofile" "zshenv" "zshrc"))
-
-(mapc (lambda (file)
-        (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
-      prelude-prezto-files)
-
-(add-hook 'sh-mode-hook
-          (lambda ()
-            (if (and buffer-file-name
-                     (member (file-name-nondirectory buffer-file-name) prelude-prezto-files))
-                (sh-set-shell "zsh"))))
+(defun erc-global-notify (match-type nick message)
+  "Notify when a message is recieved."
+  (notifications-notify
+   :title nick
+   :body message
+   :urgency 'low))
 
 (provide 'misc)

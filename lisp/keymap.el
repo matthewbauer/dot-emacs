@@ -426,5 +426,7 @@ END end of region"
 (bind-key "C-x p" 'pop-to-mark-command)
 (setq set-mark-command-repeat-pop t)
 
+(global-set-key (kbd "C-M-y") 'reverse-tranpose-sexps)
+
 (provide 'keymap)
 ;;; keymap.el ends here
