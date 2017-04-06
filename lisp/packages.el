@@ -170,7 +170,7 @@
   (setq backup-enable-predicate 'my-dont-backup-files-p))
 
 (use-package bookmark
-  :defer 10
+  :disabled t
   :config
   (use-package bookmark+))
 
@@ -183,7 +183,6 @@
    ("<M-S-right>" . buf-move-right)))
 
 (use-package bug-reference-github
-  :defer 10
   :config
   (bug-reference-github-set-url-format))
 
@@ -430,6 +429,146 @@
   :commands (diffview-current diffview-region diffview-message))
 
 (use-package diminish)
+
+(use-package dired
+  :ensure nil
+  :bind ("C-c J" . dired-double-jump)
+  :preface
+  (defvar mark-files-cache (make-hash-table :test #'equal))
+
+  (defun mark-similar-versions (name)
+    (let ((pat name))
+      (if (string-match "^\\(.+?\\)-[0-9._-]+$" pat)
+          (setq pat (match-string 1 pat)))
+      (or (gethash pat mark-files-cache)
+          (ignore (puthash pat t mark-files-cache)))))
+
+  (defun dired-mark-similar-version ()
+    (interactive)
+    (setq mark-files-cache (make-hash-table :test #'equal))
+    (dired-mark-sexp '(mark-similar-versions name)))
+
+  (defun dired-double-jump (first-dir second-dir)
+    (interactive
+     (list (read-directory-name "First directory: "
+                                (expand-file-name "~")
+                                nil nil "dl/")
+           (read-directory-name "Second directory: "
+                                (expand-file-name "~")
+                                nil nil "Archives/")))
+    (dired first-dir)
+    (dired-other-window second-dir))
+
+  (defun my-dired-switch-window ()
+    (interactive)
+    (if (eq major-mode 'sr-mode)
+        (call-interactively #'sr-change-window)
+      (call-interactively #'other-window)))
+
+  :config
+  (bind-key "l" #'dired-up-directory dired-mode-map)
+
+  (bind-key "<tab>" #'my-dired-switch-window dired-mode-map)
+
+  (bind-key "M-!" #'async-shell-command dired-mode-map)
+  (unbind-key "M-G" dired-mode-map)
+
+  (use-package dired+
+    :config
+    (unbind-key "M-s f" dired-mode-map))
+
+  (use-package dired-details
+    ;; (shell-command "rm -f site-lisp/dired-details.el*")
+    :disabled t)
+
+  (use-package dired-ranger
+    :bind (:map dired-mode-map
+                ("W" . dired-ranger-copy)
+                ("X" . dired-ranger-move)
+                ("Y" . dired-ranger-paste)))
+
+  (use-package dired-sort-map
+    ;; (shell-command "rm -f site-lisp/dired-sort-map.el*")
+    :disabled t)
+
+  (use-package dired-toggle
+    :load-path "site-lisp/dired-toggle"
+    :bind ("C-. d" . dired-toggle)
+    :preface
+    (defun my-dired-toggle-mode-hook ()
+      (interactive)
+      (visual-line-mode 1)
+      (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
+      (setq-local word-wrap nil))
+    :config
+    (add-hook 'dired-toggle-mode-hook #'my-dired-toggle-mode-hook))
+
+  (defadvice dired-omit-startup (after diminish-dired-omit activate)
+    "Make sure to remove \"Omit\" from the modeline."
+    (diminish 'dired-omit-mode) dired-mode-map)
+
+  (defadvice dired-next-line (around dired-next-line+ activate)
+    "Replace current buffer if file is a directory."
+    ad-do-it
+    (while (and  (not  (eobp)) (not ad-return-value))
+      (forward-line)
+      (setq ad-return-value(dired-move-to-filename)))
+    (when (eobp)
+      (forward-line -1)
+      (setq ad-return-value(dired-move-to-filename))))
+
+  (defadvice dired-previous-line (around dired-previous-line+ activate)
+    "Replace current buffer if file is a directory."
+    ad-do-it
+    (while (and  (not  (bobp)) (not ad-return-value))
+      (forward-line -1)
+      (setq ad-return-value(dired-move-to-filename)))
+    (when (bobp)
+      (call-interactively 'dired-next-line)))
+
+  (defvar dired-omit-regexp-orig (symbol-function 'dired-omit-regexp))
+
+  ;; Omit files that Git would ignore
+  (defun dired-omit-regexp ()
+    (let ((file (expand-file-name ".git"))
+          parent-dir)
+      (while (and (not (file-exists-p file))
+                  (progn
+                    (setq parent-dir
+                          (file-name-directory
+                           (directory-file-name
+                            (file-name-directory file))))
+                    ;; Give up if we are already at the root dir.
+                    (not (string= (file-name-directory file)
+                                  parent-dir))))
+        ;; Move up to the parent dir and try again.
+        (setq file (expand-file-name ".git" parent-dir)))
+      ;; If we found a change log in a parent, use that.
+      (if (file-exists-p file)
+          (let ((regexp (funcall dired-omit-regexp-orig))
+                (omitted-files
+                 (shell-command-to-string "git clean -d -x -n")))
+            (if (= 0 (length omitted-files))
+                regexp
+              (concat
+               regexp
+               (if (> (length regexp) 0)
+                   "\\|" "")
+               "\\("
+               (mapconcat
+                #'(lambda (str)
+                    (concat
+                     "^"
+                     (regexp-quote
+                      (substring str 13
+                                 (if (= ?/ (aref str (1- (length str))))
+                                     (1- (length str))
+                                   nil)))
+                     "$"))
+                (split-string omitted-files "\n" t)
+                "\\|")
+               "\\)")))
+        (funcall dired-omit-regexp-orig)))))
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
@@ -687,7 +826,7 @@ is achieved by adding the relevant text properties."
 (use-package flyspell
   :commands flyspell-mode ;;(spell-checking/change-dictionary)
   :init
-  (add-hook 'text-mode-hook' 'flyspell-mode)
+  (add-hook 'text-mode-hook 'flyspell-mode)
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
 (use-package gitattributes-mode
@@ -785,7 +924,7 @@ is achieved by adding the relevant text properties."
     (helm-match-plugin-mode 1)))
 
 (use-package hydra
-  :defer 10
+  :disabled t
   :config
   (defhydra hydra-zoom (global-map "<f2>")
     "zoom"
@@ -859,17 +998,17 @@ is achieved by adding the relevant text properties."
         :config
         (use-package eldoc-extension
           :disabled t
-          :defer t
           :init
           (add-hook 'emacs-lisp-mode-hook
                     #'(lambda () (require 'eldoc-extension)) t))
         (eldoc-add-command 'paredit-backward-delete
                            'paredit-close-round))
 
-      ;; (use-package cldoc
-      ;;   :demand t
-      ;;   :commands (cldoc-mode turn-on-cldoc-mode)
-      ;;   :diminish cldoc-mode)
+      (use-package cldoc
+        :demand t
+        :ensure nil
+        :commands (cldoc-mode turn-on-cldoc-mode)
+        :diminish cldoc-mode)
 
       (use-package ert
         :bind ("C-c e t" . ert-run-tests-interactively))
@@ -911,23 +1050,25 @@ is achieved by adding the relevant text properties."
         (save-excursion
           (byte-recompile-file buffer-file-name)))
 
-      ;; (use-package info-lookmore
-      ;;   :config
-      ;;   (info-lookmore-elisp-cl)
-      ;;   (info-lookmore-elisp-userlast)
-      ;;   (info-lookmore-elisp-gnus)
-      ;;   (info-lookmore-apropos-elisp))
+      (use-package info-lookmore
+        :ensure nil
+        :demand t
+        :config
+        (info-lookmore-elisp-cl)
+        (info-lookmore-elisp-userlast)
+        (info-lookmore-elisp-gnus)
+        (info-lookmore-apropos-elisp))
 
       (use-package testcover
         :commands testcover-this-defun)
 
-      ;; (mapc (lambda (mode)
-      ;;         (info-lookup-add-help
-      ;;          :mode mode
-      ;;          :regexp "[^][()'\" \t\n]+"
-      ;;          :ignore-case t
-      ;;          :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
-      ;;       lisp-modes)
+      (mapc (lambda (mode)
+              (info-lookup-add-help
+               :mode mode
+               :regexp "[^][()'\" \t\n]+"
+               :ignore-case t
+               :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
+            lisp-modes)
       )
 
     (auto-fill-mode 1)
@@ -940,11 +1081,11 @@ is achieved by adding the relevant text properties."
 
     (add-hook 'after-save-hook 'check-parens nil t)
 
-    ;; (unless (memq major-mode
-    ;;               '(emacs-lisp-mode inferior-emacs-lisp-mode ielm-mode))
-    ;;   (turn-on-cldoc-mode)
-    ;;   (bind-key "M-q" #'slime-reindent-defun lisp-mode-map)
-    ;;   (bind-key "M-l" #'slime-selector lisp-mode-map))
+    (unless (memq major-mode
+                  '(emacs-lisp-mode inferior-emacs-lisp-mode ielm-mode))
+      (turn-on-cldoc-mode)
+      (bind-key "M-q" #'slime-reindent-defun lisp-mode-map)
+      (bind-key "M-l" #'slime-selector lisp-mode-map))
     )
 
   ;; Change lambda to an actual lambda symbol
@@ -1049,8 +1190,14 @@ is achieved by adding the relevant text properties."
   :mode "\\.nix\\'")
 
 (use-package org
-  :config
+  ;; :mode "\\.\\(org\\)\\'"
+  :init
   (add-hook 'org-mode-hook 'auto-fill-mode))
+
+(use-package org-bullets
+  :commands org-bullets-mode
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (use-package page-break-lines
   :init
@@ -1080,11 +1227,11 @@ is achieved by adding the relevant text properties."
   (bind-key "C-. J" #'paredit-join-with-previous-list paredit-mode-map))
 
 (or (use-package mic-paren
-      :defer 5
+      :disabled t
       :config
       (paren-activate))
     (use-package paren
-      :defer 5
+      :disabled t
       :config
       (show-paren-mode 1)))
 
@@ -1095,7 +1242,6 @@ is achieved by adding the relevant text properties."
   :commands projectile-mode
   :diminish projectile-mode
   :after helm
-  :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (use-package helm-projectile
@@ -1148,7 +1294,6 @@ is achieved by adding the relevant text properties."
   (apply #'hook-into-modes 'rainbow-delimiters-mode lisp-mode-hooks))
 
 (use-package recentf
-  :defer 10
   :commands (recentf-mode
              recentf-add-file
              recentf-apply-filename-handlers)
@@ -1210,7 +1355,6 @@ is achieved by adding the relevant text properties."
   :mode "\\.rs\\'")
 
 (use-package sh-script
-  :defer t
   :init
   (defvar sh-script-initialized nil)
   (defun initialize-sh-script ()
@@ -1301,6 +1445,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("C-c ;" . undo-tree-visualize)))
 
 (use-package web-mode
+  :disabled t
   :mode "\\.html\\'")
 
 (use-package whitespace
@@ -1370,7 +1515,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package winner
   :if (not noninteractive)
-  :defer 5
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
   :config
@@ -1404,7 +1548,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (use-package yaml-mode
   :mode "\\.yaml\\'")
 
-(use-package ycmd)
+(use-package ycmd
+  :commands ycmd-mode)
 
 (provide 'packages)
 ;;; packages.el ends here

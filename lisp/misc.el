@@ -23,6 +23,8 @@
 ;; (size-indication-mode t)
 (toggle-scroll-bar -1)
 
+(auto-compression-mode t)
+
 ;; show the cursor when moving after big movements in the window
 ;; (require 'beacon)
 ;; (beacon-mode +1)
@@ -238,7 +240,7 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (defun setup-imenu-for-use-package ()
   "Recognize `use-package` in imenu"
-  (when (string= buffer-file-name (expand-file-name "packages.el" "~/.emacs.d"))
+  (when (string= buffer-file-name (expand-file-name "packages.el" "~/.emacs.d/lisp"))
     (add-to-list
      'imenu-generic-expression
      '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))))
