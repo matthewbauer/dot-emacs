@@ -1020,8 +1020,7 @@ is achieved by adding the relevant text properties."
       (use-package cldoc
         :demand t
         :ensure nil
-        :commands (cldoc-mode turn-on-cldoc-mode)
-        :diminish cldoc-mode)
+        :commands (cldoc-mode turn-on-cldoc-mode))
 
       (use-package ert
         :bind ("C-c e t" . ert-run-tests-interactively))
@@ -1334,7 +1333,11 @@ is achieved by adding the relevant text properties."
 
 (use-package rg
   :commands rg
-  :if (executable-find "ripgrep"))
+  :if (executable-find "rg"))
+
+(use-package ripgrep
+  :commands ripgrep
+  :if (executable-find "rg"))
 
 (use-package ruby-mode
   :mode ("\\.rb\\'" . ruby-mode)
@@ -1434,6 +1437,12 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :init
   (add-hook 'prog-mode-hook 'smart-tabs-mode)
   :commands smart-tabs-mode)
+
+(use-package smartparens
+  :disabled t
+  :commands (smartparens-mode show-smartparens-mode)
+  :config
+  (use-package smartparens-config))
 
 (use-package tern
   :init
