@@ -304,6 +304,7 @@
  '(use-file-dialog nil)
  '(use-package-always-defer t)
  '(use-package-always-ensure t)
+ '(use-package-enable-imenu-support t)
  '(use-package-verbose nil)
  '(user-full-name "Matthew Bauer")
  '(user-initials "mjb")

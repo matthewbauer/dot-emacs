@@ -238,15 +238,6 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (global-set-key (kbd "M-n") 'newline-same-column)
 
-(defun setup-imenu-for-use-package ()
-  "Recognize `use-package` in imenu"
-  (when (string= buffer-file-name (expand-file-name "packages.el" "~/.emacs.d/lisp"))
-    (add-to-list
-     'imenu-generic-expression
-     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))))
-
-(add-hook 'emacs-lisp-mode-hook 'setup-imenu-for-use-package)
-
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
 (defun shell-comint-input-sender-hook ()
