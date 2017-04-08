@@ -1313,6 +1313,7 @@ is achieved by adding the relevant text properties."
   (apply #'hook-into-modes 'rainbow-delimiters-mode lisp-mode-hooks))
 
 (use-package recentf
+  :disabled t
   :commands (recentf-mode
              recentf-add-file
              recentf-apply-filename-handlers)
