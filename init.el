@@ -41,6 +41,8 @@
 
 ;; packages
 
+(require 'ido)
+
 (require 'packages)
 
 (require 'private nil t)
