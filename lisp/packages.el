@@ -1085,7 +1085,7 @@ is achieved by adding the relevant text properties."
       )
 
     (auto-fill-mode 1)
-    (paredit-mode 1)
+    ;; (paredit-mode 1)
     (redshank-mode 1)
     ;; (elisp-slime-nav-mode 1)
 
@@ -1221,6 +1221,9 @@ is achieved by adding the relevant text properties."
 
 (use-package paredit
   :commands paredit-mode
+  :disabled t
+  :init
+  (apply #'hook-into-modes 'paredit-mode lisp-mode-hooks)
   :config
   (bind-key "C-M-l" #'paredit-recentre-on-sexp paredit-mode-map)
 
