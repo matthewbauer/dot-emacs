@@ -303,6 +303,7 @@
  '(use-dialog-box nil)
  '(use-file-dialog nil)
  '(use-package-always-defer t)
+ '(use-package-always-defer-install t)
  '(use-package-always-ensure t)
  '(use-package-enable-imenu-support t)
  '(use-package-verbose nil)
