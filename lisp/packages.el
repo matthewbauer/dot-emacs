@@ -223,7 +223,6 @@
 
   (defun my-c-mode-common-hook ()
     ;; (ggtags-mode 1)
-    (eldoc-mode 1)
     (hs-minor-mode 1)
     (hide-ifdef-mode 1)
     ;; (whitespace-mode 1)
@@ -1528,6 +1527,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 
 (use-package winner
+  :disabled t
   :if (not noninteractive)
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
