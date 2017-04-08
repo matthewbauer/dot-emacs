@@ -55,6 +55,7 @@
   (add-hook 'find-file-hook #'(lambda () (auto-revert-mode 1))))
 
 (use-package backup-each-save
+  :disabled t
   :commands backup-each-save
   :preface
   (defun show-backups ()
