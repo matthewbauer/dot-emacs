@@ -863,7 +863,7 @@ is achieved by adding the relevant text properties."
          ("M-s F" . find-grep)
          ("M-s G" . grep))
   :config
-  (add-hook 'grep-mode-hook #'(lambda () (use-package grep-ed)))
+  ;; (add-hook 'grep-mode-hook #'(lambda () (use-package grep-ed)))
 
   (grep-apply-setting 'grep-command "egrep -nH -e ")
   (grep-apply-setting
