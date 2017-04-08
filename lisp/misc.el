@@ -281,4 +281,9 @@ i.e. change right window to bottom, or change bottom window to right."
    :body message
    :urgency 'low))
 
+(defun eshell-remove-pcomplete ()
+  (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point t))
+
+(add-hook 'eshell-mode-hook #'eshell-remove-pcomplete)
+
 (provide 'misc)

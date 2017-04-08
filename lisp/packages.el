@@ -799,6 +799,9 @@ is achieved by adding the relevant text properties."
 
   ;; support `em-smart'
   (require 'em-smart)
+  (setq eshell-where-to-jump 'begin)
+  (setq eshell-review-quick-commands nil)
+  (setq eshell-smart-space-goes-to-end t)
   (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
 
 (use-package eshell-prompt-extras
