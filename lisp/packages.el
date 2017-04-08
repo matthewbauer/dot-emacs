@@ -41,13 +41,15 @@
 
 (use-package apropospriate-theme
   :demand t
+  :init
+  (require 'ido)
   :config
   (load-theme 'apropospriate-dark))
 
 (use-package auto-compile
-  :disabled t
   :demand t
   :config
+  (auto-compile-on-save-mode)
   (auto-compile-on-load-mode))
 
 (use-package autorevert
