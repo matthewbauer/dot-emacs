@@ -45,6 +45,7 @@
   (load-theme 'apropospriate-dark))
 
 (use-package auto-compile
+  :disabled t
   :demand t
   :config
   (auto-compile-on-load-mode))
