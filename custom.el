@@ -21,6 +21,7 @@
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
  '(bookmark-default-file (quote (expand-file-name "bookmarks" user-emacs-directory)))
  '(bookmark-save-flag 1)
+ '(c-eldoc-includes "")
  '(comint-process-echoes t)
  '(comint-prompt-read-only t)
  '(company-idle-delay 0.5)

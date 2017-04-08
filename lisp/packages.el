@@ -257,6 +257,13 @@
                                          1 font-lock-warning-face t))))
 
   :config
+
+  (use-package c-eldoc
+    :commands c-turn-on-eldoc-mode
+    :init
+    (add-hook 'c-mode-common-hook 'c-turn-on-eldoc-mode)
+    )
+
   (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
   (setq c-syntactic-indentation nil)
