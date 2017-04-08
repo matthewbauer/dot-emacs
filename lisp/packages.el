@@ -1184,6 +1184,9 @@ is achieved by adding the relevant text properties."
   (defadvice term-process-pager (after term-process-rebind-keys activate)
     (define-key term-pager-break-map  "\177" 'term-pager-back-page)))
 
+(use-package minimap
+  :commands minimap-mode)
+
 (use-package multiple-cursors
   :commands (mc/mark-next-like-this mc/mark-previous-like-this)
   :bind
