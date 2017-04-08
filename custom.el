@@ -173,7 +173,6 @@
  '(magit-auto-revert-mode nil)
  '(magit-completing-read-function (quote helm--completing-read-default))
  '(magit-diff-options nil)
- '(magit-display-buffer-function (quote magit-display-buffer-fullframe-status-v1))
  '(magit-ediff-dwim-show-on-hunks t)
  '(magit-fetch-arguments nil)
  '(magit-highlight-trailing-whitespace nil)
