@@ -24,7 +24,7 @@
 (use-package aggressive-indent
   :commands aggressive-indent-mode
   :init
-  (apply #'hook-into-modes 'aggressive-indent-mode lisp-modes))
+  (apply #'hook-into-modes 'aggressive-indent-mode lisp-mode-hooks))
 
 (use-package align
   :bind (("M-["   . align-code)
