@@ -16,6 +16,9 @@
 (defsubst hook-into-modes (func &rest modes)
   (dolist (mode-hook modes) (add-hook mode-hook func)))
 
+(use-package ace-jump-mode
+  :bind ("C-c SPC" . ace-jump-mode))
+
 (use-package ag
   :commands ag
   :if (executable-find "ag")
@@ -39,6 +42,12 @@
         (indent-region beg end-mark nil)
         (align beg end-mark)))))
 
+(use-package anaconda-mode
+  :commands (anaconda-mode anaconda-eldoc-mode)
+  :init
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
 (use-package apropospriate-theme
   :demand t
   :init
@@ -51,6 +60,16 @@
   :config
   (auto-compile-on-save-mode)
   (auto-compile-on-load-mode))
+
+(use-package auto-highlight-symbol
+  :disabled t
+  :commands auto-highlight-symbol-mode
+  :init
+  (add-hook 'prog-mode-hook auto-highlight-symbol-mode))
+
+(use-package autopair
+  :commands autopair-global-mode
+  :init (autopair-global-mode))
 
 (use-package autorevert
   :commands auto-revert-mode
@@ -172,6 +191,8 @@
       (normal-backup-enable-predicate filename)))
 
   (setq backup-enable-predicate 'my-dont-backup-files-p))
+
+(use-package bbdb)
 
 (use-package bookmark
   :disabled t
@@ -377,9 +398,7 @@
   :after helm
   :config (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
-  (use-package company-tern
-    :commands company-tern
-    :init (add-to-list 'company-backends 'company-tern))
+
 
   ;; Use Helm to complete suggestions
   (define-key company-mode-map (kbd "C-:") 'helm-company)
@@ -387,12 +406,34 @@
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
 
+(use-package company-anaconda
+  :disabled t
+  :after company
+  :commands company-anaconda
+  :init
+  (add-to-list 'company-backends 'company-anaconda))
+
+(use-package company-statistics
+  :disable t
+  :commands company-statistics-mode
+  :init
+  (company-statistics-mode))
+
+(use-package company-tern
+  :commands company-tern
+  :init (add-to-list 'company-backends 'company-tern))
+
+(use-package company-quickhelp
+  :commands company-quickhelp-mode
+  :init (company-quickhelp-mode 1))
+
 (use-package company-ycmd
   :after ycmd
-  :disabled
+  :disabled t
   :commands company-ycmd
   :init
   (company-ycmd-setup))
+
 (use-package compile
   :bind (("C-c c" . compile)
          ("M-O"   . show-compilation))
@@ -736,6 +777,9 @@
   (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules)))
   (erc-track-mode t))
 
+(use-package elpy
+  :disabled t)
+
 (use-package esh-help
   :commands esh-help-eldoc-command
   :init
@@ -830,11 +874,22 @@ is achieved by adding the relevant text properties."
   (global-fasd-mode 1)
   )
 
+(use-package flatland-theme
+  :demand t
+  :disabled t
+  :config (load-theme 'flatland))
+
 (use-package flycheck
   :commands flycheck-mode)
 
 (use-package flycheck-ycmd
   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+
+(use-package flycheck-pos-tip
+  :disabld t
+  :commands flycheck-pos-tip-mode
+  :after flycheck
+  :init (flycheck-pos-tip-mode))
 
 (use-package flyspell
   :commands flyspell-mode ;;(spell-checking/change-dictionary)
@@ -842,6 +897,9 @@ is achieved by adding the relevant text properties."
   (add-hook 'text-mode-hook 'flyspell-mode)
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
+
+(use-package gist)
+
 (use-package gitattributes-mode
   :mode "\\.gitattributes\\'")
 
@@ -850,6 +908,12 @@ is achieved by adding the relevant text properties."
 
 (use-package gitignore-mode)
 
+(use-package git-timemachine
+  :commands git-timemachine)
+
+(use-package git-messenger
+  :disabled t)
+
 (use-package gnus
   :commands gnus
   :init
@@ -857,6 +921,14 @@ is achieved by adding the relevant text properties."
 
 (use-package go-mode
   :mode "\\.go\\'")
+
+(use-package go-eldoc
+  :commands go-eldoc-setup
+  :init
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
+(use-package golden-ratio
+  :commands golden-ratio-mode)
 
 (use-package grep
   :bind (("M-s d" . find-grep-dired)
@@ -892,8 +964,15 @@ is achieved by adding the relevant text properties."
     (bind-key "<f11>" #'gud-step)
     (bind-key "S-<f11>" #'gud-finish)))
 
+(use-package guru-mode
+  :commands guru-mode
+  :init (add-hook 'prog-mode-hook 'guru-mode))
+
 (use-package haskell-mode
   :mode "\\.hs\\'")
+
+(use-package haml-mode
+  :mode "\\.haml\\'")
 
 (use-package helm
   :commands helm-mode
@@ -925,6 +1004,15 @@ is achieved by adding the relevant text properties."
   (setq projectile-completion-system 'helm)
   (helm-mode 1))
 
+(use-package helm-company
+  :commands helm-company)
+
+(use-package helm-flyspell
+  :disabled t)
+
+(use-package helm-gitignore
+  :commands helm-gitignore)
+
 (use-package helm-make
   :commands (helm-make helm-make-projectile))
 
@@ -935,6 +1023,12 @@ is achieved by adding the relevant text properties."
   (use-package helm-match-plugin
     :config
     (helm-match-plugin-mode 1)))
+
+(use-package hungry-delete
+  :disabled t
+  :commands global-hungry-delete-mode
+  :init
+  (global-hungry-delete-mode))
 
 (use-package hydra
   :disabled t
@@ -965,11 +1059,29 @@ is achieved by adding the relevant text properties."
   (bind-key "M-n" #'flycheck-next-error js2-mode-map)
   (bind-key "M-p" #'flycheck-previous-error js2-mode-map))
 
+(use-package js2-refactor
+  :commands js2-refactor-mode
+  :init (add-hook 'js2-mode-hook #'js2-refactor-mode))
+
 (use-package json-mode
   :mode "\\.json\\'"
   :config
   (use-package json-reformat)
   (use-package json-snatcher))
+
+(use-package json-snatcher
+  :commands js-mode-bindings
+  :preface
+  (defun js-mode-bindings ()
+    "Sets a hotkey for using the json-snatcher plugin"
+    (when (string-match  "\\.json$" (buffer-name))
+      (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
+  :init
+  (add-hook 'js2-mode-hook 'js-mode-binding)
+  (add-hook 'js-mode-hook 'js-mode-binding))
+
+(use-package launchctl
+  :commands launchctl)
 
 (use-package less-css-mode
   :mode "\\.json\\'"
@@ -997,8 +1109,8 @@ is achieved by adding the relevant text properties."
     (unless lisp-mode-initialized
       (setq lisp-mode-initialized t)
 
-      (use-package redshank
-        :demand t)
+      ;; (use-package redshank
+      ;;   :demand t)
 
       (use-package elisp-slime-nav)
 
@@ -1085,10 +1197,10 @@ is achieved by adding the relevant text properties."
 
     (auto-fill-mode 1)
     ;; (paredit-mode 1)
-    (redshank-mode 1)
+    ;; (redshank-mode 1)
     ;; (elisp-slime-nav-mode 1)
 
-    (local-set-key (kbd "<return>") 'paredit-newline)
+    ;; (local-set-key (kbd "<return>") 'paredit-newline)
     (bind-key "<tab>" #'my-elisp-indent-or-complete emacs-lisp-mode-map)
 
     (add-hook 'after-save-hook 'check-parens nil t)
@@ -1119,6 +1231,9 @@ is achieved by adding the relevant text properties."
 
   (apply #'hook-into-modes 'my-lisp-mode-hook lisp-mode-hooks))
 
+(use-package lua-mode
+  :mode "\\.lua\\'")
+
 (use-package lsp-mode
   :disabled t
   :demand t
@@ -1140,6 +1255,12 @@ is achieved by adding the relevant text properties."
   :after magit
   :config (magithub-feature-autoinject t))
 
+(use-package material-theme
+  :disabled t
+  :demand t
+  :config
+  (load-theme 'material t))
+
 (use-package markdown-mode
   :mode "\\.\\(md\\|markdown\\)\\'"
   :commands markdown-mode
@@ -1154,7 +1275,10 @@ is achieved by adding the relevant text properties."
     (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
 
 (use-package mmm-mode
-  :commands mmm-mode)
+  :commands mmm-mode
+  :init
+  (setq mmm-global-mode 'maybe)
+  (require 'mmm-auto))
 
 (use-package multi-term
   :bind (("C-. t" . multi-term-next)
@@ -1191,6 +1315,12 @@ is achieved by adding the relevant text properties."
 (use-package minimap
   :commands minimap-mode)
 
+(use-package monokai-theme
+  :disabled t
+  :demand t
+  :config
+  (load-theme 'monokai t))
+
 (use-package multiple-cursors
   :commands (mc/mark-next-like-this mc/mark-previous-like-this)
   :bind
@@ -1202,6 +1332,7 @@ is achieved by adding the relevant text properties."
          ("C-e" . mwim-end-of-code-or-line)))
 
 (use-package nix-mode
+  :load-path "~/Projects/nix-mode"
   :mode "\\.nix\\'")
 
 (use-package org
@@ -1252,6 +1383,8 @@ is achieved by adding the relevant text properties."
       :disabled t
       :config
       (show-paren-mode 1)))
+
+(use-package pdf-tools)
 
 (use-package php-mode
   :mode "\\.php\\'")
@@ -1331,6 +1464,10 @@ is achieved by adding the relevant text properties."
   :config
   (recentf-mode 1))
 
+
+(use-package reveal-in-osx-finder
+  :commands reveal-in-osx-finder)
+
 (use-package rg
   :commands rg
   :if (executable-find "rg"))
@@ -1377,6 +1514,17 @@ is achieved by adding the relevant text properties."
 (use-package rust-mode
   :mode "\\.rs\\'")
 
+(use-package sass-mode
+  :mode "\\.sass\\'")
+
+(use-package scss-mode
+  :mode "\\.scss\\'")
+
+(use-package seti-theme
+  :disabled t
+  :demand t
+  :config (load-theme 'seti))
+
 (use-package sh-script
   :init
   (defvar sh-script-initialized nil)
@@ -1393,6 +1541,7 @@ is achieved by adding the relevant text properties."
 (use-package shell)
 
 (use-package shell-pop
+  :disabled t
   :init
   (defmacro make-shell-pop-command (func &optional shell)
     "Create a function to open a shell via the function FUNC.
@@ -1421,8 +1570,16 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (make-shell-pop-command multiterm)
   (make-shell-pop-command ansi-term shell-pop-term-shell))
 
-(use-package shell-pop
-  :disabled t)
+(use-package skewer-mode
+  :commands (skewer-mode skewer-css-mode skewer-html-mode)
+  :init
+  (add-hook 'js2-mode-hook 'skewer-mode)
+  (add-hook 'css-mode-hook 'skewer-css-mode)
+  (add-hook 'html-mode-hook 'skewer-html-mode))
+
+(use-package skewer-less
+  :commands skewer-less-mode
+  :init (add-hook 'less-css-mode-hook 'skewer-less-mode))
 
 (use-package slime
   :commands slime)
@@ -1443,6 +1600,21 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands (smartparens-mode show-smartparens-mode)
   :config
   (use-package smartparens-config))
+
+(use-package smooth-scrolling
+  :disabled t
+  :commands smooth-scrolling-mode
+  :init
+  (smooth-scrolling-mode 1))
+
+(use-package solarized-theme
+  :disabled t
+  :demand t
+  :config
+  (load-theme 'solarized-dark))
+
+(use-package spray
+  :commands spray-mode)
 
 (use-package tern
   :init
@@ -1466,6 +1638,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 (use-package try
   :commands try)
 
+(use-package toc-org
+  :commands toc-org-enable
+  :init
+  (add-hook 'org-mode-hook 'toc-org-enable))
+
 (use-package undo-tree
   :config (global-undo-tree-mode 1)
   :bind (("C-c j" . undo-tree-undo)
@@ -1474,7 +1651,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
          ("C-c ;" . undo-tree-visualize)))
 
 (use-package web-mode
-  :disabled t
   :mode "\\.html\\'")
 
 (use-package whitespace
@@ -1580,6 +1756,16 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package ycmd
   :commands ycmd-mode)
+
+(use-package zenburn-theme
+  :disabled t
+  :demand t
+  :config (load-theme 'zenburn))
+
+(use-package zonokai-theme
+  :disabled t
+  :demand t
+  :config (load-theme 'zonokai-blue))
 
 (provide 'packages)
 ;;; packages.el ends here
