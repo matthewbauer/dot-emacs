@@ -414,16 +414,18 @@
   (add-to-list 'company-backends 'company-anaconda))
 
 (use-package company-statistics
-  :disable t
+  :disabled t
   :commands company-statistics-mode
   :init
   (company-statistics-mode))
 
 (use-package company-tern
+  :disabled t
   :commands company-tern
   :init (add-to-list 'company-backends 'company-tern))
 
 (use-package company-quickhelp
+  :disabled t
   :commands company-quickhelp-mode
   :init (company-quickhelp-mode 1))
 
@@ -886,7 +888,7 @@ is achieved by adding the relevant text properties."
   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
 
 (use-package flycheck-pos-tip
-  :disabld t
+  :disabled t
   :commands flycheck-pos-tip-mode
   :after flycheck
   :init (flycheck-pos-tip-mode))
