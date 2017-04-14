@@ -13,6 +13,7 @@
               (concat (symbol-name mode) "-hook"))))
           lisp-modes))
 
+
 (defsubst hook-into-modes (func &rest modes)
   (dolist (mode-hook modes) (add-hook mode-hook func)))
 
@@ -68,6 +69,7 @@
   (add-hook 'prog-mode-hook auto-highlight-symbol-mode))
 
 (use-package autopair
+  :disabled t
   :commands autopair-global-mode
   :init (autopair-global-mode))
 
@@ -960,15 +962,14 @@ is achieved by adding the relevant text properties."
           (switch-to-buffer-other-window gud-buf)
         (call-interactively 'gud-gdb))))
   :config
-  (progn
-    (bind-key "<f9>" #'gud-cont)
-    (bind-key "<f10>" #'gud-next)
-    (bind-key "<f11>" #'gud-step)
-    (bind-key "S-<f11>" #'gud-finish)))
+  (bind-key "<f9>" #'gud-cont)
+  (bind-key "<f10>" #'gud-next)
+  (bind-key "<f11>" #'gud-step)
+  (bind-key "S-<f11>" #'gud-finish))
 
 (use-package guru-mode
-  :commands guru-mode
-  :init (add-hook 'prog-mode-hook 'guru-mode))
+  :commands guru-global-mode
+  :init (guru-global-mode))
 
 (use-package haskell-mode
   :mode "\\.hs\\'")
@@ -1128,8 +1129,9 @@ is achieved by adding the relevant text properties."
           :init
           (add-hook 'emacs-lisp-mode-hook
                     #'(lambda () (require 'eldoc-extension)) t))
-        (eldoc-add-command 'paredit-backward-delete
-                           'paredit-close-round))
+        ;; (eldoc-add-command 'paredit-backward-delete
+        ;;                    'paredit-close-round)
+        )
 
       (use-package cldoc
         :demand t
@@ -1598,10 +1600,15 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands smart-tabs-mode)
 
 (use-package smartparens
-  :disabled t
-  :commands (smartparens-mode show-smartparens-mode)
-  :config
-  (use-package smartparens-config))
+  :bind (("M-n" . sp-next-sexp)
+         ("M-p" . sp-previous-sexp)
+         ("M-f" . sp-forward-sexp)
+         ("M-b" . sp-backward-sexp))
+  :commands (smartparens-mode show-smartparens-mode sp-use-paredit-bindings)
+  :init
+  (require 'smartparens-config)
+  (sp-use-paredit-bindings)
+  )
 
 (use-package smooth-scrolling
   :disabled t
@@ -1730,6 +1737,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package wrap-region
   :commands wrap-region-mode
+  :disabled t
   :init
   (add-hook 'prog-mode-hook 'wrap-region-mode)
   :config
