@@ -1478,6 +1478,7 @@ is achieved by adding the relevant text properties."
 
 
 (use-package reveal-in-osx-finder
+  :if (memq window-system '(mac ns))
   :commands reveal-in-osx-finder)
 
 (use-package rg
