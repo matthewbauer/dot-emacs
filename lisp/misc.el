@@ -18,6 +18,8 @@
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
 (menu-bar-mode -1)
+(when tool-bar-mode
+  (tool-bar-mode -1))
 ;; (line-number-mode t)
 ;; (column-number-mode t)
 ;; (size-indication-mode t)
