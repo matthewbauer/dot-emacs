@@ -15,7 +15,7 @@
 (setq exec-path (split-string (getenv "PATH") ":"))
 
 ;; custom-file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq custom-file (expand-file-name "settings.el" user-emacs-directory))
 
 (load custom-file)
 
