@@ -160,6 +160,12 @@
  '(inhibit-startup-screen t)
  '(initial-major-mode (quote fundamental-mode))
  '(initial-scratch-message "")
+ '(initsplit-customizations-alist
+   (quote
+    (("\\`\\(gnus\\|nn\\|message\\|mail\\|mm-\\|smtp\\|send-mail\\|check-mail\\|spam\\|sc-\\)"
+      (concat user-emacs-directory "gnus-settings.el") nil nil)
+     ("\\`\\(org-\\|deft-\\|cfw:\\)" (concat user-emacs-directory "org-settings.el") nil
+      nil))))
  '(ispell-extra-args (quote ("--sug-mode=ultra")))
  '(ispell-program-name "aspell")
  '(js-indent-level 2)
