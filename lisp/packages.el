@@ -50,26 +50,26 @@
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package apropospriate-theme
-  :demand t
+  :demand
   :init
   (require 'ido)
   :config
   (load-theme 'apropospriate-dark))
 
 (use-package auto-compile
-  :demand t
+  :demand
   :config
   (auto-compile-on-save-mode)
   (auto-compile-on-load-mode))
 
 (use-package auto-highlight-symbol
-  :disabled t
+  :disabled
   :commands auto-highlight-symbol-mode
   :init
   (add-hook 'prog-mode-hook auto-highlight-symbol-mode))
 
 (use-package autopair
-  :disabled t
+  :disabled
   :commands autopair-global-mode
   :init (autopair-global-mode))
 
@@ -79,7 +79,7 @@
   (add-hook 'find-file-hook #'(lambda () (auto-revert-mode 1))))
 
 (use-package backup-each-save
-  :disabled t
+  :disabled
   :commands backup-each-save
   :preface
   (defun show-backups ()
@@ -197,7 +197,7 @@
 (use-package bbdb)
 
 (use-package bookmark
-  :disabled t
+  :disabled
   :config
   (use-package bookmark+))
 
@@ -409,31 +409,31 @@
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
 
 (use-package company-anaconda
-  :disabled t
+  :disabled
   :after company
   :commands company-anaconda
   :init
   (add-to-list 'company-backends 'company-anaconda))
 
 (use-package company-statistics
-  :disabled t
+  :disabled
   :commands company-statistics-mode
   :init
   (company-statistics-mode))
 
 (use-package company-tern
-  :disabled t
+  :disabled
   :commands company-tern
   :init (add-to-list 'company-backends 'company-tern))
 
 (use-package company-quickhelp
-  :disabled t
+  :disabled
   :commands company-quickhelp-mode
   :init (company-quickhelp-mode 1))
 
 (use-package company-ycmd
   :after ycmd
-  :disabled t
+  :disabled
   :commands company-ycmd
   :init
   (company-ycmd-setup))
@@ -534,7 +534,7 @@
 
   (use-package dired-details
     ;; (shell-command "rm -f site-lisp/dired-details.el*")
-    :disabled t)
+    :disabled)
 
   (use-package dired-ranger
     :bind (:map dired-mode-map
@@ -544,7 +544,7 @@
 
   (use-package dired-sort-map
     ;; (shell-command "rm -f site-lisp/dired-sort-map.el*")
-    :disabled t)
+    :disabled)
 
   (use-package dired-toggle
     :load-path "site-lisp/dired-toggle"
@@ -692,7 +692,7 @@
   (use-package ediff-keep))
 
 (use-package editorconfig
-  :demand t
+  :demand
   :if (executable-find "editorconfig")
   :mode ("\\.editorconfig\\'" . conf-unix-mode)
   :config
@@ -790,7 +790,7 @@
   (erc-track-mode t))
 
 (use-package elpy
-  :disabled t)
+  :disabled)
 
 (use-package esh-help
   :commands esh-help-eldoc-command
@@ -887,8 +887,8 @@ is achieved by adding the relevant text properties."
   )
 
 (use-package flatland-theme
-  :demand t
-  :disabled t
+  :demand
+  :disabled
   :config (load-theme 'flatland))
 
 (use-package flycheck
@@ -898,7 +898,7 @@ is achieved by adding the relevant text properties."
   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
 
 (use-package flycheck-pos-tip
-  :disabled t
+  :disabled
   :commands flycheck-pos-tip-mode
   :after flycheck
   :init (flycheck-pos-tip-mode))
@@ -924,7 +924,7 @@ is achieved by adding the relevant text properties."
   :commands git-timemachine)
 
 (use-package git-messenger
-  :disabled t)
+  :disabled)
 
 (use-package gnus
   :commands gnus
@@ -1003,10 +1003,10 @@ is achieved by adding the relevant text properties."
   (helm-mode)
   ;; (require 'helm-eshell)
   (use-package helm-descbinds
-    :demand t
+    :demand
     :config (helm-descbinds-mode))
   (use-package helm-ag
-    :demand t)
+    :demand)
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
   ;; shell history.
@@ -1019,7 +1019,7 @@ is achieved by adding the relevant text properties."
   :commands helm-company)
 
 (use-package helm-flyspell
-  :disabled t)
+  :disabled)
 
 (use-package helm-gitignore
   :commands helm-gitignore)
@@ -1036,13 +1036,13 @@ is achieved by adding the relevant text properties."
     (helm-match-plugin-mode 1)))
 
 (use-package hungry-delete
-  :disabled t
+  :disabled
   :commands global-hungry-delete-mode
   :init
   (global-hungry-delete-mode))
 
 (use-package hydra
-  :disabled t
+  :disabled
   :config
   (defhydra hydra-zoom (global-map "<f2>")
     "zoom"
@@ -1121,19 +1121,19 @@ is achieved by adding the relevant text properties."
       (setq lisp-mode-initialized t)
 
       ;; (use-package redshank
-      ;;   :demand t)
+      ;;   :demand)
 
       (use-package elisp-slime-nav)
 
       (use-package edebug
-        :demand t)
+        :demand)
 
       (use-package eldoc
         :commands eldoc-mode
-        :demand t
+        :demand
         :config
         (use-package eldoc-extension
-          :disabled t
+          :disabled
           :init
           (add-hook 'emacs-lisp-mode-hook
                     #'(lambda () (require 'eldoc-extension)) t))
@@ -1142,7 +1142,7 @@ is achieved by adding the relevant text properties."
         )
 
       (use-package cldoc
-        :demand t
+        :demand
         :ensure nil
         :commands (cldoc-mode turn-on-cldoc-mode))
 
@@ -1188,7 +1188,7 @@ is achieved by adding the relevant text properties."
 
       (use-package info-lookmore
         :ensure nil
-        :demand t
+        :demand
         :config
         (info-lookmore-elisp-cl)
         (info-lookmore-elisp-userlast)
@@ -1247,8 +1247,8 @@ is achieved by adding the relevant text properties."
   :mode "\\.lua\\'")
 
 (use-package lsp-mode
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config (global-lsp-mode t))
 
 (use-package magit
@@ -1268,8 +1268,8 @@ is achieved by adding the relevant text properties."
   :config (magithub-feature-autoinject t))
 
 (use-package material-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config
   (load-theme 'material t))
 
@@ -1328,8 +1328,8 @@ is achieved by adding the relevant text properties."
   :commands minimap-mode)
 
 (use-package monokai-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config
   (load-theme 'monokai t))
 
@@ -1363,7 +1363,7 @@ is achieved by adding the relevant text properties."
 
 (use-package paredit
   :commands paredit-mode
-  :disabled t
+  :disabled
   :init
   (apply #'hook-into-modes 'paredit-mode lisp-mode-hooks)
   :config
@@ -1388,11 +1388,11 @@ is achieved by adding the relevant text properties."
   (bind-key "C-. J" #'paredit-join-with-previous-list paredit-mode-map))
 
 (or (use-package mic-paren
-      :disabled t
+      :disabled
       :config
       (paren-activate))
     (use-package paren
-      :disabled t
+      :disabled
       :config
       (show-paren-mode 1)))
 
@@ -1408,7 +1408,7 @@ is achieved by adding the relevant text properties."
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (use-package helm-projectile
-    :demand t
+    :demand
     :config
     (setq projectile-completion-system 'helm)
     (helm-projectile-toggle 1))
@@ -1457,7 +1457,7 @@ is achieved by adding the relevant text properties."
   (apply #'hook-into-modes 'rainbow-delimiters-mode lisp-mode-hooks))
 
 (use-package recentf
-  :disabled t
+  :disabled
   :commands (recentf-mode
              recentf-add-file
              recentf-apply-filename-handlers)
@@ -1534,8 +1534,8 @@ is achieved by adding the relevant text properties."
   :mode "\\.scss\\'")
 
 (use-package seti-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config (load-theme 'seti))
 
 (use-package sh-script
@@ -1554,7 +1554,7 @@ is achieved by adding the relevant text properties."
 (use-package shell)
 
 (use-package shell-pop
-  :disabled t
+  :disabled
   :init
   (defmacro make-shell-pop-command (func &optional shell)
     "Create a function to open a shell via the function FUNC.
@@ -1598,7 +1598,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands slime)
 
 (use-package smart-mode-line
-  :demand t
+  :demand
   :config
   (setq sml/theme 'respectful)
   (sml/setup))
@@ -1620,14 +1620,14 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   )
 
 (use-package smooth-scrolling
-  :disabled t
+  :disabled
   :commands smooth-scrolling-mode
   :init
   (smooth-scrolling-mode 1))
 
 (use-package solarized-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config
   (load-theme 'solarized-dark))
 
@@ -1737,7 +1737,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 
 (use-package winner
-  :disabled t
+  :disabled
   :if (not noninteractive)
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
@@ -1746,7 +1746,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package wrap-region
   :commands wrap-region-mode
-  :disabled t
+  :disabled
   :init
   (add-hook 'prog-mode-hook 'wrap-region-mode)
   :config
@@ -1777,13 +1777,13 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands ycmd-mode)
 
 (use-package zenburn-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config (load-theme 'zenburn))
 
 (use-package zonokai-theme
-  :disabled t
-  :demand t
+  :disabled
+  :demand
   :config (load-theme 'zonokai-blue))
 
 (provide 'packages)
