@@ -53,8 +53,9 @@
  '(erc-auto-discard-away t t)
  '(erc-autoaway-idle-seconds 600 t)
  '(erc-autoaway-use-emacs-idle t t)
- '(erc-autojoin-channels-alist (quote (("freenode.net" "#nixos"
-                                        "##nix-darwin" "#haskell"))))
+ '(erc-autojoin-channels-alist
+   (quote
+    (("freenode.net" "#nixos" "##nix-darwin" "#haskell"))))
  '(erc-fill-column 88)
  '(erc-fill-prefix "          ")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))

@@ -737,6 +737,14 @@
   (defun slowping (host)
     (= 0 (call-process "ping" nil nil nil "-c1" "-W5000" "-q" host)))
 
+  (defun irc ()
+    (interactive)
+    (require 'erc)
+    (erc-tls :server "irc.freenode.net"
+             :port 6697
+             :nick "matthewbauer"
+             :password (lookup-password "irc.freenode.net" "matthewbauer" 6667)))
+
   (defun setup-irc-environment ()
     (defun reset-erc-track-mode ()
       (interactive)
