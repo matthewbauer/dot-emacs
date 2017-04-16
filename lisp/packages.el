@@ -26,6 +26,7 @@
   :bind ("M-?" . ag-project))
 
 (use-package aggressive-indent
+  :disabled
   :commands aggressive-indent-mode
   :init
   (apply #'hook-into-modes 'aggressive-indent-mode lisp-mode-hooks))
@@ -1053,6 +1054,7 @@ is achieved by adding the relevant text properties."
   :commands imenu-list)
 
 (use-package intero
+  :commands intero-mode
   :init (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package ispell)
@@ -1746,7 +1748,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (use-package wrap-region
   :commands wrap-region-mode
-  :disabled
   :init
   (add-hook 'prog-mode-hook 'wrap-region-mode)
   :config
