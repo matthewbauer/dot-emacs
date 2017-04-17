@@ -1249,9 +1249,11 @@ is achieved by adding the relevant text properties."
   :mode "\\.lua\\'")
 
 (use-package lsp-mode
-  :disabled
-  :demand
-  :config (global-lsp-mode t))
+  :commands global-lsp-mode
+  :init
+  (global-lsp-mode t)
+  (with-eval-after-load 'lsp-mode
+    (require 'lsp-flycheck)))
 
 (use-package magit
   :if (executable-find "git")
