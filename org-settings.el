@@ -127,6 +127,7 @@
  '(org-mobile-agendas (quote ("Z")))
  '(org-mobile-files-exclude-regexp "\\(TODO\\(-.*\\)?\\)\\'")
 '(org-modules (quote (org-gnus org-habit org-info org-depend)))
+'(org-pretty-entities t)
 '(org-priority-faces
 (quote
  ((65 :foreground "ForestGreen" :weight bold)

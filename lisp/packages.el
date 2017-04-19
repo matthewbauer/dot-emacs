@@ -26,7 +26,6 @@
   :bind ("M-?" . ag-project))
 
 (use-package aggressive-indent
-  :disabled
   :commands aggressive-indent-mode
   :init
   (apply #'hook-into-modes 'aggressive-indent-mode lisp-mode-hooks))
@@ -50,15 +49,22 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
+(defface ido-subdir  '((((min-colors 88) (class color))
+                        :foreground "red1")
+                       (((class color))
+                        :foreground "red")
+                       (t :underline t))
+  "Face used by Ido for highlighting subdirs in the alternatives."
+  :group 'ido)
+
 (use-package apropospriate-theme
   :demand
-  :init
-  (require 'ido)
   :config
   (load-theme 'apropospriate-dark))
 
 (use-package auto-compile
   :demand
+  :disabled
   :config
   (auto-compile-on-save-mode)
   (auto-compile-on-load-mode))
@@ -807,6 +813,46 @@
   :bind ("C-x e" . eshell)
   :commands (eshell eshell-command)
   :preface
+  (defun eshell/emacs (&rest args)
+    "Open a file in Emacs.  Some habits die hard.
+ARGS unused"
+    (if (null args)
+        ;; If I just ran "emacs", I probably expect to be launching
+        ;; Emacs, which is rather silly since I'm already in Emacs.
+        ;; So just pretend to do what I ask.
+        (bury-buffer)
+      ;; We have to expand the file names or else weird stuff happens
+      ;; when you try to open a bunch of different files in wildly
+      ;; different places in the filesystem.
+      (mapc #'find-file (mapcar #'expand-file-name args))))
+
+  (defun eshell/vi (&rest args)
+    "Invoke `find-file' on the file.
+\"vi +42 foo\" also goes to line 42 in the buffer.
+ARGS unused"
+    (while args
+      (if (string-match "\\`\\+\\([0-9]+\\)\\'" (car args))
+          (let* ((line (string-to-number (match-string 1 (pop args))))
+                 (file (pop args)))
+            (find-file file)
+            (forward-line line))
+        (find-file (pop args)))))
+
+  ;; This is an eshell alias
+  (defun eshell/clear ()
+    (interactive)
+    (let ((inhibit-read-only t))
+      (erase-buffer))
+    (eshell-send-input))
+
+  (defun eshell-ls-find-file-at-point (point)
+    "RET on Eshell's `ls' output to open files.
+POINT ?"
+    (interactive "d")
+    (find-file (buffer-substring-no-properties
+                (previous-single-property-change point 'help-echo)
+                (next-single-property-change point 'help-echo))))
+
   (defvar eshell-isearch-map
     (let ((map (copy-keymap isearch-mode-map)))
       (define-key map [(control ?m)] 'eshell-isearch-return)
@@ -818,6 +864,11 @@
       (define-key map [delete]       'eshell-isearch-delete-char)
       map)
     "Keymap used in isearch in Eshell.")
+
+  (defun eshell-remove-pcomplete ()
+    (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point t))
+
+  (add-hook 'eshell-mode-hook #'eshell-remove-pcomplete)
 
   :init
 
@@ -1036,6 +1087,8 @@ is achieved by adding the relevant text properties."
     :config
     (helm-match-plugin-mode 1)))
 
+(use-package hideshow)
+
 (use-package hungry-delete
   :disabled
   :commands global-hungry-delete-mode
@@ -1249,11 +1302,19 @@ is achieved by adding the relevant text properties."
   :mode "\\.lua\\'")
 
 (use-package lsp-mode
+  :disabled
   :commands global-lsp-mode
   :init
   (global-lsp-mode t)
   (with-eval-after-load 'lsp-mode
-    (require 'lsp-flycheck)))
+    (require 'lsp-flycheck))
+  :config
+  (lsp-define-client 'nix-mode "nix" 'stdio #'(lambda () default-directory)
+                     :command
+                     '("stack" "exec" "nix-language-server")
+                     :name "Nix Language Server"
+                     :ignore-regexps '())
+  )
 
 (use-package magit
   :if (executable-find "git")
@@ -1291,6 +1352,7 @@ is achieved by adding the relevant text properties."
     (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
 
 (use-package mmm-mode
+  :disabled
   :commands mmm-mode
   :init
   (setq mmm-global-mode 'maybe)
@@ -1555,7 +1617,50 @@ is achieved by adding the relevant text properties."
 
   (add-hook 'shell-mode-hook 'initialize-sh-script))
 
-(use-package shell)
+(use-package shell
+  :commands (shell shell-mode)
+  :init
+  ;; shell mode
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+  (setenv "PAGER" "cat")
+  (setenv "TERM" "xterm-256color")
+
+  ;; eshell mode
+  ;; (setenv "JAVA_HOME" "/usr/local/java")
+  (setenv "EDITOR" "emacsclient")
+  (setenv "LC_ALL" "C")
+  (setenv "LANG" "en")
+
+  (defun shell-comint-input-sender-hook ()
+    "Check certain shell commands.
+ Executes the appropriate behavior for certain commands."
+    (setq comint-input-sender
+          (lambda (proc command)
+            (cond
+             ;; Check for clear command and execute it.
+             ((string-match "^[ \t]*clear[ \t]*$" command)
+              (comint-send-string proc "\n")
+              (erase-buffer))
+             ;; Check for man command and execute it.
+             ((string-match "^[ \t]*man[ \t]*" command)
+              (comint-send-string proc "\n")
+              (setq command (replace-regexp-in-string
+                             "^[ \t]*man[ \t]*" "" command))
+              (setq command (replace-regexp-in-string
+                             "[ \t]+$" "" command))
+              (funcall 'man command))
+             ;; Send other commands to the default handler.
+             (t (comint-simple-send proc command))))))
+
+  (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
+  )
+
+(use-package shell-script-mode
+  :commands shell-script-mode
+  :ensure nil
+  :init
+  (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+  )
 
 (use-package shell-pop
   :disabled
@@ -1602,6 +1707,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands slime)
 
 (use-package smart-mode-line
+  :disabled
   :demand
   :config
   (setq sml/theme 'respectful)
@@ -1613,10 +1719,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands smart-tabs-mode)
 
 (use-package smartparens
-  :bind (("M-n" . sp-next-sexp)
-         ("M-p" . sp-previous-sexp)
-         ("M-f" . sp-forward-sexp)
-         ("M-b" . sp-backward-sexp))
+  :disabled
   :commands (smartparens-mode show-smartparens-mode sp-use-paredit-bindings)
   :init
   (require 'smartparens-config)
@@ -1639,7 +1742,9 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands spray-mode)
 
 (use-package tern
+  :commands tern-mode
   :init
+  (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
   (add-hook 'js2-mode-hook 'tern-mode))
 
 (use-package tramp

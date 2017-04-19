@@ -217,7 +217,7 @@
  '(org-tags-column 80)
  '(package-selected-packages
    (quote
-    (docbook smartparens toc-org spray ediff-keep undo-tree org- org-bullets dired-toggle dired-ranger dired+ dired-x info-lookmore highlight-cl cldoc elisp-slime-nav redshank emacs-lisp-mode lsp-mode flycheck-ycmd company-ycmd paredit-ext workgroups slime python-mode mic-paren paredit nxml-mode multi-term lisp-mode hydra haskell-mode-autoloads fancy-narrow edit-var diffview diff-mode- dired debbugs-gnu cursor-chg bytecomp-simplify bookmark+ bug-reference-github backup-each-save helm-swoop helm-make helm-grep helm-config tramp-sh realgud mmm-mode mode-icons smart-line-mode try helm-spotify-plus helm-spotify spotify esup yaml-mode gitignore-mode coffee-mode go-mode gitconfig-mode gitattributes-mode rust-mode cmake-mode php-mode web-mode nix-mode css-eldoc rainbow-mode crontab-mode markdown-mode less-css-mode json-mode intero js2-mode aggressive-indent fasd editorconfig dumb-jump page-break-lines ag rainbow-delimiters mwim multiple-cursors buffer-move whitespace-cleanup-mode wrap-region imenu-list magit-gh-pulls company-tern company flycheck eshell-prompt-extras eshell-z shell-pop esh-help xterm-color magithub helm-projectile projectile helm-ag helm-descbinds helm smart-tabs-mode apropospriate-theme auto-compile use-package jdee smooth-scrolling smart-mode-line skewer-less savekill readline-complete peep-dired pacmacs ox-gfm origami miniedit jsx-mode js3-mode jasminejs-mode imenu-anywhere flycheck-pos-tip ensime d-mode company-web company-ghci company-ghc company-cabal company-anaconda auctex)))
+    (bui shell-script-mode docbook smartparens toc-org spray ediff-keep undo-tree org- org-bullets dired-toggle dired-ranger dired+ dired-x info-lookmore highlight-cl cldoc elisp-slime-nav redshank emacs-lisp-mode lsp-mode flycheck-ycmd company-ycmd paredit-ext workgroups slime python-mode mic-paren paredit nxml-mode multi-term lisp-mode hydra haskell-mode-autoloads fancy-narrow edit-var diffview diff-mode- dired debbugs-gnu cursor-chg bytecomp-simplify bookmark+ bug-reference-github backup-each-save helm-swoop helm-make helm-grep helm-config tramp-sh realgud mmm-mode mode-icons smart-line-mode try helm-spotify-plus helm-spotify spotify esup yaml-mode gitignore-mode coffee-mode go-mode gitconfig-mode gitattributes-mode rust-mode cmake-mode php-mode web-mode nix-mode css-eldoc rainbow-mode crontab-mode markdown-mode less-css-mode json-mode intero js2-mode aggressive-indent fasd editorconfig dumb-jump page-break-lines ag rainbow-delimiters mwim multiple-cursors buffer-move whitespace-cleanup-mode wrap-region imenu-list magit-gh-pulls company-tern company flycheck eshell-prompt-extras eshell-z shell-pop esh-help xterm-color magithub helm-projectile projectile helm-ag helm-descbinds helm smart-tabs-mode apropospriate-theme auto-compile use-package jdee smooth-scrolling smart-mode-line skewer-less savekill readline-complete peep-dired pacmacs ox-gfm origami miniedit jsx-mode js3-mode jasminejs-mode imenu-anywhere flycheck-pos-tip ensime d-mode company-web company-ghci company-ghc company-cabal company-anaconda auctex)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
@@ -288,6 +288,8 @@
      (sbcl
       ("sbcl" "--noinform")
       :coding-system utf-8-unix))) t)
+ '(sml/mode-width (quote full))
+ '(sml/name-width 40)
  '(sp-autoskip-closing-pair (quote always))
  '(sp-base-key-bindings (quote paredit))
  '(sp-hybrid-kill-entire-symbol nil)

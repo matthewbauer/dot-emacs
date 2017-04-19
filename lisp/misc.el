@@ -1,4 +1,3 @@
-;; default global modes
 ;; (electric-pair-mode t)
 (electric-indent-mode t)
 (show-paren-mode 1)
@@ -42,7 +41,7 @@
 ;; buffer name (if the buffer isn't visiting a file)
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
-(if (fboundp 'set-fontset-font)
+(when (fboundp 'set-fontset-font)
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 ;; Show trailing whitespace
@@ -100,9 +99,6 @@
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
 
-;; .zsh file is shell script too
-(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
-
 ;; Compilation from Emacs
 (defun colorize-compilation-buffer ()
   "Colorize a compilation mode buffer."
@@ -152,60 +148,6 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
 ;; make executable after save
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
-;; shell mode
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(setenv "PAGER" "cat")
-(setenv "TERM" "xterm-256color")
-
-;; eshell mode
-;; (setenv "JAVA_HOME" "/usr/local/java")
-(setenv "EDITOR" "emacsclient")
-(setenv "LC_ALL" "C")
-(setenv "LANG" "en")
-
-;; It's all in the Meta
-;; (setq ns-function-modifier 'hyper)
-
-(defun eshell/emacs (&rest args)
-  "Open a file in Emacs.  Some habits die hard.
-ARGS unused"
-  (if (null args)
-      ;; If I just ran "emacs", I probably expect to be launching
-      ;; Emacs, which is rather silly since I'm already in Emacs.
-      ;; So just pretend to do what I ask.
-      (bury-buffer)
-    ;; We have to expand the file names or else weird stuff happens
-    ;; when you try to open a bunch of different files in wildly
-    ;; different places in the filesystem.
-    (mapc #'find-file (mapcar #'expand-file-name args))))
-
-(defun eshell/vi (&rest args)
-  "Invoke `find-file' on the file.
-\"vi +42 foo\" also goes to line 42 in the buffer.
-ARGS unused"
-  (while args
-    (if (string-match "\\`\\+\\([0-9]+\\)\\'" (car args))
-        (let* ((line (string-to-number (match-string 1 (pop args))))
-               (file (pop args)))
-          (find-file file)
-          (forward-line line))
-      (find-file (pop args)))))
-
-;; This is an eshell alias
-(defun eshell/clear ()
-  (interactive)
-  (let ((inhibit-read-only t))
-    (erase-buffer))
-  (eshell-send-input))
-
-(defun eshell-ls-find-file-at-point (point)
-  "RET on Eshell's `ls' output to open files.
-POINT ?"
-  (interactive "d")
-  (find-file (buffer-substring-no-properties
-              (previous-single-property-change point 'help-echo)
-              (next-single-property-change point 'help-echo))))
-
 (defun window-toggle-split-direction ()
   "Switch window split from horizontally to vertically, or vice versa.
 
@@ -239,44 +181,5 @@ i.e. change right window to bottom, or change bottom window to right."
     (indent-to col)))
 
 (global-set-key (kbd "M-n") 'newline-same-column)
-
-(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
-
-(defun shell-comint-input-sender-hook ()
-  "Check certain shell commands.
- Executes the appropriate behavior for certain commands."
-  (setq comint-input-sender
-        (lambda (proc command)
-          (cond
-           ;; Check for clear command and execute it.
-           ((string-match "^[ \t]*clear[ \t]*$" command)
-            (comint-send-string proc "\n")
-            (erase-buffer))
-           ;; Check for man command and execute it.
-           ((string-match "^[ \t]*man[ \t]*" command)
-            (comint-send-string proc "\n")
-            (setq command (replace-regexp-in-string
-                           "^[ \t]*man[ \t]*" "" command))
-            (setq command (replace-regexp-in-string
-                           "[ \t]+$" "" command))
-            (funcall 'man command))
-           ;; Send other commands to the default handler.
-           (t (comint-simple-send proc command))))))
-
-(add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
-
-(require 'notifications)
-
-(defun erc-global-notify (match-type nick message)
-  "Notify when a message is recieved."
-  (notifications-notify
-   :title nick
-   :body message
-   :urgency 'low))
-
-(defun eshell-remove-pcomplete ()
-  (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point t))
-
-(add-hook 'eshell-mode-hook #'eshell-remove-pcomplete)
 
 (provide 'misc)
