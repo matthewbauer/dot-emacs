@@ -49,16 +49,9 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
-(defface ido-subdir  '((((min-colors 88) (class color))
-                        :foreground "red1")
-                       (((class color))
-                        :foreground "red")
-                       (t :underline t))
-  "Face used by Ido for highlighting subdirs in the alternatives."
-  :group 'ido)
-
 (use-package apropospriate-theme
-  :demand
+  :defer 1
+  ;; :demand
   :config
   (load-theme 'apropospriate-dark))
 
@@ -865,39 +858,6 @@ POINT ?"
       map)
     "Keymap used in isearch in Eshell.")
 
-  (defun eshell-remove-pcomplete ()
-    (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point t))
-
-  (add-hook 'eshell-mode-hook #'eshell-remove-pcomplete)
-
-  :init
-
-  (defun protect-eshell-prompt ()
-    "Protect Eshell's prompt like Comint's prompts.
-E.g. `evil-change-whole-line' won't wipe the prompt. This
-is achieved by adding the relevant text properties."
-    (let ((inhibit-field-text-motion t))
-      (add-text-properties
-       (point-at-bol)
-       (point)
-       '(rear-nonsticky t
-                        inhibit-line-move-field-capture t
-                        field output
-                        read-only t
-                        front-sticky (field inhibit-line-move-field-capture)))))
-
-  (add-hook 'eshell-after-prompt-hook 'protect-eshell-prompt)
-
-  (autoload 'eshell-delchar-or-maybe-eof "em-rebind")
-
-  (defun init-eshell ()
-    "Stuff to do when enabling eshell."
-    (setq pcomplete-cycle-completions nil)
-    (if (bound-and-true-p linum-mode) (linum-mode -1))
-    (semantic-mode -1))
-
-  (add-hook 'eshell-mode-hook 'init-eshell)
-
   :config
 
   (require 'esh-opt)
@@ -909,9 +869,6 @@ is achieved by adding the relevant text properties."
 
   ;; support `em-smart'
   (require 'em-smart)
-  (setq eshell-where-to-jump 'begin)
-  (setq eshell-review-quick-commands nil)
-  (setq eshell-smart-space-goes-to-end t)
   (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
 
 (use-package eshell-prompt-extras
