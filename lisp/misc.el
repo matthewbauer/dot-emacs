@@ -4,7 +4,7 @@
 ;; (winner-mode t)
 ;; (which-function-mode t)
 ;; (ido-mode -1)
-(cua-selection-mode t)
+;; (cua-selection-mode t)
 ;; (semantic-mode 1)
 ;; (desktop-save-mode t)
 (blink-cursor-mode 0)
@@ -25,6 +25,8 @@
 (toggle-scroll-bar -1)
 
 (auto-compression-mode t)
+
+(prefer-coding-system 'utf-8)
 
 ;; show the cursor when moving after big movements in the window
 ;; (require 'beacon)
@@ -181,5 +183,22 @@ i.e. change right window to bottom, or change bottom window to right."
     (indent-to col)))
 
 (global-set-key (kbd "M-n") 'newline-same-column)
+
+(defvar my-ansi-escape-re
+  (rx (or ?\233 (and ?\e ?\[))
+      (zero-or-more (char (?0 . ?\?)))
+      (zero-or-more (char ?\s ?- ?\/))
+      (char (?@ . ?~))))
+
+(defun my-nuke-ansi-escapes (beg end)
+  (save-excursion
+    (goto-char beg)
+    (while (re-search-forward my-ansi-escape-re end t)
+      (replace-match ""))))
+
+(defun my-eshell-nuke-ansi-escapes ()
+  (my-nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
+
+(add-hook 'eshell-output-filter-functions 'my-eshell-nuke-ansi-escapes t)
 
 (provide 'misc)

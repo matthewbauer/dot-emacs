@@ -55,6 +55,10 @@
   :config
   (load-theme 'apropospriate-dark))
 
+(use-package apu
+  :bind ("C-h u" . apropos-char)
+  :commands apropos-char)
+
 (use-package auto-compile
   :demand
   :disabled
@@ -1676,11 +1680,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands smart-tabs-mode)
 
 (use-package smartparens
-  :disabled
-  :commands (smartparens-mode show-smartparens-mode sp-use-paredit-bindings)
+  :commands smartparens-mode
   :init
-  (require 'smartparens-config)
-  (sp-use-paredit-bindings)
+  ;; (require 'smartparens-config)
+  ;; (sp-use-paredit-bindings)
+  (add-hook 'prog-mode-hook #'smartparens-mode)
   )
 
 (use-package smooth-scrolling

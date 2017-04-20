@@ -6,11 +6,6 @@
 
 ;;; Code:
 
-;; used to setup custom PATH
-(let ((platform-file (expand-file-name "platform.el" user-emacs-directory)))
-  (if (file-exists-p platform-file)
-      (load platform-file)))
-
 ;; sync exec-path with environment path
 (setq exec-path (split-string (getenv "PATH") ":"))
 
@@ -24,7 +19,6 @@
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
-(setq package-enable-at-startup nil)
 (package-initialize 'noactivate)
 
 (unless (package-installed-p 'use-package)
