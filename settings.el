@@ -82,7 +82,7 @@
  '(eshell-directory-name (expand-file-name "eshell" user-emacs-directory))
  '(eshell-highlight-prompt nil)
  '(eshell-hist-ignoredups t)
- '(eshell-history-size 350)
+ '(eshell-history-size 10000)
  '(eshell-plain-echo-behavior t)
  '(eshell-prompt-regexp "^[^λ]+ λ ")
  '(eshell-review-quick-commands nil)
