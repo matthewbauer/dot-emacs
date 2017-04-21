@@ -1048,7 +1048,10 @@ POINT ?"
     :config
     (helm-match-plugin-mode 1)))
 
-(use-package hideshow)
+(use-package hideshow
+  :ensure nil
+  :init
+  (add-hook 'prog-mode-hook 'hideshow-minor-mode))
 
 (use-package hungry-delete
   :disabled

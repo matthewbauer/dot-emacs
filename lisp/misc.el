@@ -1,4 +1,10 @@
+(menu-bar-mode -1)
+(when tool-bar-mode
+  (tool-bar-mode -1))
+(toggle-scroll-bar -1)
+
 (electric-pair-mode t)
+(electric-quote-mode t)
 (electric-indent-mode t)
 (show-paren-mode 1)
 (winner-mode t)
@@ -16,13 +22,10 @@
 (global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
-(menu-bar-mode -1)
-(when tool-bar-mode
-  (tool-bar-mode -1))
 ;; (line-number-mode t)
 (column-number-mode t)
 ;; (size-indication-mode t)
-(toggle-scroll-bar -1)
+
 (display-time)
 
 (auto-compression-mode t)
