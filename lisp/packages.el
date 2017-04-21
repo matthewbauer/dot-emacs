@@ -1050,8 +1050,9 @@ POINT ?"
 
 (use-package hideshow
   :ensure nil
+  :commands (hs-minor-mode)
   :init
-  (add-hook 'prog-mode-hook 'hideshow-minor-mode))
+  (add-hook 'prog-mode-hook 'hs-minor-mode))
 
 (use-package hungry-delete
   :disabled
