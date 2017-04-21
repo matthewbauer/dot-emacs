@@ -1,8 +1,3 @@
-(menu-bar-mode -1)
-(when tool-bar-mode
-  (tool-bar-mode -1))
-(toggle-scroll-bar -1)
-
 (electric-pair-mode t)
 (electric-quote-mode t)
 (electric-indent-mode t)
@@ -12,7 +7,7 @@
 ;; (ido-mode -1)
 ;; (cua-selection-mode t)
 (semantic-mode 1)
-(desktop-save-mode t)
+;; (desktop-save-mode t)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
@@ -25,6 +20,11 @@
 ;; (line-number-mode t)
 (column-number-mode t)
 ;; (size-indication-mode t)
+
+(menu-bar-mode -1)
+(when tool-bar-mode
+  (tool-bar-mode -1))
+(toggle-scroll-bar -1)
 
 (display-time)
 

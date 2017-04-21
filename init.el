@@ -14,6 +14,10 @@
 
 (load custom-file)
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+(require 'misc)
+
 (require 'package)
 
 (unless (assoc-default "melpa" package-archives)
@@ -31,17 +35,13 @@
 (eval-when-compile
   (require 'use-package))
 
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
 ;; packages
-
-(require 'misc)
 
 (require 'packages)
 
-(require 'private nil t)
-
 (require 'keymap)
+
+(require 'private nil t)
 
 ;; server
 ;; (require 'server)
