@@ -25,9 +25,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; (let ((default-directory (concat user-emacs-directory "elpa/")))
-;;   (normal-top-level-add-subdirs-to-load-path))
-
 (let ((default-directory (concat user-emacs-directory "elpa/")))
   (normal-top-level-add-to-load-path (directory-files default-directory nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
 
