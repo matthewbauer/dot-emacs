@@ -1278,6 +1278,7 @@ POINT ?"
   )
 
 (use-package magit
+  :commands (magit-clone)
   :if (executable-find "git")
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
