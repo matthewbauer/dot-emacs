@@ -50,8 +50,7 @@
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package apropospriate-theme
-  :defer 1
-  ;; :demand
+  :demand
   :config
   (load-theme 'apropospriate-dark))
 
