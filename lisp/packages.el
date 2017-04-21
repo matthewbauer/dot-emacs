@@ -1680,11 +1680,12 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :commands smart-tabs-mode)
 
 (use-package smartparens
+  :disabled
   :commands smartparens-mode
   :init
   ;; (require 'smartparens-config)
   ;; (sp-use-paredit-bindings)
-  (add-hook 'prog-mode-hook #'smartparens-mode)
+  ;; (add-hook 'prog-mode-hook #'smartparens-mode)
   )
 
 (use-package smooth-scrolling

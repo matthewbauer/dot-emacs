@@ -1,4 +1,4 @@
-;; (electric-pair-mode t)
+(electric-pair-mode t)
 (electric-indent-mode t)
 (show-paren-mode 1)
 ;; (winner-mode t)
