@@ -35,11 +35,11 @@
 
 ;; packages
 
+(require 'misc)
+
 (require 'packages)
 
 (require 'private nil t)
-
-(require 'misc)
 
 (require 'keymap)
 
