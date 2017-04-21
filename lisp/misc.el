@@ -6,7 +6,7 @@
 (which-function-mode t)
 ;; (ido-mode -1)
 ;; (cua-selection-mode t)
-(semantic-mode 1)
+;; (semantic-mode 1)
 ;; (desktop-save-mode t)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
