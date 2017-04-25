@@ -1569,18 +1569,7 @@ POINT ?"
   :demand
   :config (load-theme 'seti))
 
-(use-package sh-script
-  :init
-  (defvar sh-script-initialized nil)
-  (defun initialize-sh-script ()
-    (unless sh-script-initialized
-      (setq sh-script-initialized t)
-      (info-lookup-add-help :mode 'shell-script-mode
-                            :regexp ".*"
-                            :doc-spec
-                            '(("(bash)Index")))))
-
-  (add-hook 'shell-mode-hook 'initialize-sh-script))
+(use-package sh-script)
 
 (use-package shell
   :commands (shell shell-mode)
