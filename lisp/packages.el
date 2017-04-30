@@ -390,6 +390,8 @@
                  (c-special-indent-hook . c-gnu-impose-minimum)
                  (c-block-comment-prefix . ""))))
 
+(use-package cider)
+
 (use-package cmake-mode
   :mode (("CMakeLists.txt" . cmake-mode)
          ("\\.cmake\\'"    . cmake-mode)))
@@ -927,6 +929,9 @@ POINT ?"
 (use-package gitattributes-mode
   :mode "\\.gitattributes\\'")
 
+(use-package github-clone
+  :commands github-clone)
+
 (use-package gitconfig-mode
   :mode "\\.gitconfig\\'")
 
@@ -1069,6 +1074,9 @@ POINT ?"
 
 (use-package imenu-list
   :commands imenu-list)
+
+(use-package indium
+  :commands (indium-mode indium-interaction-mode indium-scratch))
 
 (use-package intero
   :commands intero-mode
@@ -1289,6 +1297,7 @@ POINT ?"
 
 (use-package magit-gh-pulls
   :if (executable-find "git")
+  :commands turn-on-magit-gh-pulls
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
