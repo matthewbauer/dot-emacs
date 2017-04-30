@@ -94,14 +94,9 @@
    (quote
     (current
      (nnir "nnimap:Local")
-     (nntp "LocalNews"
-           (nntp-address "localhost")
-           (nntp-port-number 9119))
      (nntp "Gmane"
            (nntp-address "news.gmane.org"))
-     (nntp "Eternal September"
-           (nntp-address "news.eternal-september.org")
-           (nntp-authinfo-user "jwiegley")))))
+     )))
  '(gnus-registry-ignored-groups (quote (("nntp" t) ("^INBOX" t))))
  '(gnus-save-killed-list nil)
  '(gnus-save-newsrc-file nil)
@@ -255,11 +250,6 @@
  '(smtpmail-default-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 587)
- '(smtpmail-smtp-user "mjbauer95@gmail.com")
- '(smtpmail-starttls-credentials
-   (quote
-    (("mail.johnwiegley.com" 587 nil nil)
-     ("smtp.gmail.com" 587 nil nil))))
  '(smtpmail-stream-type (quote ssl))
  '(spam-report-gmane-use-article-number nil)
  '(spam-use-regex-headers t)
