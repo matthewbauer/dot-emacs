@@ -1314,10 +1314,11 @@ POINT ?"
     :config
     (setq markdown-preview-stylesheets
           (list "http://ftp.newartisans.com/pub/github.css")))
-  (use-package pandoc-mode
-    :commands turn-on-pandoc
-    :init
-    (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
+  ;; (use-package pandoc-mode
+  ;;   :commands turn-on-pandoc
+  ;;   :init
+  ;;   (add-hook 'markdown-mode-hook 'turn-on-pandoc)
+  ))
 
 (use-package mmm-mode
   :disabled
