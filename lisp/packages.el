@@ -906,7 +906,8 @@ POINT ?"
   :config (load-theme 'flatland))
 
 (use-package flycheck
-  :commands flycheck-mode)
+  :commands global-flycheck-mode
+  :init (global-flycheck-mode))
 
 (use-package flycheck-ycmd
   :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))

@@ -132,7 +132,7 @@
  '(flycheck-display-errors-delay 0.0)
  '(flycheck-display-errors-function nil)
  '(flycheck-idle-change-delay 0.8)
- '(flycheck-standard-error-navigation nil)
+ '(flycheck-standard-error-navigation t)
  '(flyspell-abbrev-p nil)
  '(flyspell-auto-correct nil)
  '(flyspell-highlight-properties nil)
