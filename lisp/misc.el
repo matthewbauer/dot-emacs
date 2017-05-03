@@ -7,12 +7,12 @@
 ;; (ido-mode -1)
 ;; (cua-selection-mode t)
 ;; (semantic-mode 1)
-;; (desktop-save-mode t)
+(desktop-save-mode 1)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
 (delete-selection-mode t)
-(savehist-mode t)
+(savehist-mode 1)
 (delete-selection-mode t)
 (global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
@@ -62,13 +62,13 @@
                 minibuffer-setup-hook))
   (add-hook hook (lambda () (setq show-trailing-whitespace nil))))
 
-(defadvice set-buffer-major-mode (after set-major-mode activate compile)
-  "Set buffer major mode according to `auto-mode-alist'."
-  (let* ((name (buffer-name buffer))
-         (mode (assoc-default name auto-mode-alist 'string-match)))
-    (when (and mode (consp mode))
-      (setq mode (car mode)))
-    (with-current-buffer buffer (if mode (funcall mode)))))
+;; (defadvice set-buffer-major-mode (after set-major-mode activate compile)
+;;   "Set buffer major mode according to `auto-mode-alist'."
+;;   (let* ((name (buffer-name buffer))
+;;          (mode (assoc-default name auto-mode-alist 'string-match)))
+;;     (when (and mode (consp mode))
+;;       (setq mode (car mode)))
+;;     (with-current-buffer buffer (if mode (funcall mode)))))
 
 ;; enable narrowing commands
 (put 'narrow-to-region 'disabled nil)
@@ -204,5 +204,8 @@ i.e. change right window to bottom, or change bottom window to right."
   (my-nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
 
 (add-hook 'eshell-output-filter-functions 'my-eshell-nuke-ansi-escapes t)
+
+(add-hook 'kill-emacs-query-functions
+          'custom-prompt-customize-unsaved-options)
 
 (provide 'misc)
