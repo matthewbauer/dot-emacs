@@ -20,10 +20,14 @@
 (use-package ace-jump-mode
   :bind ("C-c SPC" . ace-jump-mode))
 
+(use-package ace-window
+  :commands ace-window
+  :bind ("M-p" . ace-window))
+
 (use-package ag
   :commands ag
   :if (executable-find "ag")
-  :bind ("M-?" . ag-project))
+  :bind ("C-?" . ag-project))
 
 (use-package aggressive-indent
   :commands aggressive-indent-mode
@@ -48,6 +52,12 @@
   :init
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+(use-package async
+  :disabled
+  :commands dired-async-mode
+  :init
+  (dired-async-mode 1))
 
 (use-package apropospriate-theme
   :demand
@@ -213,12 +223,17 @@
    ("<M-S-right>" . buf-move-right)))
 
 (use-package bug-reference-github
+  :init
+  (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
   :config
   (bug-reference-github-set-url-format))
 
 (use-package cc-mode
   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'"                   . c-mode)
+         ("\\.c\\'"                   . c-mode)
+         ("\\.cpp\\'"                 . c++-mode)
+         ("\\.c++\\'"                 . c++-mode)
          ("\\.mm\\'"                  . c++-mode))
   :preface
   (defun my-paste-as-check ()
@@ -421,10 +436,9 @@
   (add-to-list 'company-backends 'company-anaconda))
 
 (use-package company-statistics
-  :disabled
   :commands company-statistics-mode
   :init
-  (company-statistics-mode))
+  (add-hook 'after-init-hook 'company-statistics-mode))
 
 (use-package company-tern
   :disabled
@@ -438,10 +452,9 @@
 
 (use-package company-ycmd
   :after ycmd
-  :disabled
-  :commands company-ycmd
+  :commands company-ycmd-setup
   :init
-  (company-ycmd-setup))
+  (add-hook 'after-init-hook #'company-ycmd-setup))
 
 (use-package compile
   :bind (("C-c c" . compile)
@@ -484,6 +497,9 @@
   :config
   (change-cursor-mode 1)
   (toggle-cursor-type-when-idle 1))
+
+(use-package csv-mode
+  :mode "\\.csv\\'")
 
 (use-package diffview
   :commands (diffview-current diffview-region diffview-message))
@@ -639,6 +655,11 @@
 
   (dumb-jump-mode))
 
+(use-package easy-kill
+  :commands easy-kil
+  :init
+  (global-set-key [remap kill-ring-save] 'easy-kill))
+
 (use-package edebug
   :preface
   (defvar modi/fns-in-edebug nil
@@ -676,6 +697,7 @@
         (widen)))))
 
 (use-package ediff
+  :disabled
   :init
   (defvar ctl-period-equals-map)
   (define-prefix-command 'ctl-period-equals-map)
@@ -907,10 +929,11 @@ POINT ?"
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :init (global-flycheck-mode))
+  :init (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package flycheck-ycmd
-  :init (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup))
+  :commands flycheck-ycmd-setup
+  :init (add-hook 'after-init-hook #'flycheck-ycmd-setup))
 
 (use-package flycheck-pos-tip
   :disabled
@@ -1072,6 +1095,10 @@ POINT ?"
     "zoom"
     ("g" text-scale-increase "in")
     ("l" text-scale-decrease "out")))
+
+(use-package idris
+  :disabled
+  :mode ("\\.idr\\'" . idris-mode))
 
 (use-package imenu-list
   :commands imenu-list)
@@ -1398,6 +1425,11 @@ POINT ?"
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+(use-package origami
+  :commands origami-mode
+  :init
+  (add-hook 'prog-mode-hook 'origami-mode))
+
 (use-package page-break-lines
   :init
   (add-hook 'doc-mode-hook 'page-break-lines-mode))
@@ -1595,28 +1627,28 @@ POINT ?"
   (setenv "LC_ALL" "C")
   (setenv "LANG" "en")
 
-  (defun shell-comint-input-sender-hook ()
-    "Check certain shell commands.
- Executes the appropriate behavior for certain commands."
-    (setq comint-input-sender
-          (lambda (proc command)
-            (cond
-             ;; Check for clear command and execute it.
-             ((string-match "^[ \t]*clear[ \t]*$" command)
-              (comint-send-string proc "\n")
-              (erase-buffer))
-             ;; Check for man command and execute it.
-             ((string-match "^[ \t]*man[ \t]*" command)
-              (comint-send-string proc "\n")
-              (setq command (replace-regexp-in-string
-                             "^[ \t]*man[ \t]*" "" command))
-              (setq command (replace-regexp-in-string
-                             "[ \t]+$" "" command))
-              (funcall 'man command))
-             ;; Send other commands to the default handler.
-             (t (comint-simple-send proc command))))))
+  ;;  (defun shell-comint-input-sender-hook ()
+  ;;    "Check certain shell commands.
+  ;; Executes the appropriate behavior for certain commands."
+  ;;    (setq comint-input-sender
+  ;;          (lambda (proc command)
+  ;;            (cond
+  ;;             ;; Check for clear command and execute it.
+  ;;             ((string-match "^[ \t]*clear[ \t]*$" command)
+  ;;              (comint-send-string proc "\n")
+  ;;              (erase-buffer))
+  ;;             ;; Check for man command and execute it.
+  ;;             ((string-match "^[ \t]*man[ \t]*" command)
+  ;;              (comint-send-string proc "\n")
+  ;;              (setq command (replace-regexp-in-string
+  ;;                             "^[ \t]*man[ \t]*" "" command))
+  ;;              (setq command (replace-regexp-in-string
+  ;;                             "[ \t]+$" "" command))
+  ;;              (funcall 'man command))
+  ;;             ;; Send other commands to the default handler.
+  ;;             (t (comint-simple-send proc command))))))
 
-  (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
+  ;;  (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
   )
 
 (use-package shell-script-mode
@@ -1847,7 +1879,13 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :mode "\\.yaml\\'")
 
 (use-package ycmd
-  :commands ycmd-mode)
+  :commands global-ycmd-mode
+  :init
+  (add-hook 'after-init-hook #'global-ycmd-mode)
+  (require 'ycmd-eldoc)
+  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+  )
+
 
 (use-package zenburn-theme
   :disabled
