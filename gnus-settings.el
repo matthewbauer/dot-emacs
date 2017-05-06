@@ -100,8 +100,6 @@
  '(gnus-registry-ignored-groups (quote (("nntp" t) ("^INBOX" t))))
  '(gnus-inhibit-startup-message t)
  '(gnus-interactive-exit (quote quiet))
- '(gnus-select-method (quote (nntp "news.gmane.org")))
- '(gnus-server-unopen-status (quote offline))
  '(gnus-save-killed-list nil)
  '(gnus-save-newsrc-file nil)
  '(gnus-score-default-duration (quote p))
@@ -138,6 +136,7 @@
  '(gnus-thread-hide-subtree t)
  '(gnus-thread-ignore-subject nil)
  '(gnus-thread-score-function (quote max))
+ '(gnus-view-pseudo-asynchronously t)
  '(gnus-thread-sort-functions
    (quote
     (gnus-thread-sort-by-total-score gnus-thread-sort-by-most-recent-number)))
