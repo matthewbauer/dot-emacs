@@ -1318,7 +1318,7 @@ POINT ?"
 (use-package magit-gh-pulls
   :if (executable-find "git")
   :commands turn-on-magit-gh-pulls
-  :config
+  :init
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (use-package magithub
