@@ -13,7 +13,6 @@
               (concat (symbol-name mode) "-hook"))))
           lisp-modes))
 
-
 (defsubst hook-into-modes (func &rest modes)
   (dolist (mode-hook modes) (add-hook mode-hook func)))
 
@@ -22,7 +21,7 @@
 
 (use-package ace-window
   :commands ace-window
-  :bind ("M-p" . ace-window))
+  :bind ("M-o" . ace-window))
 
 (use-package ag
   :commands ag
@@ -207,7 +206,8 @@
 
   (setq backup-enable-predicate 'my-dont-backup-files-p))
 
-(use-package bbdb)
+(use-package bbdb
+  :disabled)
 
 (use-package bookmark
   :disabled
@@ -405,13 +405,15 @@
                  (c-special-indent-hook . c-gnu-impose-minimum)
                  (c-block-comment-prefix . ""))))
 
-(use-package cider)
+(use-package cider
+  :disabled)
 
 (use-package cmake-mode
   :mode (("CMakeLists.txt" . cmake-mode)
          ("\\.cmake\\'"    . cmake-mode)))
 
-(use-package coffee-mode)
+(use-package coffee-mode
+  :mode (("\\.coffee\\'"   . coffee-mode)))
 
 (use-package company
   :bind ("<C-tab>" . company-complete)
@@ -656,6 +658,7 @@
   (dumb-jump-mode))
 
 (use-package easy-kill
+  :disabled
   :commands easy-kil
   :init
   (global-set-key [remap kill-ring-save] 'easy-kill))
@@ -744,6 +747,7 @@
   :interpreter (("emacs" . emacs-lisp-mode)))
 
 (use-package erc
+  :bind ("C-x r c" . erc)
   :defines (erc-timestamp-only-if-changed-flag
             erc-timestamp-format
             erc-fill-prefix
@@ -751,26 +755,9 @@
             erc-insert-timestamp-function
             erc-modified-channels-alist)
   :preface
-  (defun lookup-password (host user port)
-    (require 'auth-source)
-    (funcall (plist-get
-              (car (auth-source-search
-                    :host host
-                    :user user
-                    :type 'netrc
-                    :port port))
-              :secret)))
 
   (defun slowping (host)
     (= 0 (call-process "ping" nil nil nil "-c1" "-W5000" "-q" host)))
-
-  (defun irc ()
-    (interactive)
-    (require 'erc)
-    (erc-tls :server "irc.freenode.net"
-             :port 6697
-             :nick "matthewbauer"
-             :password (lookup-password "irc.freenode.net" "matthewbauer" 6667)))
 
   (defun setup-irc-environment ()
     (defun reset-erc-track-mode ()
@@ -914,13 +901,17 @@ POINT ?"
 (use-package etags
   :bind ("M-T" . tags-search))
 
+(use-package eyebrowse
+  :disabled
+  :commands eyebrowse-mode
+  :init (eyebrowse-mode t))
+
 (use-package fancy-narrow
   :commands (fancy-narrow-to-region fancy-widen))
 
 (use-package fasd
   :config
-  (global-fasd-mode 1)
-  )
+  (global-fasd-mode 1))
 
 (use-package flatland-theme
   :demand
@@ -969,6 +960,7 @@ POINT ?"
 
 (use-package gnus
   :commands gnus
+  :bind (("C-M-g" . gnus) ("C-x n u" . gnus))
   :init
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
 
@@ -1392,6 +1384,9 @@ POINT ?"
   (defadvice term-process-pager (after term-process-rebind-keys activate)
     (define-key term-pager-break-map  "\177" 'term-pager-back-page)))
 
+(use-package multishell
+  :disabled)
+
 (use-package minimap
   :commands minimap-mode)
 
@@ -1469,7 +1464,8 @@ POINT ?"
       :config
       (show-paren-mode 1)))
 
-(use-package pdf-tools)
+(use-package pdf-tools
+  :disabled)
 
 (use-package php-mode
   :mode "\\.php\\'")
@@ -1659,34 +1655,7 @@ POINT ?"
   )
 
 (use-package shell-pop
-  :disabled
-  :init
-  (defmacro make-shell-pop-command (func &optional shell)
-    "Create a function to open a shell via the function FUNC.
-SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
-    (let* ((name (symbol-name func)))
-      `(defun ,(intern (concat "shell-pop-" name)) (index)
-         ,(format (concat "Toggle a popup window with `%S'.\n"
-                          "Multiple shells can be opened with a numerical prefix "
-                          "argument. Using the universal prefix argument will "
-                          "open the shell in the current buffer instead of a "
-                          "popup buffer.") func)
-         (interactive "P")
-         (require 'shell-pop)
-         (if (equal '(4) index)
-             ;; no popup
-             (,func ,shell)
-           (shell-pop--set-shell-type
-            'shell-pop-shell-type
-            (backquote (,name
-                        ,(concat "*" name "*")
-                        (lambda nil (,func ,shell)))))
-           (shell-pop index)))))
-  (make-shell-pop-command eshell)
-  (make-shell-pop-command shell)
-  (make-shell-pop-command term shell-pop-term-shell)
-  (make-shell-pop-command multiterm)
-  (make-shell-pop-command ansi-term shell-pop-term-shell))
+  :demand)
 
 (use-package skewer-mode
   :commands (skewer-mode skewer-css-mode skewer-html-mode)
@@ -1885,7 +1854,6 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (require 'ycmd-eldoc)
   (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
   )
-
 
 (use-package zenburn-theme
   :disabled
