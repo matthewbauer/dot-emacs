@@ -552,6 +552,7 @@
   (unbind-key "M-G" dired-mode-map)
 
   (use-package dired+
+    :disabled
     :config
     (unbind-key "M-s f" dired-mode-map))
 
@@ -560,6 +561,7 @@
     :disabled)
 
   (use-package dired-ranger
+    :disabled
     :bind (:map dired-mode-map
                 ("W" . dired-ranger-copy)
                 ("X" . dired-ranger-move)
@@ -570,6 +572,7 @@
     :disabled)
 
   (use-package dired-toggle
+    :disabled
     :load-path "site-lisp/dired-toggle"
     :bind ("C-. d" . dired-toggle)
     :preface
