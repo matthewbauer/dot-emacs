@@ -29,3 +29,5 @@ url
 server
 tmp
 bookmarks
+company-statistics-cache.el
+projectile.cache
