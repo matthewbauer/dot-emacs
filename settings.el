@@ -66,7 +66,6 @@
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(erc-autoaway-idle-seconds 600)
  '(erc-autoaway-use-emacs-idle t)
- '(erc-autojoin-channels-alist (quote (("freenode.net" "#nixos" "##nix-darwin"))))
  '(erc-fill-column 88)
  '(erc-fill-prefix "          ")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))

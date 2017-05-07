@@ -747,7 +747,7 @@
   :interpreter (("emacs" . emacs-lisp-mode)))
 
 (use-package erc
-  :bind ("C-x r c" . erc)
+  :bind ("C-x r c" . irc)
   :defines (erc-timestamp-only-if-changed-flag
             erc-timestamp-format
             erc-fill-prefix
@@ -755,53 +755,18 @@
             erc-insert-timestamp-function
             erc-modified-channels-alist)
   :preface
-
-  (defun slowping (host)
-    (= 0 (call-process "ping" nil nil nil "-c1" "-W5000" "-q" host)))
-
-  (defun setup-irc-environment ()
-    (defun reset-erc-track-mode ()
-      (interactive)
-      (erc-modified-channels-update)
-      (erc-modified-channels-display)
-      (force-mode-line-update))
-
-    (bind-key "C-c r" #'reset-erc-track-mode))
-
-  (defcustom erc-foolish-content '()
-    "Regular expressions to identify foolish content.
-    Usually what happens is that you add the bots to
-    `erc-ignore-list' and the bot commands to this list."
-    :group 'erc
-    :type '(repeat regexp))
-
-  (defun erc-foolish-content (msg)
-    "Check whether MSG is foolish."
-    (erc-list-match erc-foolish-content msg))
-
-  :init
-  (add-hook 'erc-mode-hook 'setup-irc-environment)
-  (add-to-list
-   'erc-mode-hook
-   #'(lambda () (set (make-local-variable 'scroll-conservatively) 100)))
+  (defun irc ()
+    (interactive)
+    (require 'erc)
+    (erc-tls :server "irc.freenode.net"
+             :port 6697
+             :nick "matthewbauer"))
 
   :config
   (erc-track-minor-mode 1)
   (erc-track-mode 1)
-
-  (add-hook 'erc-insert-pre-hook
-            (lambda (s)
-              (when (erc-foolish-content s)
-                (setq erc-insert-this nil)))
-            )
   (erc-services-mode 1)
-  (defun erc-list-command ()
-    "execute the list command"
-    (interactive)
-    (insert "/list")
-    (erc-send-current-line))
-  (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules)))
-  (erc-track-mode t))
+  (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules))))
 
 (use-package elpy
   :disabled)
@@ -880,6 +845,7 @@ POINT ?"
   ;; (defalias 'eshell/e 'find-file-other-window)
   ;; (defalias 'eshell/d 'dired)
   (setenv "PAGER" "cat")
+  (setenv "EDITOR" "emacsclient -nq")
 
   ;; support `em-smart'
   (require 'em-smart)
@@ -1038,8 +1004,6 @@ POINT ?"
   (use-package helm-descbinds
     :demand
     :config (helm-descbinds-mode))
-  (use-package helm-ag
-    :demand)
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
   ;; shell history.
@@ -1047,6 +1011,10 @@ POINT ?"
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (setq projectile-completion-system 'helm)
   (helm-mode 1))
+
+(use-package helm-ag
+  :bind ("C-c a" . helm-ag)
+  :commands helm-ag)
 
 (use-package helm-company
   :commands helm-company)
@@ -1525,6 +1493,14 @@ POINT ?"
   :init
   (apply #'hook-into-modes 'rainbow-delimiters-mode lisp-mode-hooks))
 
+(use-package realgud
+  :commands (realgud:gdb
+             realgud:byebug
+             realgud:pry
+             realgud:ipdb
+             realgud:pdb
+             realgud:jdb))
+
 (use-package recentf
   :disabled
   :commands (recentf-mode
@@ -1619,7 +1595,7 @@ POINT ?"
 
   ;; eshell mode
   ;; (setenv "JAVA_HOME" "/usr/local/java")
-  (setenv "EDITOR" "emacsclient")
+  (setenv "EDITOR" "emacsclient -nq")
   (setenv "LC_ALL" "C")
   (setenv "LANG" "en")
 
