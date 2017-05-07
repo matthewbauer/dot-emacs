@@ -928,6 +928,9 @@ POINT ?"
   :commands gnus
   :bind (("C-M-g" . gnus) ("C-x n u" . gnus))
   :init
+  (add-hook 'kill-emacs-hook (lambda ()
+                               (when (boundp 'gnus-group-exit)
+                                 (gnus-group-exit))))
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
 
 (use-package go-mode

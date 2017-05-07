@@ -18,7 +18,6 @@
  '(auru-warn-only t)
  '(auth-source-save-behavior t)
  '(auth-sources (quote ("~/.authinfo")))
- '(auto-revert-use-notify t)
  '(auto-revert-check-vc-info t)
  '(auto-revert-use-notify nil)
  '(auto-revert-verbose nil)
@@ -371,7 +370,8 @@
    (quote
     (yas-ido-prompt yas-completing-prompt yas-no-prompt)))
  '(yas-triggers-in-field t)
- '(yas-wrap-around-region t))
+ '(yas-wrap-around-region t)
+ '(ycmd-server-command (quote ("ycmd"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
