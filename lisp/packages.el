@@ -1081,10 +1081,6 @@ POINT ?"
 (use-package js2-mode
   :mode "\\.js\\'"
   :config
-  (setq flycheck-disabled-checkers
-        (append flycheck-disabled-checkers
-                '(javascript-jshint)))
-
   (flycheck-add-mode 'javascript-eslint 'js2-mode)
   (flycheck-mode 1)
 
@@ -1167,8 +1163,7 @@ POINT ?"
         :ensure nil
         :commands (cldoc-mode turn-on-cldoc-mode))
 
-      (use-package ert
-        :bind ("C-c e t" . ert-run-tests-interactively))
+      (use-package ert)
 
       (use-package elint
         :commands 'elint-initialize
@@ -1318,7 +1313,7 @@ POINT ?"
   ;;   :commands turn-on-pandoc
   ;;   :init
   ;;   (add-hook 'markdown-mode-hook 'turn-on-pandoc)
-  ))
+  )
 
 (use-package mmm-mode
   :disabled
