@@ -208,4 +208,9 @@ i.e. change right window to bottom, or change bottom window to right."
 (add-hook 'kill-emacs-query-functions
           'custom-prompt-customize-unsaved-options)
 
+;; (tramp-change-syntax 'simplified)
+
+(setenv "INFOPATH" "/Users/mbauer/info/:/Users/mbauer/.nix-profile/share/info/:/nix/store/rm4191sxaybxpv5dhfm7m843v0193mdy-emacs-25.1-mac-6.1/share/info/:/usr/share/info/:/nix/var/nix/profiles/default/share/info")
+(setenv "MANPATH" "/Users/mbauer/.nix-profile/share/man/:/nix/var/nix/profiles/default/share/man/:/usr/share/man/")
+
 (provide 'misc)

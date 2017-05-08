@@ -65,6 +65,9 @@
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(erc-autoaway-idle-seconds 600)
  '(erc-autoaway-use-emacs-idle t)
+ '(erc-autojoin-channels-alist
+   (quote
+    (("freenode.net" "#haskell" "#nixos" "##nix-darwin" "#emacs"))))
  '(erc-fill-column 88)
  '(erc-fill-prefix "          ")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
@@ -241,6 +244,7 @@
  '(mmm-submode-decoration-level 0)
  '(nrepl-log-messages t)
  '(nroff-electric-mode t)
+ '(nsm-save-host-names t)
  '(package-check-signature (quote allow-unsigned))
  '(package-selected-packages
    (quote
@@ -324,6 +328,7 @@
       :coding-system utf-8-unix))) t)
  '(sml/mode-width (quote full))
  '(sml/name-width 40)
+ '(smtpmail-smtp-user "mjbauer95@gmail.com")
  '(sp-autoskip-closing-pair (quote always))
  '(sp-base-key-bindings (quote paredit))
  '(sp-hybrid-kill-entire-symbol nil)
@@ -350,6 +355,9 @@
  '(use-package-enable-imenu-support t)
  '(use-package-expand-minimally t)
  '(use-package-verbose nil)
+ '(user-full-name "Matthew Bauer")
+ '(user-initials "mjb")
+ '(user-mail-address "mjbauer95@gmail.com")
  '(vc-allow-async-revert t)
  '(vc-command-messages t)
  '(vc-follow-symlinks t)
