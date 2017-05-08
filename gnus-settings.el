@@ -5,6 +5,43 @@
  ;; If there is more than one, they won't work right.
  '(check-mail-boxes (quote ("~/Messages/incoming/mail\\..*\\.spool")))
  '(check-mail-summary-function (quote check-mail-box-summary))
+ '(gnus-always-read-dribble-file t)
+ '(gnus-article-prepare-hook nil)
+ '(gnus-article-sort-functions (quote (gnus-article-sort-by-score)))
+ '(gnus-check-new-newsgroups nil)
+ '(gnus-default-article-saver (quote gnus-summary-save-in-folder))
+ '(gnus-group-goto-unread nil)
+ '(gnus-inhibit-startup-message t)
+ '(gnus-read-newsrc-file nil)
+ '(gnus-refer-article-method (quote (current (nnweb "refer" (nnweb-type google)))))
+ '(gnus-save-killed-list nil)
+ '(gnus-save-newsrc-file nil)
+ '(gnus-select-group-hook
+   (quote
+    ((lambda nil
+       (mapcar
+        (lambda
+          (header)
+          (mail-header-set-subject header
+                                   (gnus-simplify-subject
+                                    (mail-header-subject header)
+                                    (quote re-only))))
+        gnus-newsgroup-headers))
+     gnus-group-set-timestamp)))
+ '(gnus-single-article-buffer t)
+ '(gnus-summary-exit-hook (quote (gnus-summary-bubble-group)))
+ '(gnus-summary-ignore-duplicates t)
+ '(gnus-thread-sort-functions
+   (quote
+    ((not gnus-thread-sort-by-number)
+     gnus-thread-sort-by-score)))
+ '(gnus-treat-body-boundary (quote head))
+ '(gnus-treat-display-x-face (quote head))
+ '(gnus-treat-from-gravatar (quote head))
+ '(gnus-treat-mail-gravatar (quote head))
+ '(gnus-use-cache (quote passive))
+ '(gnus-use-trees t)
+ '(gnus-widen-article-window t)
  '(gnus-activate-level 2)
  '(gnus-after-getting-new-news-hook
    (quote
@@ -105,6 +142,17 @@
  '(gnus-score-default-duration (quote p))
  '(gnus-score-expiry-days 30)
  '(gnus-score-interactive-default-score 10)
+ '(gnus-secondary-select-methods
+   (quote
+    ((nntp "gwene" (nntp-address "news.gwene.org"))
+     (nnimap "gmail"
+             (nnimap-address "imap.gmail.com")
+             (nnimap-server-port 993)
+             (nnimap-stream ssl)
+             (nnir-search-engine imap)
+             ))))
+ '(gnus-secondary-servers (quote ("news.gmane.org")))
+ '(gnus-select-method (quote (nntp "news.gmane.org")))
  '(gnus-select-group-hook (quote (gnus-group-set-timestamp)))
  '(gnus-sieve-select-method "nnimap:Local")
  '(gnus-signature-separator (quote ("^-- $" "^-- *$" "^_____+$")))
