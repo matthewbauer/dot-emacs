@@ -369,6 +369,7 @@
     (yas-ido-prompt yas-completing-prompt yas-no-prompt)))
  '(yas-triggers-in-field t)
  '(yas-wrap-around-region t)
+ '(ycmd-global-config "~/.ycm_extra_conf.py")
  '(ycmd-server-command (quote ("ycmd"))))
 
 (custom-set-faces
