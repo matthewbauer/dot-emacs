@@ -1055,22 +1055,27 @@ POINT ?"
   (helm-mode 1))
 
 (use-package helm-ag
+  :disabled
   :bind ("C-c a" . helm-ag)
   :commands helm-ag)
 
 (use-package helm-company
+  :disabled
   :commands helm-company)
 
 (use-package helm-flyspell
   :disabled)
 
 (use-package helm-gitignore
+  :disabled
   :commands helm-gitignore)
 
 (use-package helm-make
+  :disabled
   :commands (helm-make helm-make-projectile))
 
 (use-package helm-swoop
+  :disabled
   :bind (("M-s o" . helm-swoop)
          ("M-s /" . helm-multi-swoop))
   :config
