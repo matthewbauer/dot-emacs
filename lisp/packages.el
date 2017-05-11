@@ -90,6 +90,9 @@
   :init
   (add-hook 'find-file-hook #'(lambda () (auto-revert-mode 1))))
 
+(use-package avy
+  :commands avy)
+
 (use-package backup-each-save
   :disabled
   :commands backup-each-save
@@ -437,6 +440,11 @@
   :commands company-anaconda
   :init
   (add-to-list 'company-backends 'company-anaconda))
+
+(use-package company-math
+  :commands company-math-symbols-unicode
+  :init
+  (add-hook 'company-backends 'company-math-symbols-unicode))
 
 (use-package company-statistics
   :commands company-statistics-mode
@@ -802,6 +810,15 @@
               (setq eldoc-documentation-function
                     'esh-help-eldoc-command))))
 
+(use-package eshell-autojump
+  :disabled
+  :commands eshell/j)
+
+(use-package eshell-fringe-status
+  :commands eshell-fringe-status-mode
+  :init
+  (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
+
 (use-package eshell
   :bind ("C-x e" . eshell)
   :commands (eshell eshell-command)
@@ -1081,6 +1098,9 @@ POINT ?"
     ("g" text-scale-increase "in")
     ("l" text-scale-decrease "out")))
 
+(use-package ibuffer
+  :bind ("C-x b" . ibuffer))
+
 (use-package idris
   :disabled
   :mode ("\\.idr\\'" . idris-mode))
@@ -1140,6 +1160,11 @@ POINT ?"
 
 (use-package launchctl
   :commands launchctl)
+
+(use-package latex-unicode-math-mode
+  :commands (latex-unicode-math-mode latyex-unicode-convert-region latex-unicode-convert-buffer)
+  :init
+  (add-hook 'LaTeX-mode-hook 'latex-unicode-math-mode))
 
 (use-package less-css-mode
   :mode "\\.json\\'"
@@ -1615,6 +1640,9 @@ POINT ?"
   :disabled
   :demand
   :config (load-theme 'seti))
+
+(use-package sentence-navigation
+  :bind (("M-e" . sentence-nav-forward) ("M-a" . sentence-nav-backward)))
 
 (use-package sh-script)
 
