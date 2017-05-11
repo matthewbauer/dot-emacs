@@ -95,7 +95,7 @@
 
 (use-package avy
   :commands avy
-  :bind (("M-s" . avy-goto-word-1)))
+  :bind (("C-M-q" . avy-goto-word-1)))
 
 (use-package backup-each-save
   :disabled
