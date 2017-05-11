@@ -1044,15 +1044,39 @@ POINT ?"
   (helm-mode)
   ;; (require 'helm-eshell)
   (use-package helm-descbinds
-    :demand
-    :config (helm-descbinds-mode))
+    :commands helm-descbinds-mode
+    :init (helm-descbinds-mode))
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
   ;; shell history.
   (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (setq projectile-completion-system 'helm)
-  (helm-mode 1))
+  (helm-mode 1)
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (eshell-cmpl-initialize)
+              (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+              (define-key eshell-mode-map (kbd "M-p")
+                'helm-eshell-history)))
+  (helm-autoresize-mode 1)
+  (use-package pcomplete-extension
+    :demand)
+  (defun *-popwin-help-mode-off ()
+    "Turn `popwin-mode' off for *Help* buffers."
+    (when (boundp 'popwin:special-display-config)
+      (customize-set-variable 'popwin:special-display-config
+                              (delq 'help-mode popwin:special-display-config))))
+
+  (defun *-popwin-help-mode-on ()
+    "Turn `popwin-mode' on for *Help* buffers."
+    (when (boundp 'popwin:special-display-config)
+      (customize-set-variable 'popwin:special-display-config
+                              (add-to-list 'popwin:special-display-config 'help-mode nil #'eq))))
+
+  (add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
+  (add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
+  )
 
 (use-package helm-ag
   :disabled
