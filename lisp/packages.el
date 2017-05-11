@@ -419,16 +419,17 @@
   :bind ("<C-tab>" . company-complete)
   :diminish company-mode
   :commands company-mode
-  :after helm
+  ;; :after helm
   :config (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
 
 
-  ;; Use Helm to complete suggestions
-  (define-key company-mode-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+  ;; ;; Use Helm to complete suggestions
+  ;; (define-key company-mode-map (kbd "C-:") 'helm-company)
+  ;; (define-key company-active-map (kbd "C-:") 'helm-company)
+  ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
+  ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  )
 
 (use-package company-anaconda
   :disabled
@@ -480,6 +481,23 @@
 
   :config
   (add-hook 'compilation-filter-hook #'compilation-ansi-color-process-output))
+
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+         ("<f1> f" . counsel-describe-function)
+         ("<f1> v" . counsel-describe-variable)
+         ("C-x C-f" . counsel-find-file)
+         ("<f1> l" . counsel-find-library)
+         ("<f2> i" . counsel-info-lookup-symbol)
+         ("<f2> u" . counsel-unicode-char)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)))
+
+(use-package counsel-projectile
+  :commands counsel-projectile-on
+  :init (counsel-projectile-on))
 
 (use-package crontab-mode
   :mode "\\.?cron\\(tab\\)?\\'")
@@ -992,6 +1010,7 @@ POINT ?"
 
 (use-package helm
   :commands helm-mode
+  :disabled
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
@@ -1077,6 +1096,17 @@ POINT ?"
   :init (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package ispell)
+
+(use-package ivy
+  :bind (("C-c C-r" . ivy-resume)
+         ("<f6>" . ivy-resume)
+         ("C-x C-b" . ivy-switch-buffer))
+  :diminish
+  :commands ivy-mode
+  :init
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (ivy-mode 1))
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -1447,6 +1477,7 @@ POINT ?"
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (use-package helm-projectile
+    :disabled
     :demand
     :config
     (setq projectile-completion-system 'helm)
@@ -1684,6 +1715,9 @@ POINT ?"
 
 (use-package spray
   :commands spray-mode)
+
+(use-package swiper
+  :bind ("\C-s" . swiper))
 
 (use-package tern
   :commands tern-mode
