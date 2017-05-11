@@ -102,7 +102,7 @@
  '(eshell-banner-message "")
  '(eshell-buffer-maximum-lines 20000)
  '(eshell-buffer-shorthand t)
- '(eshell-cd-on-directory nil)
+ '(eshell-cd-on-directory t)
  '(eshell-cmpl-autolist t)
  '(eshell-cmpl-cycle-completions t)
  '(eshell-cmpl-expand-before-complete t)
@@ -111,6 +111,7 @@
  '(eshell-cp-interactive-query t)
  '(eshell-cp-overwrite-files nil)
  '(eshell-default-target-is-dot t)
+ '(eshell-destroy-buffer-when-process-dies t)
  '(eshell-directory-name (expand-file-name "eshell" user-emacs-directory))
  '(eshell-highlight-prompt nil)
  '(eshell-hist-ignoredups t)
@@ -121,12 +122,15 @@
    (quote
     (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-smart eshell-term eshell-tramp eshell-unix eshell-xtra)))
  '(eshell-mv-interactive-query t)
+ '(eshell-output-filter-functions
+   (quote
+    (eshell-handle-ansi-color eshell-handle-control-codes eshell-watch-for-password-prompt eshell-truncate-buffer my-eshell-nuke-ansi-escapes)))
  '(eshell-plain-echo-behavior nil)
  '(eshell-prompt-function (quote epe-theme-lambda) t)
  '(eshell-prompt-regexp "^[^λ]+ λ ")
- '(eshell-review-quick-commands nil)
+ '(eshell-review-quick-commands t)
  '(eshell-rm-interactive-query t)
- '(eshell-send-direct-to-subprocesses t)
+ '(eshell-send-direct-to-subprocesses nil)
  '(eshell-smart-space-goes-to-end t)
  '(eshell-visual-commands
    (quote
