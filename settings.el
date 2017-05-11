@@ -50,6 +50,8 @@
  '(cperl-lazy-help-time 3)
  '(create-lockfiles nil)
  '(css-indent-offset 2)
+ '(custom-browse-order-groups (quote first))
+ '(custom-buffer-done-kill t)
  '(custom-safe-themes t)
  '(delete-old-versions -1)
  '(desktop-lazy-verbose nil)
