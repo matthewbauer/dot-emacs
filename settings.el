@@ -68,6 +68,7 @@
  '(erc-autojoin-channels-alist
    (quote
     (("freenode.net" "#haskell" "#nixos" "##nix-darwin" "#emacs"))))
+ '(erc-autojoin-timing (quote ident))
  '(erc-fill-column 88)
  '(erc-fill-prefix "          ")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
