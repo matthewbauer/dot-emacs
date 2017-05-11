@@ -1346,9 +1346,11 @@ POINT ?"
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (use-package magithub
-  :if (executable-find "git")
+  :if (and (executable-find "git") (executable-find "hub"))
+  :commands magithub-feature-autoinject
   :after magit
-  :config (magithub-feature-autoinject t))
+  :init
+  (magithub-feature-autoinject t))
 
 (use-package material-theme
   :disabled
