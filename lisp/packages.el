@@ -52,6 +52,9 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
+(use-package ansi-color
+  :init(add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+
 (use-package async
   :disabled
   :commands dired-async-mode
@@ -91,7 +94,8 @@
   (add-hook 'find-file-hook #'(lambda () (auto-revert-mode 1))))
 
 (use-package avy
-  :commands avy)
+  :commands avy
+  :bind (("M-s" . avy-goto-word-1)))
 
 (use-package backup-each-save
   :disabled
@@ -447,6 +451,7 @@
   (add-hook 'company-backends 'company-math-symbols-unicode))
 
 (use-package company-statistics
+  :disabled
   :commands company-statistics-mode
   :init
   (add-hook 'after-init-hook 'company-statistics-mode))
@@ -491,6 +496,7 @@
   (add-hook 'compilation-filter-hook #'compilation-ansi-color-process-output))
 
 (use-package counsel
+  :commands (counsel-descbinds)
   :bind (("M-x" . counsel-M-x)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
@@ -504,6 +510,7 @@
          ("C-x l" . counsel-locate)))
 
 (use-package counsel-projectile
+  :disabled
   :commands counsel-projectile-on
   :init (counsel-projectile-on))
 
@@ -511,6 +518,7 @@
   :mode "\\.?cron\\(tab\\)?\\'")
 
 (use-package css-mode
+  :mode "\\.css\\'"
   :commands css-mode
   :config
   (use-package rainbow-mode
@@ -520,7 +528,10 @@
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
+(use-package crux)
+
 (use-package cursor-chg
+  :disabled
   :commands change-cursor-mode
   :config
   (change-cursor-mode 1)
@@ -979,7 +990,10 @@ POINT ?"
   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 (use-package golden-ratio
-  :commands golden-ratio-mode)
+  :diminish golden-ratio-mode
+  :commands golden-ratio-mode
+  :init
+  (golden-ratio-mode 1))
 
 (use-package grep
   :bind (("M-s d" . find-grep-dired)
@@ -1146,13 +1160,15 @@ POINT ?"
 
 (use-package ispell)
 
+
 (use-package ivy
+  :defer 1
   :bind (("C-c C-r" . ivy-resume)
          ("<f6>" . ivy-resume)
          ("C-x C-b" . ivy-switch-buffer))
-  :diminish
+  :diminish ivy-mode
   :commands ivy-mode
-  :init
+  :config
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
   (ivy-mode 1))
@@ -1366,6 +1382,8 @@ POINT ?"
   :if (executable-find "git")
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
+  :init
+  (setq magit-completing-read-function 'ivy-completing-read)
   )
 
 (use-package magit-gh-pulls
@@ -1375,6 +1393,7 @@ POINT ?"
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (use-package magithub
+  :disabled
   :if (and (executable-find "git") (executable-find "hub"))
   :commands magithub-feature-autoinject
   :after magit
@@ -1456,7 +1475,8 @@ POINT ?"
   :commands (mc/mark-next-like-this mc/mark-previous-like-this)
   :bind
   (("<C-S-down>" . mc/mark-next-like-this)
-   ("<C-S-up>" . mc/mark-previous-like-this)))
+   ("<C-S-up>" . mc/mark-previous-like-this)
+   ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
 (use-package mwim
   :bind (("C-a" . mwim-beginning-of-code-or-line)
@@ -1523,6 +1543,10 @@ POINT ?"
 (use-package pdf-tools
   :disabled)
 
+(use-package popwin
+  :disabled
+  :demand)
+
 (use-package php-mode
   :mode "\\.php\\'")
 
@@ -1538,6 +1562,7 @@ POINT ?"
     :config
     (setq projectile-completion-system 'helm)
     (helm-projectile-toggle 1))
+  (setq projectile-completion-system 'ivy)
   (projectile-mode)
   (bind-key "s s"
             #'(lambda ()
@@ -1658,6 +1683,9 @@ POINT ?"
 
   (add-hook 'ruby-mode-hook 'my-ruby-mode-hook))
 
+(use-package restart-emacs
+  :commands restart-emacs)
+
 (use-package rust-mode
   :mode "\\.rs\\'")
 
@@ -1723,6 +1751,7 @@ POINT ?"
   )
 
 (use-package shell-pop
+  :disabled
   :demand)
 
 (use-package skewer-mode
@@ -1801,6 +1830,10 @@ POINT ?"
          ("C-c l" . undo-tree-switch-branch)
          ("C-c ;" . undo-tree-visualize)))
 
+(use-package uniquify
+  :ensure nil
+  :demand)
+
 (use-package web-mode
   :mode "\\.html\\'")
 
@@ -1869,6 +1902,11 @@ POINT ?"
   :init
   (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 
+(use-package which-key
+  :diminish which-key-mode
+  :commands which-key-mode
+  :init (which-key-mode))
+
 (use-package winner
   :disabled
   :if (not noninteractive)
@@ -1906,6 +1944,7 @@ POINT ?"
   :mode "\\.yaml\\'")
 
 (use-package ycmd
+  :disabled
   :commands global-ycmd-mode
   :init
   (add-hook 'after-init-hook #'global-ycmd-mode)

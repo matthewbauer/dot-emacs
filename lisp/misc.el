@@ -7,7 +7,7 @@
 ;; (ido-mode -1)
 ;; (cua-selection-mode t)
 ;; (semantic-mode 1)
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
 (save-place-mode)
@@ -85,11 +85,6 @@
 ;; dired - reuse current buffer by pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
 
-(defadvice exchange-point-and-mark (before deactivate-mark activate compile)
-  "When called with no active region, do not activate mark."
-  (interactive
-   (list (not (region-active-p)))))
-
 (defmacro with-region-or-buffer (func)
   "When called with no active region, call FUNC on current buffer."
   `(defadvice ,func (before with-region-or-buffer activate compile)
@@ -98,8 +93,8 @@
           (list (region-beginning) (region-end))
         (list (point-min) (point-max))))))
 
-(with-region-or-buffer indent-region)
-(with-region-or-buffer untabify)
+;; (with-region-or-buffer indent-region)
+;; (with-region-or-buffer untabify)
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
@@ -118,22 +113,22 @@
 ;; http://stackoverflow.com/a/3072831/355252
 (add-hook 'compilation-filter-hook #'colorize-compilation-buffer)
 
-(defadvice server-visit-files (before parse-numbers-in-lines (files proc &optional nowait) activate)
-  "Open file with emacsclient with cursors positioned on requested line.
-Most of console-based utilities prints filename in format
-'filename:linenumber'.  So you may wish to open filename in that format.
-Just call:
-  emacsclient filename:linenumber
-and file 'filename' will be opened and cursor set on line 'linenumber'"
-  (ad-set-arg 0
-              (mapcar (lambda (fn)
-                        (let ((name (car fn)))
-                          (if (string-match "^\\(.*?\\):\\([0-9]+\\)\\(?::\\([0-9]+\\)\\)?$" name)
-                              (cons
-                               (match-string 1 name)
-                               (cons (string-to-number (match-string 2 name))
-                                     (string-to-number (or (match-string 3 name) ""))))
-                            fn))) files)))
+;; (defadvice server-visit-files (before parse-numbers-in-lines (files proc &optional nowait) activate)
+;;   "Open file with emacsclient with cursors positioned on requested line.
+;; Most of console-based utilities prints filename in format
+;; 'filename:linenumber'.  So you may wish to open filename in that format.
+;; Just call:
+;;   emacsclient filename:linenumber
+;; and file 'filename' will be opened and cursor set on line 'linenumber'"
+;;   (ad-set-arg 0
+;;               (mapcar (lambda (fn)
+;;                         (let ((name (car fn)))
+;;                           (if (string-match "^\\(.*?\\):\\([0-9]+\\)\\(?::\\([0-9]+\\)\\)?$" name)
+;;                               (cons
+;;                                (match-string 1 name)
+;;                                (cons (string-to-number (match-string 2 name))
+;;                                      (string-to-number (or (match-string 3 name) ""))))
+;;                             fn))) files)))
 
 ;; unbind unused keys
 (global-unset-key "\C-z")
@@ -180,30 +175,30 @@ i.e. change right window to bottom, or change bottom window to right."
                   (split-window-horizontally))
                 (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
 
-(defun newline-same-column ()
-  (interactive)
-  (let ((col (current-column)))
-    (newline)
-    (indent-to col)))
+;; (defun newline-same-column ()
+;;   (interactive)
+;;   (let ((col (current-column)))
+;;     (newline)
+;;     (indent-to col)))
 
-(global-set-key (kbd "M-n") 'newline-same-column)
+;; (global-set-key (kbd "M-n") 'newline-same-column)
 
-(defvar my-ansi-escape-re
-  (rx (or ?\233 (and ?\e ?\[))
-      (zero-or-more (char (?0 . ?\?)))
-      (zero-or-more (char ?\s ?- ?\/))
-      (char (?@ . ?~))))
+;; (defvar my-ansi-escape-re
+;;   (rx (or ?\233 (and ?\e ?\[))
+;;       (zero-or-more (char (?0 . ?\?)))
+;;       (zero-or-more (char ?\s ?- ?\/))
+;;       (char (?@ . ?~))))
 
-(defun my-nuke-ansi-escapes (beg end)
-  (save-excursion
-    (goto-char beg)
-    (while (re-search-forward my-ansi-escape-re end t)
-      (replace-match ""))))
+;; (defun my-nuke-ansi-escapes (beg end)
+;;   (save-excursion
+;;     (goto-char beg)
+;;     (while (re-search-forward my-ansi-escape-re end t)
+;;       (replace-match ""))))
 
-(defun my-eshell-nuke-ansi-escapes ()
-  (my-nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
+;; (defun my-eshell-nuke-ansi-escapes ()
+;;   (my-nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
 
-(add-hook 'eshell-output-filter-functions 'my-eshell-nuke-ansi-escapes t)
+;; (add-hook 'eshell-output-filter-functions 'my-eshell-nuke-ansi-escapes t)
 
 (add-hook 'kill-emacs-query-functions
           'custom-prompt-customize-unsaved-options)
@@ -212,5 +207,13 @@ i.e. change right window to bottom, or change bottom window to right."
 
 (setenv "INFOPATH" "/Users/mbauer/info/:/Users/mbauer/.nix-profile/share/info/:/nix/store/rm4191sxaybxpv5dhfm7m843v0193mdy-emacs-25.1-mac-6.1/share/info/:/usr/share/info/:/nix/var/nix/profiles/default/share/info")
 (setenv "MANPATH" "/Users/mbauer/.nix-profile/share/man/:/nix/var/nix/profiles/default/share/man/:/usr/share/man/")
+
+(global-set-key (kbd "C-x w") 'delete-frame)
+(defun bjm/kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(global-set-key (kbd "C-x k") 'bjm/kill-this-buffer)
 
 (provide 'misc)
