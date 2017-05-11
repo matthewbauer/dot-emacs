@@ -142,7 +142,8 @@
  '(explicit-shell-file-name "bash")
  '(fased-completing-read-function (quote nil))
  '(flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
- '(flycheck-global-modes (quote (not erc-mode message-mode)))
+ '(flycheck-global-modes (quote (not erc-mode message-mode
+                                     git-commit-mode)))
  '(flycheck-idle-change-delay 0.8)
  '(flycheck-standard-error-navigation t)
  '(flyspell-abbrev-p nil)
@@ -234,6 +235,7 @@
  '(kill-whole-line t)
  '(load-prefer-newer t)
  '(mac-mouse-wheel-mode t)
+ '(magit-auto-revert-mode nil)
  '(magit-clone-set-remote\.pushDefault t)
  '(magit-completing-read-function (quote magit-builtin-completing-read) t)
  '(magit-delete-by-moving-to-trash t)
