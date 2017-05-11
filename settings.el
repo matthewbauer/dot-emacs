@@ -141,6 +141,7 @@
  '(explicit-shell-file-name "bash")
  '(fased-completing-read-function (quote nil))
  '(flycheck-check-syntax-automatically (quote (save idle-change mode-enabled)))
+ '(flycheck-global-modes (quote (not erc-mode message-mode)))
  '(flycheck-idle-change-delay 0.8)
  '(flycheck-standard-error-navigation t)
  '(flyspell-abbrev-p nil)
