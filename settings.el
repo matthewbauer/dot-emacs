@@ -68,9 +68,6 @@
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(erc-autoaway-idle-seconds 600)
  '(erc-autoaway-use-emacs-idle t)
- '(erc-autojoin-channels-alist
-   (quote
-    (("freenode.net" "#haskell" "#nixos" "##nix-darwin" "#emacs"))))
  '(erc-autojoin-timing (quote ident))
  '(erc-fill-column 88)
  '(erc-fill-prefix "          ")
@@ -84,8 +81,6 @@
  '(erc-modules
    (quote
     (autojoin button capab-identify completion dcc fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
- '(erc-nick "matthewbauer")
- '(erc-nickserv-passwords (quote ((freenode (("matthewbauer" . "lupin2"))))))
  '(erc-prompt (lambda nil (concat "[" (buffer-name) "]")))
  '(erc-prompt-for-nickserv-password nil)
  '(erc-prompt-for-password nil)
@@ -345,7 +340,6 @@
       :coding-system utf-8-unix))) t)
  '(sml/mode-width (quote full))
  '(sml/name-width 40)
- '(smtpmail-smtp-user "mjbauer95@gmail.com")
  '(sp-autoskip-closing-pair (quote always))
  '(sp-base-key-bindings (quote paredit))
  '(sp-hybrid-kill-entire-symbol nil)
@@ -372,9 +366,6 @@
  '(use-package-enable-imenu-support t)
  '(use-package-expand-minimally t)
  '(use-package-verbose nil)
- '(user-full-name "Matthew Bauer")
- '(user-initials "mjb")
- '(user-mail-address "mjbauer95@gmail.com")
  '(vc-allow-async-revert t)
  '(vc-command-messages t)
  '(vc-follow-symlinks t)
