@@ -77,7 +77,6 @@
  '(erc-kill-buffer-on-part t)
  '(erc-kill-queries-on-quit t)
  '(erc-kill-server-buffer-on-quit t)
- '(erc-log-channels-directory "~/.erc/logs/")
  '(erc-modules
    (quote
     (autojoin button capab-identify completion dcc fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
@@ -305,13 +304,13 @@
  '(save-place-file (concat user-emacs-directory "places"))
  '(savehist-additional-variables (quote (search-ring regexp-search-ring)))
  '(savehist-autosave-interval 60)
- '(savehist-file (expand-file-name "savehist" "~/.emacs.d"))
+ '(savehist-file (expand-file-name "savehist" user-emacs-directory))
  '(scroll-conservatively 100000)
  '(scroll-margin 0)
  '(scroll-preserve-screen-position 1)
  '(select-enable-clipboard t)
  '(select-enable-primary t)
- '(semanticdb-default-save-directory (quote (expand-file-name "semanticdb" "~/.emacs.d")))
+ '(semanticdb-default-save-directory (quote (expand-file-name "semanticdb" user-emacs-directory)))
  '(send-mail-function (quote smtpmail-send-it))
  '(sentence-end-double-space nil)
  '(shell-completion-execonly nil)
@@ -347,7 +346,6 @@
  '(tramp-default-method "ssh")
  '(undo-limit 800000)
  '(undo-tree-auto-save-history t)
- '(undo-tree-history-directory-alist (quote ((".*" . "~/.backups"))))
  '(undo-tree-mode-lighter "")
  '(undo-tree-visualizer-diff t)
  '(undo-tree-visualizer-timestamps t)
@@ -383,7 +381,7 @@
     (yas-ido-prompt yas-completing-prompt yas-no-prompt)))
  '(yas-triggers-in-field t)
  '(yas-wrap-around-region t)
- '(ycmd-global-config "~/.ycm_extra_conf.py")
+ '(ycmd-global-config (expand-file-name ".ycm_extra_conf.py" user-emacs-directory))
  '(ycmd-server-command (quote ("ycmd"))))
 
 (custom-set-faces
@@ -391,13 +389,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(erc-input-face ((t (:foreground "antique white"))))
- '(helm-selection ((t (:background "ForestGreen" :foreground "black"))))
- '(org-agenda-clocking ((t (:inherit secondary-selection :foreground "black"))) t)
- '(org-agenda-done ((t (:foreground "dim gray" :strike-through nil))))
- '(org-clock-overlay ((t (:background "SkyBlue4" :foreground "black"))))
- '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
- '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
+ )
 
 (provide 'settings)
 ;;; settings.el ends here

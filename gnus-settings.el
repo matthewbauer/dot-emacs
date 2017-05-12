@@ -203,6 +203,8 @@
  '(gnus-use-adaptive-scoring (quote (line)))
  '(gnus-use-cache t)
  '(gnus-verbose 4)
+ '(gnus-article-date-headers (quote (local)))
+ '(gnus-gcc-mark-as-read t)
  '(mail-envelope-from (quote header))
  '(mail-setup-with-from nil)
  '(mail-source-delete-incoming t)
