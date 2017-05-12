@@ -125,7 +125,7 @@
  '(eshell-mv-interactive-query t)
  '(eshell-output-filter-functions
    (quote
-    (eshell-handle-ansi-color eshell-handle-control-codes eshell-watch-for-password-prompt eshell-truncate-buffer my-eshell-nuke-ansi-escapes)))
+    (eshell-handle-ansi-color eshell-handle-control-codes eshell-watch-for-password-prompt eshell-truncate-buffer)))
  '(eshell-plain-echo-behavior nil)
  '(eshell-prompt-function (quote epe-theme-lambda) t)
  '(eshell-prompt-regexp "^[^λ]+ λ ")
