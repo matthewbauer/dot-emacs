@@ -230,7 +230,7 @@
  '(kill-whole-line t)
  '(load-prefer-newer t)
  '(mac-mouse-wheel-mode t)
- '(magit-auto-revert-mode nil)
+ '(magit-auto-revert-mode t)
  '(magit-clone-set-remote\.pushDefault t)
  '(magit-completing-read-function (quote magit-builtin-completing-read) t)
  '(magit-delete-by-moving-to-trash t)
