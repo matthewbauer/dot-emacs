@@ -1948,9 +1948,11 @@ POINT ?"
   :commands global-ycmd-mode
   :init
   (add-hook 'after-init-hook #'global-ycmd-mode)
-  (require 'ycmd-eldoc)
-  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
-  )
+  (use-package ycmd-eldoc
+    :ensure nil
+    :commands ycmd-eldoc-mode
+    :init
+    (add-hook 'ycmd-mode-hook 'ycmd-eldoc-mode)))
 
 (use-package zenburn-theme
   :disabled
