@@ -543,6 +543,18 @@
 (use-package csv-mode
   :mode "\\.csv\\'")
 
+(use-package desktop
+  :ensure nil
+  :disabled
+  :demand
+  :config
+  (desktop-read)
+  (desktop-save-mode 1)
+  ;; Don't save Magit and Git related buffers
+  (dolist (mode '(magit-mode magit-log-mode))
+    (add-to-list 'desktop-modes-not-to-save mode))
+  (add-to-list 'desktop-files-not-to-save (rx bos "COMMIT_EDITMSG")))
+
 (use-package diffview
   :commands (diffview-current diffview-region diffview-message))
 

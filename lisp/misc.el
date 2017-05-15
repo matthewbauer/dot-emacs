@@ -7,10 +7,13 @@
 ;; (ido-mode -1)
 ;; (cua-selection-mode t)
 ;; (semantic-mode 1)
-;; (desktop-save-mode 1)
 (blink-cursor-mode 0)
 ;; (icomplete-mode 1)
-(save-place-mode)
+
+;; (desktop-save-mode 1)
+;; (desktop-read)
+
+(save-place-mode 1)
 (delete-selection-mode t)
 (savehist-mode 1)
 ;; (global-undo-tree-mode)
