@@ -1389,9 +1389,20 @@ POINT ?"
   (with-eval-after-load 'ibuffer
     (bind-keys :map ibuffer-mode-map ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root))))
 
+(use-package ibuffer-vc
+  :init
+  (with-eval-after-load 'ibuffer
+    (bind-keys :map ibuffer-mode-map ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root))))
+
 (use-package idris
   :disabled
   :mode ("\\.idr\\'" . idris-mode))
+
+(use-package iedit
+  :bind (("C-;" . iedit-mode)
+         :map help-map ("C-;" . iedit-mode-toggle-on-function)
+         :map esc-map ("C-;" . iedit-mode-toggle-on-function)
+         :map isearch-mode-map ("C-;" . iedit-mode-toggle-on-function)))
 
 (use-package iedit
   :bind (("C-;" . iedit-mode)
@@ -1406,11 +1417,21 @@ POINT ?"
               #'imenu-anywhere)
             search-map))
 
+(use-package imenu-anywhere
+  :init
+  (bind-key "M"
+            (if (featurep 'ivy) #'ivy-imenu-anywhere
+              #'imenu-anywhere)
+            search-map))
+
 (use-package imenu-list
   :commands imenu-list)
 
 (use-package indium
   :commands (indium-mode indium-interaction-mode indium-scratch))
+
+(use-package inf-ruby
+  :commands inf-ruby)
 
 (use-package intero
   :commands intero-mode
@@ -1684,12 +1705,18 @@ POINT ?"
 (use-package minimap
   :commands minimap-mode)
 
+(use-package minimap
+  :commands minimap-mode)
+
 (use-package mmm-mode
   :disabled
   :commands mmm-mode
   :init
   (setq mmm-global-mode 'maybe)
   (require 'mmm-auto))
+
+(use-package multi-line
+  :bind (("C-c m" . multi-line)))
 
 (use-package multi-term
   :bind (("C-. t" . multi-term-next)
@@ -1733,9 +1760,6 @@ POINT ?"
 (use-package multishell
   :disabled)
 
-(use-package multi-line
-  :bind (("C-c m" . multi-line)))
-
 (use-package mwim
   :bind (("C-a" . mwim-beginning-of-code-or-line)
          ("C-e" . mwim-end-of-code-or-line)))
@@ -1748,6 +1772,9 @@ POINT ?"
 (use-package nix-mode
   :load-path "~/Projects/nix-mode"
   :mode "\\.nix\\'")
+
+(use-package nodejs-repl
+  :commands nodejs-repl)
 
 (use-package org
   ;; :mode "\\.\\(org\\)\\'"
@@ -1829,6 +1856,9 @@ POINT ?"
   (projectile-mode)
   )
 
+(use-package psysh
+  :commands psysh)
+
 (use-package python-mode
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
@@ -1860,15 +1890,6 @@ POINT ?"
     (unbind-key "C-c c" python-mode-map))
 
   (add-hook 'python-mode-hook 'my-python-mode-hook))
-
-(use-package psysh
-  :commands psysh)
-
-(use-package inf-ruby
-  :commands inf-ruby)
-
-(use-package nodejs-repl
-  :commands nodejs-repl)
 
 (use-package rainbow-delimiters
   :commands rainbow-delimiters-mode
@@ -2115,13 +2136,13 @@ POINT ?"
   (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
   (add-hook 'js2-mode-hook 'tern-mode))
 
+(use-package tiny
+  :commands tiny)
+
 (use-package toc-org
   :commands toc-org-enable
   :init
   (add-hook 'org-mode-hook 'toc-org-enable))
-
-(use-package tiny
-  :commands tiny)
 
 (use-package tramp
   :commands tramp)
