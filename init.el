@@ -20,9 +20,6 @@
 
 (require 'package)
 
-(unless (assoc-default "melpa" package-archives)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
-
 (package-initialize 'noactivate)
 
 (unless (package-installed-p 'use-package)

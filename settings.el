@@ -257,7 +257,16 @@
  '(nrepl-log-messages t)
  '(nroff-electric-mode t)
  '(nsm-save-host-names t)
- '(package-check-signature (quote allow-unsigned))
+ '(package-archives
+   (quote
+    (("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa" . "https://melpa.org/packages/"))))
+ '(package-check-signature nil)
+ '(package-directory-list nil)
+ '(package-load-list (quote (all)))
+ '(package-selected-packages
+   (quote
+    (tiny mu4e elixir-mode-iex inf-ruby nodejs-repl psysh repl-toggle multi-line neotree make-it-so deft iedit ibuffer-vc transpose-frame imenu-anywhere comint alert gnus-desktop-notify ggtags hackernews reddit-mode sx company-flx company-flx-mode company-web company-try-hard company-shell company-jedi company-irony-c-headers company-irony company-ghci company-ghc company-go company-dict company-c-headers company-auctex flycheck-ghcmod company-ycm zonokai-theme zenburn-theme yari yaml-mode xterm-color wrap-region workgroups whitespace-cleanup-mode which-key web-mode use-package undo-tree try toc-org spray spotify solarized-theme smartparens smart-tabs-mode smart-mode-line slime skewer-less shell-pop seti-theme sentence-navigation scss-mode sass-mode rust-mode ripgrep rg reveal-in-osx-finder restart-emacs redshank realgud rainbow-mode rainbow-delimiters python-mode popwin php-mode pdf-tools pcomplete-extension paredit pandoc-mode page-break-lines origami org-bullets nix-mode mwim multishell multi-term monokai-theme mode-icons mmm-mode minimap mic-paren material-theme markdown-preview-mode magithub magit-gh-pulls lua-mode lsp-mode less-css-mode launchctl latex-unicode-math-mode json-mode js2-refactor intero indium imenu-list highlight-cl guru-mode golden-ratio go-eldoc github-clone gitconfig-mode gitattributes-mode git-timemachine gist flycheck-ycmd flycheck-pos-tip flatland-theme fasd fancy-narrow eyebrowse esup eshell-z eshell-prompt-extras eshell-fringe-status eshell-autojump esh-help elisp-slime-nav editorconfig easy-kill dumb-jump docbook dired-toggle dired-ranger dired+ diffview cursor-chg csv-mode css-eldoc crux crontab-mode counsel-projectile company-ycmd company-tern company-statistics company-math company-anaconda coffee-mode cmake-mode cider c-eldoc bui bug-reference-github buffer-move bookmark+ bbdb backup-each-save auto-compile apu apropospriate-theme aggressive-indent ag ace-window ace-jump-mode)))
  '(page-break-lines-modes
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
