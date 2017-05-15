@@ -17,7 +17,6 @@
  '(async-bytecomp-package-mode t)
  '(auru-warn-only t)
  '(auth-source-save-behavior t)
- '(auth-sources (quote ("~/.authinfo")))
  '(auto-revert-check-vc-info t)
  '(auto-revert-use-notify nil)
  '(auto-revert-verbose nil)
@@ -25,6 +24,7 @@
  '(backup-directory-alist (\` ((".*" \, temporary-file-directory))))
  '(bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
  '(bookmark-save-flag 1)
+ '(byte-compile-verbose nil)
  '(c-eldoc-includes "" t)
  '(comint-process-echoes t)
  '(comint-prompt-read-only t)
@@ -53,6 +53,7 @@
  '(custom-browse-order-groups (quote first))
  '(custom-buffer-done-kill t)
  '(custom-safe-themes t)
+ '(default-input-method "TeX")
  '(delete-old-versions -1)
  '(desktop-lazy-verbose nil)
  '(desktop-load-locked-desktop nil)
@@ -64,6 +65,17 @@
  '(dired-mode-hook (quote (auto-revert-mode)))
  '(dired-recursive-copies (quote always))
  '(dired-recursive-deletes (quote top))
+ '(display-buffer-alist
+   (\`
+    (((\,
+       (rx bos
+           (or "*Flycheck errors*" "*Backtrace" "*Warnings" "*compilation" "*Help" "*less-css-compilation" "*Packages" "*magit-process" "*SQL" "*tldr")))
+      (display-buffer-reuse-window display-buffer-in-side-window)
+      (side . bottom)
+      (reusable-frames . visible)
+      (window-height . 0.33))
+     ("." nil
+      (reusable-frames . visible)))))
  '(dumb-jump-selector (quote helm))
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(erc-autoaway-idle-seconds 600)
@@ -195,6 +207,8 @@
  '(helm-reuse-last-window-split-state t)
  '(history-delete-duplicates t)
  '(history-length 200)
+ '(ibuffer-display-summary nil)
+ '(ibuffer-show-empty-filter-groups nil)
  '(ido-auto-merge-work-directories-length -1)
  '(ido-create-new-buffer (quote always))
  '(ido-default-file-method (quote selected-window))
@@ -203,6 +217,7 @@
  '(ido-max-prospects 10)
  '(ido-use-faces nil)
  '(ido-use-filename-at-point (quote guess))
+ '(iedit-toggle-key-default nil)
  '(imenu-list-auto-resize t)
  '(imenu-list-focus-after-activation t)
  '(indent-tabs-mode nil)
@@ -253,8 +268,10 @@
  '(magit-save-repository-buffers (quote dontask))
  '(magit-stage-all-confirm nil)
  '(magit-unstage-all-confirm nil)
+ '(make-backup-files nil)
  '(makefile-electric-keys t)
  '(mmm-submode-decoration-level 0)
+ '(mouse-yank-at-point t)
  '(network-security-level (quote medium))
  '(nrepl-log-messages t)
  '(nroff-electric-mode t)
@@ -273,6 +290,7 @@
    (quote
     (emacs-lisp-mode compilation-mode outline-mode prog-mode haskell-mode)))
  '(parens-require-spaces t)
+ '(parse-sexp-ignore-comments t)
  '(projectile-enable-caching t)
  '(projectile-mode-line " Projectile")
  '(reb-re-syntax (quote string))
@@ -321,9 +339,12 @@
  '(scroll-preserve-screen-position 1)
  '(select-enable-clipboard t)
  '(select-enable-primary t)
- '(semanticdb-default-save-directory (quote (expand-file-name "semanticdb" user-emacs-directory)))
+ '(semanticdb-default-save-directory
+   (quote
+    (expand-file-name "semanticdb" user-emacs-directory)))
  '(send-mail-function (quote smtpmail-send-it))
  '(sentence-end-double-space nil)
+ '(sh-learn-basic-offset t)
  '(shell-completion-execonly nil)
  '(shell-input-autoexpand t)
  '(shell-pop-full-span t)
@@ -333,7 +354,7 @@
  '(shell-pop-window-position (quote bottom))
  '(shell-pop-window-size 30)
  '(show-trailing-whitespace t)
- '(slime-contribs (quote (slime-fancy)))
+ '(slime-contribs (quote (slime-fancy)) t)
  '(slime-lisp-implementations
    (quote
     ((ccl
@@ -365,6 +386,7 @@
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(uniquify-ignore-buffers-re "^\\*")
  '(uniquify-separator "/")
+ '(url-automatic-caching t)
  '(use-dialog-box nil)
  '(use-file-dialog nil)
  '(use-package-always-defer t)
