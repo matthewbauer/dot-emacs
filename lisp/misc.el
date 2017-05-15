@@ -13,8 +13,6 @@
 (save-place-mode)
 (delete-selection-mode t)
 (savehist-mode 1)
-(delete-selection-mode t)
-;; (global-auto-revert-mode t)
 ;; (global-undo-tree-mode)
 ;; (global-anzu-mode)
 ;; (line-number-mode t)

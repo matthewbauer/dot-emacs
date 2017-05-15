@@ -90,8 +90,10 @@
   :init (autopair-global-mode))
 
 (use-package autorevert
-  :commands auto-revert-mode
-  :init
+  :diminish auto-revert-mode
+  :defer 1
+  :config
+  (global-auto-revert-mode 1)
   (add-hook 'find-file-hook #'(lambda () (auto-revert-mode 1))))
 
 (use-package avy
