@@ -1033,15 +1033,29 @@ POINT ?"
   :commands global-flycheck-mode
   :init (add-hook 'after-init-hook #'global-flycheck-mode))
 
-(use-package flycheck-ycmd
-  :commands flycheck-ycmd-setup
-  :init (add-hook 'after-init-hook #'flycheck-ycmd-setup))
+(use-package flycheck-ghcmod
+  :disabled
+  :commands flycheck-ghcmod
+  :after flycheck
+  :init
+  (add-hook 'flycheck-mode-hook #'flycheck-ghcmod))
+
+(use-package flycheck-haskell
+  :disabled
+  :commands flycheck-haskell-setup
+  :after flycheck
+  :init
+  (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 
 (use-package flycheck-pos-tip
   :disabled
   :commands flycheck-pos-tip-mode
   :after flycheck
   :init (flycheck-pos-tip-mode))
+
+(use-package flycheck-ycmd
+  :commands flycheck-ycmd-setup
+  :init (add-hook 'after-init-hook #'flycheck-ycmd-setup))
 
 (use-package flyspell
   :commands flyspell-mode ;;(spell-checking/change-dictionary)
