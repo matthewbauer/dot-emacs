@@ -62,6 +62,7 @@
   (dired-async-mode 1))
 
 (use-package apropospriate-theme
+  :disabled
   :demand
   :config
   (load-theme 'apropospriate-dark))
@@ -1955,7 +1956,6 @@ POINT ?"
     (add-hook 'ycmd-mode-hook 'ycmd-eldoc-mode)))
 
 (use-package zenburn-theme
-  :disabled
   :demand
   :config (load-theme 'zenburn))
 
