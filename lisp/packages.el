@@ -428,12 +428,11 @@
 (use-package company
   :bind ("<C-tab>" . company-complete)
   :diminish company-mode
-  :commands company-mode
+  :commands (company-mode global-company-mode)
   ;; :after helm
-  :config (global-company-mode 1)
+  :init
+  ;; (global-company-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
-
-
   ;; ;; Use Helm to complete suggestions
   ;; (define-key company-mode-map (kbd "C-:") 'helm-company)
   ;; (define-key company-active-map (kbd "C-:") 'helm-company)
@@ -448,10 +447,84 @@
   :init
   (add-to-list 'company-backends 'company-anaconda))
 
+(use-package company-auctex
+  :disabled
+  :after company
+  :commands company-auctex
+  :init
+  (add-to-list 'company-backends 'company-auctex))
+
+(use-package company-c-headers
+  :disabled
+  :after company
+  :commands company-c-headers
+  :init
+  (add-to-list 'company-backends 'company-c-headers))
+
+(use-package company-dict
+  :disabled
+  :after company
+  :commands company-dict
+  :init
+  (add-to-list 'company-backends 'company-dict))
+
+(use-package company-flx
+  :after company
+  :config
+  (company-flx-mode +1))
+
+(use-package company-ghc
+  :disabled
+  :after company
+  :commands company-ghc
+  :init (add-to-list 'company-backends 'company-ghc))
+
+(use-package company-ghci
+  :disabled
+  :after company
+  :commands company-ghci
+  :init (add-to-list 'company-backends 'company-ghci))
+
+(use-package company-go
+  :after company
+  :disabled
+  :commands company-go
+  :init (add-to-list 'company-backends 'company-go))
+
+(use-package company-irony
+  :disabled
+  :after company
+  :commands company-irony
+  :init (add-to-list 'company-backends 'company-irony))
+
+(use-package company-irony-c-headers
+  :disabled
+  :after company
+  :commands company-irony-c-headers
+  :init (add-to-list 'company-backends 'company-irony-c-headers))
+
+(use-package company-jedi
+  :disabled
+  :after company
+  :commands company-jedi
+  :init (add-to-list 'company-backends 'company-jedi))
+
 (use-package company-math
+  :disabled
   :commands company-math-symbols-unicode
   :init
-  (add-hook 'company-backends 'company-math-symbols-unicode))
+  (add-to-list 'company-backends 'company-math-symbols-unicode))
+
+(use-package company-quickhelp
+  :disabled
+  :commands company-quickhelp-mode
+  :init (company-quickhelp-mode 1))
+
+(use-package company-shell
+  :disabled
+  :after company
+  :commands company-shell
+  :init (add-to-list 'company-backends 'company-shell))
 
 (use-package company-statistics
   :disabled
@@ -461,19 +534,27 @@
 
 (use-package company-tern
   :disabled
+  :after company
   :commands company-tern
   :init (add-to-list 'company-backends 'company-tern))
 
-(use-package company-quickhelp
+(use-package company-try-hard
+  :commands company-try-hard)
+
+(use-package company-web
   :disabled
-  :commands company-quickhelp-mode
-  :init (company-quickhelp-mode 1))
+  :after company
+  :commands company-web
+  :init (add-to-list 'company-backends 'company-web))
 
 (use-package company-ycmd
   :after ycmd
-  :commands company-ycmd-setup
-  :init
-  (add-hook 'after-init-hook #'company-ycmd-setup))
+  ;; :commands company-ycmd-setup
+  ;; :init
+  ;; (add-hook 'after-init-hook #'company-ycmd-setup)
+  :config
+  (company-ycmd-setup)
+  )
 
 (use-package compile
   :bind (("C-c c" . compile)
