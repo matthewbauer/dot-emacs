@@ -1667,9 +1667,8 @@ POINT ?"
 
 (use-package projectile
   :commands projectile-mode
-  :diminish projectile-mode
-  :after helm
   :bind-keymap ("C-c p" . projectile-command-map)
+  :defer 5
   :config
   (use-package helm-projectile
     :disabled
