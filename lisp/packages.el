@@ -1271,18 +1271,22 @@ POINT ?"
 
 (use-package ispell)
 
-
 (use-package ivy
   :defer 1
   :bind (("C-c C-r" . ivy-resume)
          ("<f6>" . ivy-resume)
-         ("C-x C-b" . ivy-switch-buffer))
+         ("C-x C-b" . ivy-switch-buffer)
+         :map ivy-minibuffer-map
+         ("C-j" . ivy-call))
   :diminish ivy-mode
   :commands ivy-mode
   :config
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (ivy-mode 1))
+  (ivy-mode 1)
+  (use-package flx
+    :disabled
+    :demand
+    :config
+    (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))))
 
 (use-package js2-mode
   :mode "\\.js\\'"
