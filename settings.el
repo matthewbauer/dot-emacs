@@ -135,7 +135,7 @@
  '(eshell-ln-interactive-query t)
  '(eshell-modules-list
    (quote
-    (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-smart eshell-term eshell-tramp eshell-unix eshell-xtra)))
+    (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-tramp eshell-unix eshell-xtra)))
  '(eshell-mv-interactive-query t)
  '(eshell-output-filter-functions
    (quote

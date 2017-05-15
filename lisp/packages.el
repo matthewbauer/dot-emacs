@@ -917,15 +917,6 @@
               (setq eldoc-documentation-function
                     'esh-help-eldoc-command))))
 
-(use-package eshell-autojump
-  :disabled
-  :commands eshell/j)
-
-(use-package eshell-fringe-status
-  :commands eshell-fringe-status-mode
-  :init
-  (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
-
 (use-package eshell
   :bind ("C-x e" . eshell)
   :commands (eshell eshell-command)
@@ -993,8 +984,18 @@ POINT ?"
   (setenv "EDITOR" "emacsclient -nq")
 
   ;; support `em-smart'
-  (require 'em-smart)
-  (add-hook 'eshell-mode-hook 'eshell-smart-initialize))
+  ;; (require 'em-smart)
+  ;; (add-hook 'eshell-mode-hook 'eshell-smart-initialize)
+  )
+
+(use-package eshell-autojump
+  :disabled
+  :commands eshell/j)
+
+(use-package eshell-fringe-status
+  :commands eshell-fringe-status-mode
+  :init
+  (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
 
 (use-package eshell-prompt-extras
   :commands epe-theme-lambda
