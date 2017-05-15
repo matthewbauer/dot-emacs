@@ -20,7 +20,6 @@
   :bind ("C-c SPC" . ace-jump-mode))
 
 (use-package ace-window
-  :commands ace-window
   :bind ("M-o" . ace-window))
 
 (use-package ag
@@ -32,6 +31,27 @@
   :commands aggressive-indent-mode
   :init
   (apply #'hook-into-modes 'aggressive-indent-mode lisp-mode-hooks))
+
+(use-package alert
+  :after erc
+  :config
+  (alert-add-rule :status   '(buried visible idle)
+                  :severity '(moderate high urgent)
+                  :mode     'erc-mode
+                  :predicate
+                  #'(lambda (info)
+                      (string-match (concat "\\`[^&].*@BitlBee\\'")
+                                    (erc-format-target-and/or-network)))
+                  :persistent
+                  #'(lambda (info)
+                      ;; If the buffer is buried, or the user has been
+                      ;; idle for `alert-reveal-idle-time' seconds,
+                      ;; make this alert persistent.  Normally, alerts
+                      ;; become persistent after
+                      ;; `alert-persist-idle-time' seconds.
+                      (memq (plist-get info :status) '(buried idle)))
+                  :style 'fringe
+                  :continue t))
 
 (use-package align
   :bind (("M-["   . align-code)
@@ -46,6 +66,10 @@
         (indent-region beg end-mark nil)
         (align beg end-mark)))))
 
+(use-package all-the-icons
+  :disabled
+  :demand t)
+
 (use-package anaconda-mode
   :commands (anaconda-mode anaconda-eldoc-mode)
   :init
@@ -53,13 +77,8 @@
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package ansi-color
-  :init(add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
-
-(use-package async
-  :disabled
-  :commands dired-async-mode
   :init
-  (dired-async-mode 1))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
 (use-package apropospriate-theme
   :disabled
@@ -71,12 +90,17 @@
   :bind ("C-h u" . apropos-char)
   :commands apropos-char)
 
+(use-package async
+  :disabled
+  :commands dired-async-mode
+  :init
+  (dired-async-mode 1))
+
 (use-package auto-compile
   :demand
-  :disabled
   :config
-  (auto-compile-on-save-mode)
-  (auto-compile-on-load-mode))
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
 
 (use-package auto-highlight-symbol
   :disabled
@@ -425,6 +449,41 @@
 (use-package coffee-mode
   :mode (("\\.coffee\\'"   . coffee-mode)))
 
+(use-package comint
+  :ensure nil
+  :bind
+  (:map comint-mode-map
+        ("RET"       . comint-return-dwim)
+        ("C-r"       . comint-history-isearch-backward-regexp)
+        ("s-k"       . comint-clear-buffer)
+        ("M-TAB"     . comint-previous-matching-input-from-input)
+        ("<M-S-tab>" . comint-next-matching-input-from-input))
+  :config
+  (setq comint-prompt-read-only t)
+  (setq-default comint-process-echoes t
+                comint-input-ignoredups t
+                comint-scroll-show-maximum-output nil
+                comint-output-filter-functions
+                '(ansi-color-process-output
+                  comint-truncate-buffer
+                  comint-watch-for-password-prompt))
+  (defun turn-on-comint-history (history-file)
+    (setq comint-input-ring-file-name history-file)
+    (comint-read-input-ring 'silent))
+  (defun text-smaller-no-truncation ()
+    (setq truncate-lines nil)
+    (set (make-local-variable 'scroll-margin) 0)
+    (text-scale-decrease 1))
+  (defun improve-npm-process-output (output)
+    (replace-regexp-in-string "\\[[0-9]+[GK]" "" output))
+  (add-to-list 'comint-preoutput-filter-functions #'improve-npm-process-output)
+  (add-hook 'kill-buffer-hook #'comint-write-input-ring)
+  (add-hook 'comint-mode-hook #'text-smaller-no-truncation)
+  (add-hook 'kill-emacs-hook
+            (lambda ()
+              (dolist (buffer (buffer-list))
+                (with-current-buffer buffer (comint-write-input-ring))))))
+
 (use-package company
   :bind ("<C-tab>" . company-complete)
   :diminish company-mode
@@ -579,9 +638,16 @@
   :config
   (add-hook 'compilation-filter-hook #'compilation-ansi-color-process-output))
 
+(use-package compile
+  :config
+  (setq compilation-always-kill t
+        compilation-ask-about-save nil)
+  (add-hook 'compilation-mode-hook #'text-smaller-no-truncation)
+  (add-hook 'compilation-finish-functions #'alert-after-finish-in-background))
+
 (use-package counsel
   :commands (counsel-descbinds)
-  :bind (("M-x" . counsel-M-x)
+  :bind (([remap execute-extended-command] . counsel-M-x)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
          ("C-x C-f" . counsel-find-file)
@@ -601,6 +667,8 @@
 (use-package crontab-mode
   :mode "\\.?cron\\(tab\\)?\\'")
 
+(use-package crux)
+
 (use-package css-mode
   :mode "\\.css\\'"
   :commands css-mode
@@ -612,7 +680,8 @@
       (add-hook hook 'rainbow-mode)))
   (use-package css-eldoc))
 
-(use-package crux)
+(use-package csv-mode
+  :mode "\\.csv\\'")
 
 (use-package cursor-chg
   :disabled
@@ -621,8 +690,15 @@
   (change-cursor-mode 1)
   (toggle-cursor-type-when-idle 1))
 
-(use-package csv-mode
-  :mode "\\.csv\\'")
+(use-package deft
+  :commands deft
+  :config
+  (setq deft-default-extension "org")
+  (setq deft-extensions '("org"))
+  (setq deft-use-filter-string-for-filename t)
+  (setq deft-file-naming-rules '((noslash . "_")
+                                 (nospace . "_")
+                                 (case-fn . downcase))))
 
 (use-package desktop
   :ensure nil
@@ -784,6 +860,24 @@
                "\\)")))
         (funcall dired-omit-regexp-orig)))))
 
+(use-package dired-x
+  :after dired
+  :disabled
+  :mode ("[^/]\\.dired$" . dired-virtual-mode)
+  :bind (("C-x C-j" . dired-jump)
+         ("C-x 4 j" . dired-jump-other-window)))
+
+(use-package drag-stuff
+  :disabled
+  :diminish drag-stuff-mode
+  :config
+  (progn
+    (drag-stuff-global-mode t)
+    (drag-stuff-define-keys)
+    (add-to-list 'drag-stuff-except-modes 'org-mode)
+    (add-to-list 'drag-stuff-except-modes 'rebase-mode)
+    (add-to-list 'drag-stuff-except-modes 'emacs-lisp-mode)))
+
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
@@ -858,11 +952,18 @@
   (use-package ediff-keep))
 
 (use-package editorconfig
+  :disabled
   :demand
-  :if (executable-find "editorconfig")
-  :mode ("\\.editorconfig\\'" . conf-unix-mode)
+  ;; :if (executable-find "editorconfig")
   :config
   (editorconfig-mode 1))
+
+(use-package electric-operator
+  :config
+  (add-hook 'python-mode-hook #'electric-operator-mode))
+
+(use-package elpy
+  :disabled)
 
 (use-package emacs-lisp-mode
   :ensure nil
@@ -881,6 +982,11 @@
   :bind (("M-." . find-function-at-point)
          ("M-&" . complete-symbol))
   :interpreter (("emacs" . emacs-lisp-mode)))
+
+(use-package emr
+  :bind (:map prog-mode-map
+              ("M-RET" . emr-show-refactor-menu))
+  :config (emr-initialize))
 
 (use-package erc
   :bind ("C-x r c" . irc)
@@ -903,9 +1009,6 @@
   (erc-track-mode 1)
   (erc-services-mode 1)
   (add-hook 'erc-connect-pre-hook (lambda (x) (erc-update-modules))))
-
-(use-package elpy
-  :disabled)
 
 (use-package esh-help
   :commands esh-help-eldoc-command
@@ -1012,6 +1115,11 @@ POINT ?"
 (use-package etags
   :bind ("M-T" . tags-search))
 
+(use-package expand-region
+  :commands er/expand-region
+  :config (setq expand-region-contract-fast-key "j")
+  :bind (("C-c k" . er/expand-region)))
+
 (use-package eyebrowse
   :disabled
   :commands eyebrowse-mode
@@ -1064,24 +1172,34 @@ POINT ?"
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
 
-(use-package gist)
+(use-package ggtags
+  :commands ggtags-mode
+  :init
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
 
-(use-package gitattributes-mode
-  :mode "\\.gitattributes\\'")
+(use-package gist
+  :commands (gist-list gist-region gist-region-private gist-buffer
+                       gist-buffer-private gist-region-or-buffer gist-region-or-buffer-private))
 
-(use-package github-clone
-  :commands github-clone)
-
-(use-package gitconfig-mode
-  :mode "\\.gitconfig\\'")
-
-(use-package gitignore-mode)
+(use-package git-messenger
+  :disabled)
 
 (use-package git-timemachine
   :commands git-timemachine)
 
-(use-package git-messenger
-  :disabled)
+(use-package gitattributes-mode
+  :mode "\\.gitattributes\\'")
+
+(use-package gitconfig-mode
+  :mode "\\.gitconfig\\'")
+
+(use-package github-clone
+  :commands github-clone)
+
+(use-package gitignore-mode)
 
 (use-package gnus
   :commands gnus
@@ -1090,15 +1208,24 @@ POINT ?"
   (add-hook 'kill-emacs-hook (lambda ()
                                (when (boundp 'gnus-group-exit)
                                  (gnus-group-exit))))
-  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+  :config
+  (require 'gnus-autocheck))
 
-(use-package go-mode
-  :mode "\\.go\\'")
+(use-package gnus-desktop-notify
+  :after gnus
+  :config
+  (gnus-desktop-notify-mode)
+  (gnus-demon-add-scanmail)
+  )
 
 (use-package go-eldoc
   :commands go-eldoc-setup
   :init
   (add-hook 'go-mode-hook 'go-eldoc-setup))
+
+(use-package go-mode
+  :mode "\\.go\\'")
 
 (use-package golden-ratio
   :diminish golden-ratio-mode
@@ -1144,11 +1271,14 @@ POINT ?"
   :commands guru-global-mode
   :init (guru-global-mode))
 
-(use-package haskell-mode
-  :mode "\\.hs\\'")
+(use-package hackernews
+  :commands hackernews)
 
 (use-package haml-mode
   :mode "\\.haml\\'")
+
+(use-package haskell-mode
+  :mode "\\.hs\\'")
 
 (use-package helm
   :commands helm-mode
@@ -1200,8 +1330,7 @@ POINT ?"
                               (add-to-list 'popwin:special-display-config 'help-mode nil #'eq))))
 
   (add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
-  (add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
-  )
+  (add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on))
 
 (use-package helm-ag
   :disabled
@@ -1255,9 +1384,27 @@ POINT ?"
 (use-package ibuffer
   :bind ("C-x b" . ibuffer))
 
+(use-package ibuffer-vc
+  :init
+  (with-eval-after-load 'ibuffer
+    (bind-keys :map ibuffer-mode-map ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root))))
+
 (use-package idris
   :disabled
   :mode ("\\.idr\\'" . idris-mode))
+
+(use-package iedit
+  :bind (("C-;" . iedit-mode)
+         :map help-map ("C-;" . iedit-mode-toggle-on-function)
+         :map esc-map ("C-;" . iedit-mode-toggle-on-function)
+         :map isearch-mode-map ("C-;" . iedit-mode-toggle-on-function)))
+
+(use-package imenu-anywhere
+  :init
+  (bind-key "M"
+            (if (featurep 'ivy) #'ivy-imenu-anywhere
+              #'imenu-anywhere)
+            search-map))
 
 (use-package imenu-list
   :commands imenu-list)
@@ -1318,13 +1465,13 @@ POINT ?"
   (add-hook 'js2-mode-hook 'js-mode-binding)
   (add-hook 'js-mode-hook 'js-mode-binding))
 
-(use-package launchctl
-  :commands launchctl)
-
 (use-package latex-unicode-math-mode
   :commands (latex-unicode-math-mode latyex-unicode-convert-region latex-unicode-convert-buffer)
   :init
   (add-hook 'LaTeX-mode-hook 'latex-unicode-math-mode))
+
+(use-package launchctl
+  :commands launchctl)
 
 (use-package less-css-mode
   :mode "\\.json\\'"
@@ -1435,8 +1582,7 @@ POINT ?"
                :regexp "[^][()'\" \t\n]+"
                :ignore-case t
                :doc-spec '(("(ansicl)Symbol Index" nil nil nil))))
-            lisp-modes)
-      )
+            lisp-modes))
 
     (auto-fill-mode 1)
     ;; (paredit-mode 1)
@@ -1452,8 +1598,7 @@ POINT ?"
                   '(emacs-lisp-mode inferior-emacs-lisp-mode ielm-mode))
       (turn-on-cldoc-mode)
       (bind-key "M-q" #'slime-reindent-defun lisp-mode-map)
-      (bind-key "M-l" #'slime-selector lisp-mode-map))
-    )
+      (bind-key "M-l" #'slime-selector lisp-mode-map)))
 
   ;; Change lambda to an actual lambda symbol
   :init
@@ -1474,9 +1619,6 @@ POINT ?"
 
   (apply #'hook-into-modes 'my-lisp-mode-hook lisp-mode-hooks))
 
-(use-package lua-mode
-  :mode "\\.lua\\'")
-
 (use-package lsp-mode
   :disabled
   :commands global-lsp-mode
@@ -1489,8 +1631,10 @@ POINT ?"
                      :command
                      '("stack" "exec" "nix-language-server")
                      :name "Nix Language Server"
-                     :ignore-regexps '())
-  )
+                     :ignore-regexps '()))
+
+(use-package lua-mode
+  :mode "\\.lua\\'")
 
 (use-package magit
   :commands (magit-clone)
@@ -1498,8 +1642,7 @@ POINT ?"
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
   :init
-  (setq magit-completing-read-function 'ivy-completing-read)
-  )
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (use-package magit-gh-pulls
   :if (executable-find "git")
@@ -1508,18 +1651,15 @@ POINT ?"
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (use-package magithub
-  :disabled
   :if (and (executable-find "git") (executable-find "hub"))
-  :commands magithub-feature-autoinject
   :after magit
-  :init
+  :config
   (magithub-feature-autoinject t))
 
-(use-package material-theme
-  :disabled
-  :demand
-  :config
-  (load-theme 'material t))
+(use-package make-it-so
+  :commands mis-config-default
+  :init (mis-config-default)
+  )
 
 (use-package markdown-mode
   :mode "\\.\\(md\\|markdown\\)\\'"
@@ -1529,11 +1669,20 @@ POINT ?"
     :config
     (setq markdown-preview-stylesheets
           (list "http://ftp.newartisans.com/pub/github.css")))
-  ;; (use-package pandoc-mode
-  ;;   :commands turn-on-pandoc
-  ;;   :init
-  ;;   (add-hook 'markdown-mode-hook 'turn-on-pandoc)
-  )
+  (use-package pandoc-mode
+    :disabled
+    :commands turn-on-pandoc
+    :init
+    (add-hook 'markdown-mode-hook 'turn-on-pandoc)))
+
+(use-package material-theme
+  :disabled
+  :demand
+  :config
+  (load-theme 'material t))
+
+(use-package minimap
+  :commands minimap-mode)
 
 (use-package mmm-mode
   :disabled
@@ -1574,18 +1723,6 @@ POINT ?"
   (defadvice term-process-pager (after term-process-rebind-keys activate)
     (define-key term-pager-break-map  "\177" 'term-pager-back-page)))
 
-(use-package multishell
-  :disabled)
-
-(use-package minimap
-  :commands minimap-mode)
-
-(use-package monokai-theme
-  :disabled
-  :demand
-  :config
-  (load-theme 'monokai t))
-
 (use-package multiple-cursors
   :commands (mc/mark-next-like-this mc/mark-previous-like-this)
   :bind
@@ -1593,9 +1730,20 @@ POINT ?"
    ("<C-S-up>" . mc/mark-previous-like-this)
    ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
+(use-package multishell
+  :disabled)
+
+(use-package multi-line
+  :bind (("C-c m" . multi-line)))
+
 (use-package mwim
   :bind (("C-a" . mwim-beginning-of-code-or-line)
          ("C-e" . mwim-end-of-code-or-line)))
+
+(use-package neotree
+  :bind (("<f8>" . neotree-toggle))
+  :config
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (use-package nix-mode
   :load-path "~/Projects/nix-mode"
@@ -1622,29 +1770,30 @@ POINT ?"
 
 (use-package paredit
   :commands paredit-mode
-  :disabled
   :init
   (apply #'hook-into-modes 'paredit-mode lisp-mode-hooks)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
   :config
-  (bind-key "C-M-l" #'paredit-recentre-on-sexp paredit-mode-map)
+  ;; (bind-key "C-M-l" #'paredit-recentre-on-sexp paredit-mode-map)
 
-  (bind-key ")" #'paredit-close-round-and-newline paredit-mode-map)
-  (bind-key "M-)" #'paredit-close-round paredit-mode-map)
+  ;; (bind-key ")" #'paredit-close-round-and-newline paredit-mode-map)
+  ;; (bind-key "M-)" #'paredit-close-round paredit-mode-map)
 
-  (bind-key "M-k" #'paredit-raise-sexp paredit-mode-map)
-  (bind-key "M-I" #'paredit-splice-sexp paredit-mode-map)
+  ;; (bind-key "M-k" #'paredit-raise-sexp paredit-mode-map)
+  ;; (bind-key "M-I" #'paredit-splice-sexp paredit-mode-map)
 
-  (unbind-key "M-r" paredit-mode-map)
-  (unbind-key "M-s" paredit-mode-map)
+  ;; (unbind-key "M-r" paredit-mode-map)
+  ;; (unbind-key "M-s" paredit-mode-map)
 
-  (bind-key "C-. D" #'paredit-forward-down paredit-mode-map)
-  (bind-key "C-. B" #'paredit-splice-sexp-killing-backward paredit-mode-map)
-  (bind-key "C-. C" #'paredit-convolute-sexp paredit-mode-map)
-  (bind-key "C-. F" #'paredit-splice-sexp-killing-forward paredit-mode-map)
-  (bind-key "C-. a" #'paredit-add-to-next-list paredit-mode-map)
-  (bind-key "C-. A" #'paredit-add-to-previous-list paredit-mode-map)
-  (bind-key "C-. j" #'paredit-join-with-next-list paredit-mode-map)
-  (bind-key "C-. J" #'paredit-join-with-previous-list paredit-mode-map))
+  ;; (bind-key "C-. D" #'paredit-forward-down paredit-mode-map)
+  ;; (bind-key "C-. B" #'paredit-splice-sexp-killing-backward paredit-mode-map)
+  ;; (bind-key "C-. C" #'paredit-convolute-sexp paredit-mode-map)
+  ;; (bind-key "C-. F" #'paredit-splice-sexp-killing-forward paredit-mode-map)
+  ;; (bind-key "C-. a" #'paredit-add-to-next-list paredit-mode-map)
+  ;; (bind-key "C-. A" #'paredit-add-to-previous-list paredit-mode-map)
+  ;; (bind-key "C-. j" #'paredit-join-with-next-list paredit-mode-map)
+  ;; (bind-key "C-. J" #'paredit-join-with-previous-list paredit-mode-map)
+  )
 
 (or (use-package mic-paren
       :disabled
@@ -1658,12 +1807,12 @@ POINT ?"
 (use-package pdf-tools
   :disabled)
 
+(use-package php-mode
+  :mode "\\.php\\'")
+
 (use-package popwin
   :disabled
   :demand)
-
-(use-package php-mode
-  :mode "\\.php\\'")
 
 (use-package projectile
   :commands projectile-mode
@@ -1712,6 +1861,15 @@ POINT ?"
 
   (add-hook 'python-mode-hook 'my-python-mode-hook))
 
+(use-package psysh
+  :commands psysh)
+
+(use-package inf-ruby
+  :commands inf-ruby)
+
+(use-package nodejs-repl
+  :commands nodejs-repl)
+
 (use-package rainbow-delimiters
   :commands rainbow-delimiters-mode
   :init
@@ -1745,6 +1903,16 @@ POINT ?"
   :config
   (recentf-mode 1))
 
+(use-package reddit-mode
+  :disabled
+  :commands reddit-mode)
+
+(use-package repl-toggle
+  :disabled
+  :demand)
+
+(use-package restart-emacs
+  :commands restart-emacs)
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
@@ -1793,27 +1961,43 @@ POINT ?"
 
   (add-hook 'ruby-mode-hook 'my-ruby-mode-hook))
 
-(use-package restart-emacs
-  :commands restart-emacs)
-
 (use-package rust-mode
   :mode "\\.rs\\'")
 
 (use-package sass-mode
   :mode "\\.sass\\'")
 
+(use-package savehist
+  :ensure nil
+  :config
+  (setq savehist-additional-variables
+        '(search-ring regexp-search-ring comint-input-ring)))
+
+(use-package saveplace
+  :ensure nil)
+
 (use-package scss-mode
   :mode "\\.scss\\'")
+
+(use-package semantic
+  :commands semantic-mode
+  :disabled t
+  :preface
+  (progn
+    (add-hook 'prog-mode-hook 'semantic-mode)))
+
+(use-package sentence-navigation
+  :bind (("M-e" . sentence-nav-forward)
+         ("M-a" . sentence-nav-backward)))
 
 (use-package seti-theme
   :disabled
   :demand
   :config (load-theme 'seti))
 
-(use-package sentence-navigation
-  :bind (("M-e" . sentence-nav-forward) ("M-a" . sentence-nav-backward)))
-
-(use-package sh-script)
+(use-package sh-script
+  :mode (("\\.*bashrc$" . sh-mode)
+         ("\\.*bash_profile" . sh-mode)))
 
 (use-package shell
   :commands (shell shell-mode)
@@ -1851,7 +2035,19 @@ POINT ?"
   ;;             (t (comint-simple-send proc command))))))
 
   ;;  (add-hook 'shell-mode-hook 'shell-comint-input-sender-hook)
-  )
+  :config
+  (setq explicit-bash-args '("-c" "export INSIDE_EMACS=; stty echo; bash"))
+  (defun make-shell-command-behave-interactively (orig-fun &rest args)
+    (let ((shell-command-switch "-ic"))
+      (apply orig-fun args)))
+  (advice-add 'shell-command :around #'make-shell-command-behave-interactively)
+  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively)
+  (add-hook 'shell-mode-hook (lambda ()
+                               (turn-on-comint-history (getenv "HISTFILE")))))
+
+(use-package shell-pop
+  :disabled
+  :demand)
 
 (use-package shell-script-mode
   :commands shell-script-mode
@@ -1860,9 +2056,9 @@ POINT ?"
   (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
   )
 
-(use-package shell-pop
-  :disabled
-  :demand)
+(use-package skewer-less
+  :commands skewer-less-mode
+  :init (add-hook 'less-css-mode-hook 'skewer-less-mode))
 
 (use-package skewer-mode
   :commands (skewer-mode skewer-css-mode skewer-html-mode)
@@ -1870,10 +2066,6 @@ POINT ?"
   (add-hook 'js2-mode-hook 'skewer-mode)
   (add-hook 'css-mode-hook 'skewer-css-mode)
   (add-hook 'html-mode-hook 'skewer-html-mode))
-
-(use-package skewer-less
-  :commands skewer-less-mode
-  :init (add-hook 'less-css-mode-hook 'skewer-less-mode))
 
 (use-package slime
   :commands slime)
@@ -1923,17 +2115,28 @@ POINT ?"
   (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
   (add-hook 'js2-mode-hook 'tern-mode))
 
-(use-package tramp)
-
-(use-package try
-  :commands try)
-
 (use-package toc-org
   :commands toc-org-enable
   :init
   (add-hook 'org-mode-hook 'toc-org-enable))
 
+(use-package tiny
+  :commands tiny)
+
+(use-package tramp
+  :commands tramp)
+
+(use-package transpose-frame
+  :bind ("C-x t" . transpose-frame))
+
+(use-package try
+  :commands try)
+
+(use-package twittering-mode
+  :commands twittering-mode)
+
 (use-package undo-tree
+  :disabled
   :config (global-undo-tree-mode 1)
   :bind (("C-c j" . undo-tree-undo)
          ("C-c k" . undo-tree-redo)
@@ -1944,8 +2147,18 @@ POINT ?"
   :ensure nil
   :demand)
 
+(use-package warnings
+  :demand
+  :init
+  (setq warning-suppress-types '((undo discard-info))))
+
 (use-package web-mode
   :mode "\\.html\\'")
+
+(use-package which-key
+  :diminish which-key-mode
+  :defer 3
+  :config (which-key-mode))
 
 (use-package whitespace
   :defines (whitespace-auto-cleanup
@@ -2011,11 +2224,6 @@ POINT ?"
   :commands whitespace-cleanup-mode
   :init
   (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
-
-(use-package which-key
-  :diminish which-key-mode
-  :commands which-key-mode
-  :init (which-key-mode))
 
 (use-package winner
   :disabled

@@ -86,6 +86,7 @@
       (reusable-frames . visible)))))
  '(dumb-jump-selector (quote helm))
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
+ '(enable-recursive-minibuffers t)
  '(erc-autoaway-idle-seconds 600)
  '(erc-autoaway-use-emacs-idle t)
  '(erc-autojoin-timing (quote ident))
@@ -180,6 +181,12 @@
  '(global-auto-revert-non-file-buffers t)
  '(global-magit-file-mode t)
  '(gnutls-verify-error nil)
+ '(golden-ratio-exclude-modes
+   (quote
+    ("ediff-mode" "gud-mode" "gdb-locals-mode" "gdb-registers-mode" "gdb-breakpoints-mode" "gdb-threads-mode" "gdb-frames-mode" "gdb-inferior-io-mode" "gud-mode" "gdb-inferior-io-mode" "gdb-disassembly-mode" "gdb-memory-mode" "magit-log-mode" "magit-reflog-mode" "magit-status-mode" "IELM" "eshell-mode" "dired-mode" "neotree-mode")))
+ '(golden-ratio-extra-commands
+   (quote
+    (windmove-left windmove-right windmove-down windmove-up ace-window)))
  '(helm-autoresize-mode t)
  '(helm-buffer-skip-remote-checking t)
  '(helm-buffers-fuzzy-matching t)
@@ -318,6 +325,7 @@
  '(projectile-verbose nil)
  '(reb-re-syntax (quote string))
  '(require-final-newline t)
+ '(restart-emacs-restore-frames nil)
  '(ring-bell-function (quote ignore))
  '(ruby-insert-encoding-magic-comment nil)
  '(rust-format-on-save t)
