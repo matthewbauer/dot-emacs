@@ -594,9 +594,9 @@
          ("C-x l" . counsel-locate)))
 
 (use-package counsel-projectile
-  :disabled
-  :commands counsel-projectile-on
-  :init (counsel-projectile-on))
+  :after projectile
+  :config
+  (counsel-projectile-toggle 1))
 
 (use-package crontab-mode
   :mode "\\.?cron\\(tab\\)?\\'")
@@ -1660,11 +1660,7 @@ POINT ?"
     (helm-projectile-toggle 1))
   (setq projectile-completion-system 'ivy)
   (projectile-mode)
-  (bind-key "s s"
-            #'(lambda ()
-                (interactive)
-                (helm-do-grep-1 (list (projectile-project-root)) t))
-            'projectile-command-map))
+  )
 
 (use-package python-mode
   :mode ("\\.py\\'" . python-mode)

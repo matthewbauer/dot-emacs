@@ -300,7 +300,19 @@
  '(parens-require-spaces t)
  '(parse-sexp-ignore-comments t)
  '(projectile-enable-caching t)
- '(projectile-mode-line " Projectile")
+ '(projectile-enable-idle-timer t)
+ '(projectile-idle-timer-hook nil)
+ '(projectile-ignored-project-function (quote file-remote-p))
+ '(projectile-mode-line
+   (quote
+    (:eval
+     (if
+         (projectile-project-p)
+         (format " Projectile[%s]"
+                 (projectile-project-name))
+       ""))))
+ '(projectile-switch-project-action (quote projectile-dired))
+ '(projectile-verbose nil)
  '(reb-re-syntax (quote string))
  '(require-final-newline t)
  '(ring-bell-function (quote ignore))
