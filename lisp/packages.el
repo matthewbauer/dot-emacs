@@ -1162,6 +1162,7 @@ POINT ?"
   :init (flycheck-pos-tip-mode))
 
 (use-package flycheck-ycmd
+  :disabled
   :commands flycheck-ycmd-setup
   :init (add-hook 'after-init-hook #'flycheck-ycmd-setup))
 
